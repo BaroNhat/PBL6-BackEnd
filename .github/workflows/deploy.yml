@@ -21,4 +21,5 @@ jobs:
         run: |
           echo "$SSH_KEY" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST 'bash -s' < ~/springboot-app/deploy.sh
+          ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST 'cd ~/springboot-app && bash deploy.sh'
+
