@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(origins = {"http://localhost:8081", "https://unimehospital.vercel.app", "https://unime.site"})
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor

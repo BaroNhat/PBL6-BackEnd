@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:8081", "https://unimehospital.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:8081", "https://unimehospital.vercel.app", "https://unime.site"})
 @Slf4j
 @RestController
 @RequestMapping("/patients")
