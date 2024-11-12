@@ -24,6 +24,8 @@ public class PatientRequest {
     @Email(message = "INVALID_EMAIL_FORMAT")
     String patientEmail;
 
+    String patientImage;
+
     @NotEmpty(message="MISSING_REQUIRED_FIELDS")
     String patientName;
 

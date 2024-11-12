@@ -1,5 +1,8 @@
 package PBL6.example.UNIME.dto.request;
 
+import PBL6.example.UNIME.entity.Department;
+import PBL6.example.UNIME.entity.DoctorDetail;
+import PBL6.example.UNIME.entity.User;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,38 +14,47 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EmployeeRequest {
+public class DoctorRequest {
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
     @Size(min = 6, message = "INVALID_USERNAME_FORMAT")
-    String employeeUsername;
+    String doctorUsername;
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
     @Size(min = 8, message = "INVALID_PASSWORD_FORMAT")
-    String employeePassword;
+    String doctorPassword;
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
     @Email(message = "INVALID_EMAIL_FORMAT")
-    String employeeEmail;
-
-    String employeeImage;
+    String doctorEmail;
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
-    String employeeName;
-    
+    String doctorImage;
+
+    @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
+    String doctorName;
+
+    @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
+    String doctorAddress;
+
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
     @Pattern(regexp = "^\\+84\\d{9,10}$", message = "INVALID_PHONE_NUMBER_FORMAT")
-    String employeePhoneNumber;
+    String doctorPhoneNumber;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    Boolean employeeGender;
+    boolean doctorGender;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    LocalDate employeeDateOfBirth;
+    LocalDate doctorDateOfBirth;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
     String departmentName;
 
-    String employeeStatus;
+    String doctorStatus;
 
+    String doctordetailInformation;
+
+    String doctordetailExperience;
+
+    String doctordetailAwardRecognization;
 }

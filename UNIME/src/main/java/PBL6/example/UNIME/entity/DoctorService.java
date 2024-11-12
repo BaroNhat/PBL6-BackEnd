@@ -19,11 +19,11 @@ public class DoctorService {
     @Column(name = "doctorservice_id")
     Integer doctorserviceId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id", nullable = false)
     Doctor doctor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", referencedColumnName = "service_id", nullable = false)
     Service service;
 

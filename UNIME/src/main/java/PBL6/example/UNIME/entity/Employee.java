@@ -22,6 +22,9 @@ public class Employee {
     @JoinColumn(name = "employee_userId", referencedColumnName = "user_id", nullable = false, unique = true)
     User employeeUserId;
 
+    @Column(name = "employee_image" )
+    String employeeImage;
+
     @Column(name = "employee_name", nullable = false)
     String employeeName ;
 

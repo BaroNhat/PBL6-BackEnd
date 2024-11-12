@@ -30,28 +30,6 @@ public class PatientService {
     PatientRepository patientRepository;
     UserService userService;
 
-    public PatientResponse createPatient(PatientRequest request) {
-
-        //1. kiểm tra, khởi tạo user
-        User userTest = new User();
-        userTest.setUsername(request.getPatientUsername());
-        userTest.setPassword(request.getPatientPassword());
-        userTest.setEmail(request.getPatientEmail());
-        userTest.setRole(Role.PATIENT.name());
-        User user = userService.createUser(userTest);
-
-        //2. Tạo patient
-        Patient patient = new Patient();
-        patient.setPatientUserId(user);
-        patient.setPatientName(request.getPatientName());
-        patient.setPatientAddress(request.getPatientAddress());
-        patient.setPatientGender(request.getPatientGender());
-        patient.setPatientPhoneNumber(request.getPatientPhoneNumber());
-        patient.setPatientDateOfBirth(request.getPatientDateOfBirth());
-
-        return mapToResponse(patientRepository.save(patient));
-    }
-
     @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'DOCTOR')")
     public List<PatientResponse> getAllPatients(){
         List<Patient> patients = patientRepository.findAll();
@@ -67,14 +45,6 @@ public class PatientService {
     }
 
 
-    public PatientResponse getMyInfo(String Username) {
-
-        User user = userService.getUserByUsername(Username);
-        Patient patient = patientRepository.findBypatientUserId(user)
-                .orElseThrow(() -> new AppException(ErrorCode.PATIENT_NOT_FOUND));
-
-        return mapToResponse(patient);
-    }
 
     // update
     @PostAuthorize("returnObject.patientUsername == authentication.name")
@@ -97,8 +67,9 @@ public class PatientService {
         userService.updateUser(patient.getPatientUserId().getUserId(), user );
 
         // 4. cập nhật vào bẳng Patient
-        patient.setPatientGender(request.getPatientGender());
+        patient.setPatientImage(request.getPatientImage());
         patient.setPatientName(request.getPatientName());
+        patient.setPatientGender(request.getPatientGender());
         patient.setPatientAddress(request.getPatientAddress());
         patient.setPatientPhoneNumber(request.getPatientPhoneNumber());
         patient.setPatientDateOfBirth(request.getPatientDateOfBirth());
@@ -113,6 +84,40 @@ public class PatientService {
         patientRepository.deleteById(patient.getPatientId());
         userService.deleteUser(patient.getPatientUserId().getUserId());
     }
+// ==== token
+
+    public PatientResponse getMyInfo(String Username) {
+
+        User user = userService.getUserByUsername(Username);
+        Patient patient = patientRepository.findBypatientUserId(user)
+                .orElseThrow(() -> new AppException(ErrorCode.PATIENT_NOT_FOUND));
+
+        return mapToResponse(patient);
+    }
+
+// ==== public
+    public PatientResponse createPatient(PatientRequest request) {
+
+        //1. kiểm tra, khởi tạo user
+        User userTest = new User();
+        userTest.setUsername(request.getPatientUsername());
+        userTest.setPassword(request.getPatientPassword());
+        userTest.setEmail(request.getPatientEmail());
+        userTest.setRole(Role.PATIENT.name());
+        User user = userService.createUser(userTest);
+
+        //2. Tạo patient
+        Patient patient = new Patient();
+        patient.setPatientUserId(user);
+        patient.setPatientImage(request.getPatientImage());
+        patient.setPatientName(request.getPatientName());
+        patient.setPatientAddress(request.getPatientAddress());
+        patient.setPatientGender(request.getPatientGender());
+        patient.setPatientPhoneNumber(request.getPatientPhoneNumber());
+        patient.setPatientDateOfBirth(request.getPatientDateOfBirth());
+
+        return mapToResponse(patientRepository.save(patient));
+    }
 
     // chuyển Patient => PatientResponse
     private PatientResponse mapToResponse(Patient patient) {
@@ -123,6 +128,7 @@ public class PatientService {
                 patient.getPatientUserId().getUsername(),
                 patient.getPatientUserId().getPassword(),
                 patient.getPatientUserId().getEmail(),
+                patient.getPatientImage(),
                 patient.getPatientName(),
                 patient.getPatientAddress(),
                 patient.getPatientPhoneNumber(),

@@ -25,6 +25,9 @@ public class Doctor {
     @JoinColumn(name = "doctor_userId", referencedColumnName = "user_id", nullable = false, unique = true)
     User doctorUserId;
 
+    @Column(name = "doctor_image")
+    String doctorImage;
+
     @Column(name = "doctor_name", nullable = false, length = 255)
     String doctorName;
 

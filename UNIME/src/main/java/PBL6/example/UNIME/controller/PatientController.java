@@ -23,13 +23,6 @@ import java.util.List;
 public class PatientController {
     PatientService patientService;
 
-    @PostMapping
-    ApiResponse<PatientResponse> createPatient(@RequestBody @Valid PatientRequest request) {
-        ApiResponse<PatientResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(patientService.createPatient(request));
-        return apiResponse;
-    }
-
     @GetMapping
     ApiResponse<List<PatientResponse>> getAllPatients() {
 
@@ -42,17 +35,6 @@ public class PatientController {
                 .build();
     }
 
-    @GetMapping("/myInfo")
-    ApiResponse<PatientResponse> getMyInfo(){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
-        return ApiResponse.<PatientResponse>builder()
-                .result(patientService.getMyInfo(authentication.getName()))
-                .build();
-    }
     @GetMapping("/{patient_id}")
     ApiResponse<PatientResponse> getPatient(@PathVariable("patient_id") Integer patient_id){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,29 +47,39 @@ public class PatientController {
                 .build();
     }
 
+    @DeleteMapping("/{patient_id}")
+    ApiResponse<String> deleteUser(@PathVariable("patient_id") Integer patient_id){
+
+        patientService.deletePatient(patient_id);
+        return ApiResponse.<String>builder()
+                .result( "Patient has been deleted")
+                .build();
+    }
+
+    // token
+    @GetMapping("/myInfo")
+    ApiResponse<PatientResponse> getMyInfo(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return ApiResponse.<PatientResponse>builder()
+                .result(patientService.getMyInfo(authentication.getName()))
+                .build();
+    }
     @PutMapping("/update")
     ApiResponse<PatientResponse> updatePatient(@RequestBody PatientRequest request){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
-//        log.info("username: {}", authentication.getName());
-//        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
 
         return ApiResponse.<PatientResponse>builder()
                 .result(patientService.updatePatient(username , request))
                 .build();
     }
 
-    @DeleteMapping("/{patient_id}")
-    ApiResponse<String> deleteUser(@PathVariable Integer patient_id){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
-        patientService.deletePatient(patient_id);
-        return ApiResponse.<String>builder()
-                .result( "Patient has been deleted")
-                .build();
+    // public
+    @PostMapping
+    ApiResponse<PatientResponse> createPatient(@RequestBody @Valid PatientRequest request) {
+        ApiResponse<PatientResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(patientService.createPatient(request));
+        return apiResponse;
     }
 }

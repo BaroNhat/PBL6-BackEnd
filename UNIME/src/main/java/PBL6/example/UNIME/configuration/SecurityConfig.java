@@ -28,7 +28,8 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private String[] PUBLIC_URLS = { "/patients", "/auth/token", "/auth/introspect"};
+    private String[] PUBLIC_POST_URL = { "/patients", "/auth/token", "/auth/introspect"};
+    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" };
 
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -40,9 +41,8 @@ public class SecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeHttpRequests(requests ->
-                requests.requestMatchers(HttpMethod.POST , PUBLIC_URLS).permitAll()
-                        .requestMatchers(HttpMethod.GET , "/departments").permitAll()
-                        .requestMatchers(HttpMethod.GET , "/departments/{department_id}").permitAll()
+                requests.requestMatchers(HttpMethod.POST , PUBLIC_POST_URL).permitAll()
+                        .requestMatchers(HttpMethod.GET , PUBLIC_GET_URL).permitAll()
                         .anyRequest().authenticated());
 
         //Cấu hình cho máy chủ tài nguyên OAuth2 với JWT

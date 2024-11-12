@@ -1,6 +1,7 @@
 package PBL6.example.UNIME.entity;
 
 
+import PBL6.example.UNIME.enums.DayOfWeek;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +23,8 @@ public class Timework {
     Integer id;
 
     @Column(name = "day_of_week", nullable = false, length = 20)
-    String dayOfWeek;
+    @Enumerated(EnumType.STRING)
+    DayOfWeek dayOfWeek;
 
     @Column(name = "start_time", nullable = false)
     LocalTime startTime;

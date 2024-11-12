@@ -16,6 +16,7 @@ public class PatientResponse {
     String patientUsername;
     String patientPassword;
     String patientEmail;
+    String patientImage;
     String patientName;
     String patientAddress;
     String patientPhoneNumber;

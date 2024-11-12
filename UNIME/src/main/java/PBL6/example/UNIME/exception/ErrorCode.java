@@ -22,9 +22,16 @@ public enum ErrorCode {
     // Các mã lỗi liên quan đến Đối tượng
     PATIENT_NOT_FOUND(2001, "Patient not found", HttpStatus.NOT_FOUND),
     DEPARTMENT_NOT_FOUND(2002, "Department not found", HttpStatus.NOT_FOUND),
-    DEPARTMENT_EXITED(2002, "Department is exist", HttpStatus.NOT_FOUND),
-    EMPLOYEE_NOT_FOUND(2002, "Department not found", HttpStatus.NOT_FOUND),
-
+    DEPARTMENT_EXISTED(2003, "Department is already exist", HttpStatus.BAD_REQUEST),
+    SERVICE_NOT_FOUND(2004, "Service not found", HttpStatus.NOT_FOUND),
+    SERVICE_EXITED(2005, "Service exited", HttpStatus.BAD_REQUEST),
+    TIMEWORK_EXITED(2006, "Timework exited", HttpStatus.BAD_REQUEST),
+    TIMEWORK_NOT_FOUND(2007, "Timework not found", HttpStatus.NOT_FOUND),
+    INVALID_DAY(2008, "Invalid day of week", HttpStatus.BAD_REQUEST),
+    INVALID_TIME(2009, "Invalid time", HttpStatus.BAD_REQUEST),
+    DOCTOR_DETAILS_NOT_FOUND(2003, "Doctor detail not found", HttpStatus.NOT_FOUND),
+    DOCTORS_NOT_FOUND(2004, "Doctors not found", HttpStatus.NOT_FOUND),
+    EMPLOYEE_NOT_FOUND(2005, "Employee not found", HttpStatus.NOT_FOUND),
     // Các mã lỗi liên quan đến dữ liệu đầu vào
     INVALID_KEY(3000, "Invalid key", HttpStatus.BAD_REQUEST),
     INVALID_USERNAME_FORMAT(3001, "Invalid username format", HttpStatus.BAD_REQUEST), // lớn hơn 6 kí tự

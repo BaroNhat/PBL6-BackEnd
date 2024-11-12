@@ -7,9 +7,11 @@ import PBL6.example.UNIME.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
@@ -33,8 +35,16 @@ public class UserService {
     }
 
     public User updateUser(Integer userId, User request) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
+        if( userRepository.existsByemail(request.getEmail())){
+            User userByEmail = getUserByEmail(request.getEmail());
+            log.info(" === id:{} với id:{} ", userId, userByEmail.getUserId());
+            if(!userByEmail.getUserId().equals(userId)) {
+                throw new AppException(ErrorCode.EMAIL_ALREADY_REGISTERED);
+            }
+        }
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         return userRepository.save(user);

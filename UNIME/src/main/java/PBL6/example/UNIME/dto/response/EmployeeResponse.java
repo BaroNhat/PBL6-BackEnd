@@ -10,13 +10,16 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmployeeResponse {
     int employeeId;
-    Integer userId;
+
     String employeeUsername;
     String employeePassword;
     String employeeEmail;
+
+    String employeeImage;
     String employeeName;
     String employeePhoneNumber;
     boolean employeeGender;
     String employeeStatus;
-    Integer departmentId;
+
+    String departmentName;
 }

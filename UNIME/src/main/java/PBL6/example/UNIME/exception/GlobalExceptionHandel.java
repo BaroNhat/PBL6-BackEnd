@@ -17,6 +17,7 @@ public class GlobalExceptionHandel {
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppException(AppException ae) {
         ErrorCode errorCode = ae.getErrorCode();
+//        log.error("Exception: ", ae.getMessage());
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(ae.getErrorCode().getCode());
         apiResponse.setMessage(ae.getMessage());
@@ -40,7 +41,7 @@ public class GlobalExceptionHandel {
     // Lỗi ko có quyền truy cập
     @ExceptionHandler(value = AccessDeniedException.class)
     ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException e) {
-        log.error("Exception: ", e);
+
         ErrorCode errorCode = ErrorCode.FORBIDDEN;
         return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
                 ApiResponse.builder()

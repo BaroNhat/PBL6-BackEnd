@@ -18,8 +18,11 @@ public class Service {
     @Column(name = "service_id")
     Integer serviceId;
 
+    @Column(name = "service_image", nullable = false)
+    String serviceImage ;
+
     @Column(name = "service_name", nullable = false)
-    String service_name ;
+    String serviceName ;
 
     @ManyToOne
     @JoinColumn(name = "department_id", referencedColumnName = "department_id", nullable = false)

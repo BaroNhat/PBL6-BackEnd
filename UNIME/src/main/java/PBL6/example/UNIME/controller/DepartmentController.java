@@ -22,31 +22,12 @@ import java.util.List;
 public class DepartmentController {
     DepartmentService departmentService;
 
+    //==== Admin
     @PostMapping
     ApiResponse<DepartmentResponse> createDepartment(@RequestBody @Valid DepartmentRequest request) {
         ApiResponse<DepartmentResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(departmentService.createDepartment(request));
         return apiResponse;
-    }
-
-    @GetMapping
-    ApiResponse<List<DepartmentResponse>> getAllDepartments() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
-        return ApiResponse.<List<DepartmentResponse>>builder()
-                .result(departmentService.getAllDepartments())
-                .build();
-//        return departmentService.getAllDepartments();
-    }
-
-    @GetMapping("/{department_id}")
-    ApiResponse<DepartmentResponse> getDepartment(@PathVariable("department_id") Integer departmentId) {
-        return ApiResponse.<DepartmentResponse>builder()
-                .result(departmentService.getDepartmentById(departmentId))
-                .build();
     }
 
     @PutMapping("/{department_id}")
@@ -61,6 +42,28 @@ public class DepartmentController {
         departmentService.deleteDepartment(department_id);
         return ApiResponse.<String>builder()
                 .result( "Department has been deleted")
+                .build();
+    }
+    @GetMapping("/{department_id}")
+    ApiResponse<DepartmentResponse> getDepartment(@PathVariable("department_id") Integer departmentId) {
+        return ApiResponse.<DepartmentResponse>builder()
+                .result(departmentService.getDepartmentById(departmentId))
+                .build();
+    }
+
+    // ==== public
+
+    @GetMapping("/get/departmentList")
+    ApiResponse<List<DepartmentResponse>> getAllDepartments() {
+        return ApiResponse.<List<DepartmentResponse>>builder()
+                .result(departmentService.getAllDepartments())
+                .build();
+    }
+
+    @GetMapping("/get/{department_name}")
+    ApiResponse<List<DepartmentResponse>> findByDepartmentName (@PathVariable("department_name") String departmentName) {
+        return ApiResponse.<List<DepartmentResponse>>builder()
+                .result(departmentService.findDepartmentByName(departmentName))
                 .build();
     }
 }
