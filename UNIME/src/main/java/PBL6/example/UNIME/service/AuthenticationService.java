@@ -56,7 +56,7 @@ public class AuthenticationService {
         }
 
         // 3. tạo token
-        var token = generateToken(user) + "  NHAT NHAT NHAT";
+        var token = generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(token)
