@@ -19,6 +19,17 @@ jobs:
           USER: ${{ secrets.VPS_USER }}
           SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
+          # Lưu khóa SSH vào file key.pem
           echo "$SSH_KEY" > key.pem
           chmod 600 key.pem
+
+          # Kiểm tra kết nối SSH
+          echo "Testing SSH connection..."
+          ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST "echo 'SSH connection successful!'"
+
+          # Chạy deploy.sh trên VPS
+          echo "Running deploy script..."
           ssh -o StrictHostKeyChecking=no -i key.pem $USER@$HOST 'cd ~/springboot-app && bash deploy.sh'
+          
+          # Xóa khóa SSH sau khi sử dụng
+          rm -f key.pem
