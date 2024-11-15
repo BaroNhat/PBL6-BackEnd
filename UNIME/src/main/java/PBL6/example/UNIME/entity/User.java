@@ -27,6 +27,9 @@ public class User {
     @Column(name = "user_email", nullable = false, length = 255)
     String email;
 
+    @Column(name = "user_image", nullable = false, length = 255)
+    String image;
+
     @Column(name = "user_role", nullable = false, length = 10)
     String role;
 

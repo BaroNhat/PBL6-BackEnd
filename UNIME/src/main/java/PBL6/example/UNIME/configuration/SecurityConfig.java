@@ -29,7 +29,7 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
     private String[] PUBLIC_POST_URL = { "/patients", "/auth/token", "/auth/introspect"};
-    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" };
+    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" , "/doctorservice/get/**"};
 
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -88,8 +88,10 @@ public class SecurityConfig {
     public JwtAuthenticationConverter jwtConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+
         return converter;
     }
 

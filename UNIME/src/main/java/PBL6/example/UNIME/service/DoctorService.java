@@ -41,6 +41,9 @@ public class DoctorService {
         user.setUsername(request.getDoctorUsername());
         user.setPassword(request.getDoctorPassword());
         user.setEmail(request.getDoctorEmail());
+        if(request.getDoctorImage() == null){
+            user.setImage("https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731150727/e3e8df1e56e1c8839457b42bdcd750e5_smkmhm.jpg");
+        } else  user.setImage(request.getDoctorImage());
         user.setRole(Role.DOCTOR.name());
 
 
@@ -53,7 +56,6 @@ public class DoctorService {
         // 2. Tạo Employee
         Doctor doctor = new Doctor();
         doctor.setDoctorUserId(userService.createUser(user));
-        doctor.setDoctorImage(request.getDoctorImage());
         doctor.setDoctorName(request.getDoctorName());
         doctor.setDoctorPhoneNumber(request.getDoctorPhoneNumber());
         doctor.setDoctorGender(request.isDoctorGender());
@@ -111,6 +113,7 @@ public class DoctorService {
         User user = new User();
         user.setPassword(request.getDoctorPassword());
         user.setEmail(request.getDoctorEmail());
+        user.setImage(request.getDoctorImage());
         userService.updateUser(doctor.getDoctorUserId().getUserId(), user);
 
         //2. cập nhật doctorDetail
@@ -121,7 +124,6 @@ public class DoctorService {
         doctorDetailRespository.save(detail);
 
         //3. cập nhật doctor
-        doctor.setDoctorImage(request.getDoctorImage());
         doctor.setDoctorName(request.getDoctorName());
         doctor.setDoctorPhoneNumber(request.getDoctorPhoneNumber());
         doctor.setDoctorGender(request.isDoctorGender());
@@ -155,8 +157,8 @@ public class DoctorService {
                 doctor.getDoctorUserId().getUsername(),
                 doctor.getDoctorUserId().getPassword(),
                 doctor.getDoctorUserId().getEmail(),
+                doctor.getDoctorUserId().getImage(),
 
-                doctor.getDoctorImage(),
                 doctor.getDoctorName(),
                 doctor.getDoctorAddress(),
                 doctor.getDoctorPhoneNumber(),

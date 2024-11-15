@@ -87,7 +87,9 @@ public class TimeworkService {
                 .toList();
     }
 
-
+    public Timework getTimeworkByInfo(DayOfWeek dow, LocalTime startTime, LocalTime endTime) {
+        return timeworkRespository.findByDayOfWeekAndStartTimeAndEndTime(dow,startTime,endTime);
+    }
     //============
     private TimeworkResponse mapToResponse(Timework timework) {
         return new TimeworkResponse(

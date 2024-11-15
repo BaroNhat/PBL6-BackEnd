@@ -71,6 +71,7 @@ public class AuthenticationService {
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().
                 subject(user.getUsername()).
+                claim("image", user.getImage()).
                 issuer("UNIMEHospital.com").
                 issueTime(new Date()).
                 expirationTime(new Date(

@@ -27,6 +27,8 @@ public enum ErrorCode {
     SERVICE_EXITED(2005, "Service exited", HttpStatus.BAD_REQUEST),
     TIMEWORK_EXITED(2006, "Timework exited", HttpStatus.BAD_REQUEST),
     TIMEWORK_NOT_FOUND(2007, "Timework not found", HttpStatus.NOT_FOUND),
+    DOCTORSERVICE_EXITED(2008, "Doctor service exited", HttpStatus.BAD_REQUEST),
+    DOCTORSERVICE_NOT_FOUND(2009, "Doctor service not found", HttpStatus.NOT_FOUND),
     INVALID_DAY(2008, "Invalid day of week", HttpStatus.BAD_REQUEST),
     INVALID_TIME(2009, "Invalid time", HttpStatus.BAD_REQUEST),
     DOCTOR_DETAILS_NOT_FOUND(2003, "Doctor detail not found", HttpStatus.NOT_FOUND),

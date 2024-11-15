@@ -28,7 +28,6 @@ public class DoctorRequest {
     @Email(message = "INVALID_EMAIL_FORMAT")
     String doctorEmail;
 
-    @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
     String doctorImage;
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
