@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -41,17 +42,25 @@ public class SecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeHttpRequests(requests ->
-                requests.requestMatchers(HttpMethod.POST , PUBLIC_POST_URL).permitAll()
-                        .requestMatchers(HttpMethod.GET , PUBLIC_GET_URL).permitAll()
-                        .anyRequest().authenticated());
+                        requests
+                                // Cho phép truy cập công khai Swagger
+                                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                                // Các URL công khai khác
+                                .requestMatchers(HttpMethod.POST, PUBLIC_POST_URL).permitAll()
+                                .requestMatchers(HttpMethod.GET, PUBLIC_GET_URL).permitAll()
+                                // Yêu cầu xác thực cho các yêu cầu còn lại
+                                .anyRequest().authenticated()
+                );
 
-        //Cấu hình cho máy chủ tài nguyên OAuth2 với JWT
+        // Cấu hình cho máy chủ tài nguyên OAuth2 với JWT
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
-                        .jwtAuthenticationConverter(jwtConverter()))
+                                .jwtAuthenticationConverter(jwtConverter()))
                         .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
         );
 
+        // Tắt CSRF (nếu không cần thiết)
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         return httpSecurity.build();
