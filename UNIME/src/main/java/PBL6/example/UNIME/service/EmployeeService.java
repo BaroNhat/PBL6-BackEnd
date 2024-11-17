@@ -121,11 +121,12 @@ public class EmployeeService {
         return mapToResponse(employeeRepository.save(employee));
     }
 // =========
-    public Integer getDepartmentIdByUser(User user) {
+    public Employee getEmployeeByUsername(String username) {
+        User user = userService.getUserByUsername(username);
         Employee employee = employeeRepository.findByemployeeUserId(user)
                 .orElseThrow( ()-> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
 
-        return employee.getDepartment().getDepartmentId();
+        return employee;
     }
     private EmployeeResponse mapToResponse(Employee employee) {
         return new EmployeeResponse(

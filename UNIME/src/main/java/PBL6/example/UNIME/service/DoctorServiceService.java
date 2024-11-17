@@ -107,17 +107,8 @@ public class DoctorServiceService {
 
 
     private void checkEmployeeDepartmentAccess(String username, Integer serviceId) {
-        // 1. Kiểm tra người truy cập là employee không
-        log.info(" trước kta  Role");
 
-        User user = userService.getUserByUsername(username);
-        log.info(" {} == {}",user.getRole(),Role.EMPLOYEE.name() );
-        if (!user.getRole().equals(Role.EMPLOYEE.name())) {
-            throw new AppException(ErrorCode.FORBIDDEN);
-        }
-        log.info(" trước kta  phòng ban");
-        // Lấy phòng ban của employee và service
-        Integer employeeDepartmentId = employeeService.getDepartmentIdByUser(user);
+        Integer employeeDepartmentId = employeeService.getEmployeeByUsername(username).getDepartment().getDepartmentId();
 
         PBL6.example.UNIME.entity.Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_FOUND));

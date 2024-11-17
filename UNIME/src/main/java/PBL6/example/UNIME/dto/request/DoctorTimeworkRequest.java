@@ -8,11 +8,13 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+@Slf4j
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +23,7 @@ import java.time.format.DateTimeParseException;
 public class DoctorTimeworkRequest {
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    Integer doctortimeworkYear;
+    Integer doctorTimeworkYear;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
     Integer weekOfYear;
@@ -37,17 +39,22 @@ public class DoctorTimeworkRequest {
     String endTime;
     //
 
-    @NotNull(message = "MISSING_REQUIRED_FIELDS")
+//    @NotNull(message = "MISSING_REQUIRED_FIELDS")
     Integer doctorId;
 
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
-    String doctortimeworkStatus;
+    String doctorTimeworkStatus;
+
+
 
     public void validateRequest() {
+
+        log.info("doctortimeworkStatus: {}", doctorTimeworkStatus);
+        log.info("weekOfYear: {}", weekOfYear);
         // Kiểm tra CHECK_DOCTOR_TIMEWORK_STATUS
-        if (!(DoctorTimeworkStatus.Available.name().equals(doctortimeworkStatus)
-                || DoctorTimeworkStatus.Busy.name().equals(doctortimeworkStatus))) {
+        if (!(DoctorTimeworkStatus.Available.name().equals(doctorTimeworkStatus)
+                || DoctorTimeworkStatus.Busy.name().equals(doctorTimeworkStatus))) {
             throw new AppException(ErrorCode.INVALID_KEY);
         }
 
@@ -56,5 +63,6 @@ public class DoctorTimeworkRequest {
             throw new AppException(ErrorCode.INVALID_KEY);
         }
     }
+
 
 }

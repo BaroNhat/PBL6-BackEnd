@@ -150,6 +150,14 @@ public class DoctorService {
                 .collect(Collectors.toList());
     }
 
+
+    public Doctor getDoctorByUsername(String Username) {
+
+        User user = userService.getUserByUsername(Username);
+        return doctorRespository.findBydoctorUserId(user)
+                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXITED));
+
+    }
     private DoctorResponse mapToResponse(Doctor doctor) {
         return new DoctorResponse(
                 doctor.getDoctorId(),
