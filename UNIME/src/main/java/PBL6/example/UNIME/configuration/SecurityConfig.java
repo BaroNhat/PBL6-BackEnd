@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,7 +30,7 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
     private String[] PUBLIC_POST_URL = { "/patients", "/auth/token", "/auth/introspect"};
-    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" };
+    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" , "/doctorservice/get/**"};
 
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -41,17 +42,25 @@ public class SecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeHttpRequests(requests ->
-                requests.requestMatchers(HttpMethod.POST , PUBLIC_POST_URL).permitAll()
-                        .requestMatchers(HttpMethod.GET , PUBLIC_GET_URL).permitAll()
-                        .anyRequest().authenticated());
+                        requests
+                                // Cho phép truy cập công khai Swagger
+                                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                                // Các URL công khai khác
+                                .requestMatchers(HttpMethod.POST, PUBLIC_POST_URL).permitAll()
+                                .requestMatchers(HttpMethod.GET, PUBLIC_GET_URL).permitAll()
+                                // Yêu cầu xác thực cho các yêu cầu còn lại
+                                .anyRequest().authenticated()
+                );
 
-        //Cấu hình cho máy chủ tài nguyên OAuth2 với JWT
+        // Cấu hình cho máy chủ tài nguyên OAuth2 với JWT
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
-                        .jwtAuthenticationConverter(jwtConverter()))
+                                .jwtAuthenticationConverter(jwtConverter()))
                         .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
         );
 
+        // Tắt CSRF (nếu không cần thiết)
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         return httpSecurity.build();
@@ -88,8 +97,10 @@ public class SecurityConfig {
     public JwtAuthenticationConverter jwtConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+
         return converter;
     }
 

@@ -12,8 +12,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DoctorServiceRequest {
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
-    String doctorID;
+    Integer doctorID;
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
-    String serviceID;
+    Integer serviceID;
 }

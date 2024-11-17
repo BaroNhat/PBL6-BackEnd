@@ -25,6 +25,7 @@ public class EmployeeRequest {
     @Email(message = "INVALID_EMAIL_FORMAT")
     String employeeEmail;
 
+    @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
     String employeeImage;
 
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")

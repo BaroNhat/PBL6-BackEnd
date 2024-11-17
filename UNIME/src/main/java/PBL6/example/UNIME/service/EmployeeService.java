@@ -36,16 +36,16 @@ public class EmployeeService {
         // Tìm department dựa trên departmentId từ request
         Department department = departmentService.getDepartmentByName(request.getDepartmentName());
         //1. kiểm tra, khởi tạo user
-        User userTest = new User();
-        userTest.setUsername(request.getEmployeeUsername());
-        userTest.setPassword(request.getEmployeePassword());
-        userTest.setEmail(request.getEmployeeEmail());
-        userTest.setRole(Role.EMPLOYEE.name());
+        User user = new User();
+        user.setUsername(request.getEmployeeUsername());
+        user.setPassword(request.getEmployeePassword());
+        user.setImage(request.getEmployeeImage());
+        user.setEmail(request.getEmployeeEmail());
+        user.setRole(Role.EMPLOYEE.name());
 
         // 2. Tạo Employee
         Employee employee = new Employee();
-        employee.setEmployeeUserId(userService.createUser(userTest));
-        employee.setEmployeeImage(request.getEmployeeImage());
+        employee.setEmployeeUserId(userService.createUser(user));
         employee.setEmployeeName(request.getEmployeeName());
         employee.setEmployeePhonenumber(request.getEmployeePhoneNumber());
         employee.setEmployeeGender(request.getEmployeeGender());
@@ -111,31 +111,38 @@ public class EmployeeService {
         // 2. cập nhật vào bảng User
         User user = new User();
         user.setPassword(request.getEmployeePassword());
+        user.setImage(request.getEmployeeImage());
         user.setEmail(request.getEmployeeEmail());
         userService.updateUser(employee.getEmployeeUserId().getUserId(), user);
 
-        employee.setEmployeeImage(request.getEmployeeImage());
         employee.setEmployeeName(request.getEmployeeName());
         employee.setEmployeePhonenumber(request.getEmployeePhoneNumber());
         employee.setEmployeeGender(request.getEmployeeGender());
         return mapToResponse(employeeRepository.save(employee));
     }
+// =========
+    public Employee getEmployeeByUsername(String username) {
+        User user = userService.getUserByUsername(username);
+        Employee employee = employeeRepository.findByemployeeUserId(user)
+                .orElseThrow( ()-> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
 
+        return employee;
+    }
     private EmployeeResponse mapToResponse(Employee employee) {
         return new EmployeeResponse(
-        employee.getEmployeeId(),
+                employee.getEmployeeId(),
 
-        employee.getEmployeeUserId().getUsername(),
-        employee.getEmployeeUserId().getPassword(),
-        employee.getEmployeeUserId().getEmail(),
+                employee.getEmployeeUserId().getUsername(),
+                employee.getEmployeeUserId().getPassword(),
+                employee.getEmployeeUserId().getEmail(),
+                employee.getEmployeeUserId().getImage(),
 
-        employee.getEmployeeImage(),
-        employee.getEmployeeName(),
-        employee.getEmployeePhonenumber(),
-        employee.isEmployeeGender(),
-        employee.getEmployeeStatus(),
+                employee.getEmployeeName(),
+                employee.getEmployeePhonenumber(),
+                employee.isEmployeeGender(),
+                employee.getEmployeeStatus(),
 
-        employee.getDepartment().getDepartmentName()
+                employee.getDepartment().getDepartmentName()
         );
     }
 }

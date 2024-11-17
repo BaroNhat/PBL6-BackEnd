@@ -6,8 +6,15 @@ server:
 spring:
   datasource:
     url: "jdbc:mysql://root:fnkCycRqiVdqYfdEtAggsOEDsOvDtcpY@autorack.proxy.rlwy.net:41772/UnimeHospital"
+<<<<<<< HEAD
     username: root
     password: fnkCycRqiVdqYfdEtAggsOEDsOvDtcpY
+=======
+#    url: "jdbc:mysql://localhost:3306/unimehospital"
+    username: root
+    password: fnkCycRqiVdqYfdEtAggsOEDsOvDtcpY
+#    password: 2706phuongnhung
+>>>>>>> BackEnd
   jpa:
     hibernate:
       ddl-auto: validate

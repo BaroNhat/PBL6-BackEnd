@@ -1,4 +1,4 @@
-USE unimehospital;
+use unimehospital;
 -- disable foreign keys constraint
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -16,52 +16,42 @@ TRUNCATE TABLE user;
 
 -- enable foreign keys constraint
 SET FOREIGN_KEY_CHECKS = 1;
--- ================================================================ 
+
 INSERT INTO DEPARTMENT (department_name, department_description)
 VALUES 
     ('Răng-Hàm-Mặt', 'Chăm sóc và điều trị các vấn đề về răng miệng và hàm mặt'),
     ('Tim Mạch', 'Chuyên khám và điều trị các bệnh lý về tim mạch'),
-    ('Nội Tiết', 'Điều trị các bệnh về nội tiết và rối loạn hormone'),
+    ('Dinh Dưỡng', 'Tư vấn và điều trị các vấn đề về dinh dưỡng'),
     ('Hô Hấp', 'Khám và điều trị các bệnh lý về đường hô hấp'),
     ('Tiêu Hóa', 'Chuyên điều trị các bệnh lý về tiêu hóa'),
     ('Thần Kinh', 'Chăm sóc và điều trị các bệnh về thần kinh'),
     ('Xương Khớp', 'Khám và điều trị các vấn đề về cơ xương khớp'),
     ('Sản Phụ Khoa', 'Chuyên về các dịch vụ sản khoa và phụ khoa'),
     ('Nhi Khoa', 'Khám và điều trị các bệnh cho trẻ em'),
-    ('Da Liễu', 'Chăm sóc và điều trị các vấn đề về da liễu'),
-    ('Mắt', 'Chuyên điều trị các bệnh về mắt'),
-    ('Tai Mũi Họng', 'Khám và điều trị các bệnh lý về tai, mũi, họng'),
-    ('Ung Bướu', 'Chuyên điều trị các bệnh về ung bướu và ung thư'),
-    ('Thận Tiết Niệu', 'Khám và điều trị các bệnh lý về thận và đường tiết niệu'),
-    ('Ngoại Khoa', 'Điều trị các bệnh cần phẫu thuật'),
-    ('Chấn Thương Chỉnh Hình', 'Điều trị chấn thương và các vấn đề chỉnh hình'),
-    ('Phục Hồi Chức Năng', 'Hỗ trợ phục hồi chức năng sau chấn thương và bệnh tật'),
-    ('Dinh Dưỡng', 'Tư vấn và điều trị các vấn đề về dinh dưỡng'),
-    ('Tâm Thần', 'Điều trị các rối loạn tâm thần và vấn đề tâm lý'),
-    ('Huyết Học', 'Chăm sóc và điều trị các bệnh lý về máu');
-
+    ('Da Liễu', 'Chăm sóc và điều trị các vấn đề về da liễu');
+    
 INSERT INTO SERVICE (service_name, department_id, service_description, service_price, service_image)
-VALUES 
-    ('Khám răng miệng định kỳ', 1, 'Khám và làm sạch răng miệng định kỳ', 300000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Khám và siêu âm tim', 2, 'Khám tim mạch và thực hiện siêu âm tim', 500000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Tư vấn nội tiết', 3, 'Tư vấn các bệnh về nội tiết và rối loạn hormone', 400000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Khám phổi', 4, 'Khám và tư vấn các bệnh về đường hô hấp', 350000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Nội soi dạ dày', 5, 'Nội soi và điều trị các bệnh lý dạ dày', 600000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Điều trị đau đầu', 6, 'Khám và điều trị các vấn đề về thần kinh và đau đầu', 450000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Khám xương khớp', 7, 'Kiểm tra và điều trị các vấn đề về xương khớp', 300000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Tư vấn sản phụ khoa', 8, 'Khám và tư vấn cho phụ nữ về các vấn đề sản phụ khoa', 400000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Khám tổng quát trẻ em', 9, 'Khám sức khỏe tổng quát và điều trị bệnh cho trẻ em', 250000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Điều trị da liễu', 10, 'Điều trị các vấn đề về da liễu như mụn, viêm da', 200000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Khám mắt', 11, 'Kiểm tra và điều trị các bệnh về mắt', 300000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Điều trị viêm họng', 12, 'Khám và điều trị các vấn đề về tai, mũi, họng', 220000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Khám và điều trị ung bướu', 13, 'Chẩn đoán và điều trị các bệnh về ung bướu', 800000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Tư vấn thận và tiết niệu', 14, 'Khám và tư vấn các bệnh về thận và đường tiết niệu', 450000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Phẫu thuật ngoại khoa', 15, 'Thực hiện các phẫu thuật ngoại khoa cần thiết', 1200000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Điều trị chấn thương', 16, 'Điều trị chấn thương và các vấn đề chỉnh hình', 700000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Phục hồi chức năng sau chấn thương', 17, 'Giúp bệnh nhân phục hồi chức năng sau chấn thương', 600000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Tư vấn dinh dưỡng', 18, 'Cung cấp tư vấn và điều trị các vấn đề về dinh dưỡng', 200000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Điều trị tâm lý', 19, 'Điều trị các vấn đề về tâm lý và tâm thần', 500000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    ('Điều trị rối loạn máu', 20, 'Chăm sóc và điều trị các bệnh lý về máu', 650000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg');
+VALUES
+('Khám tổng quát răng miệng', 1, 'Kiểm tra và tư vấn tình trạng răng miệng', 200000, 'rang-ham-mat-kham-tong-quat.jpg'),
+('Nhổ răng khôn', 1, 'Nhổ răng khôn mọc lệch, mọc ngầm', 800000, 'rang-ham-mat-nho-rang-khon.jpg'),
+('Khám tổng quát tim mạch', 2, 'Kiểm tra sức khỏe và chức năng tim mạch', 300000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836224/jjnyn4z5jcridiapwkbk.jpg'),
+('Điện tâm đồ', 2, 'Thực hiện đo điện tâm đồ để kiểm tra nhịp tim', 500000, 'tim-mach-dien-tam-do.jpg'),
+('Tư vấn dinh dưỡng cá nhân', 3, 'Lập kế hoạch dinh dưỡng phù hợp với cá nhân', 200000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836225/k9rr4sjzohxfdlyvy4jg.png'),
+('Đánh giá tình trạng dinh dưỡng', 3, 'Kiểm tra tình trạng dinh dưỡng và đưa ra hướng điều trị', 300000, 'dinh-duong-danh-gia.jpg'),
+('Khám tổng quát hô hấp', 4, 'Kiểm tra và tư vấn các bệnh lý đường hô hấp', 250000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836225/hhweqgvbooluqnqkqwwj.png'),
+('Xét nghiệm chức năng hô hấp', 4, 'Đánh giá chức năng hô hấp qua các xét nghiệm chuyên sâu', 700000, 'ho-hap-chuc-nang.jpg'),
+('Khám tiêu hóa tổng quát', 5, 'Kiểm tra và tư vấn các bệnh lý về tiêu hóa', 300000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836224/narif8ewmtvlooew5kee.jpg'),
+('Nội soi dạ dày', 5, 'Thực hiện nội soi để phát hiện bệnh lý dạ dày', 1500000, 'tieu-hoa-noi-soi-da-day.jpg'),
+('Khám tổng quát thần kinh', 6, 'Kiểm tra và đánh giá các bệnh về thần kinh', 400000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836224/ceer5db04i9aaaisoeq8.jpg'),
+('Điện não đồ', 6, 'Đo điện não đồ để phát hiện bất thường', 800000, 'than-kinh-dien-nao-do.jpg'),
+('Khám xương khớp tổng quát', 7, 'Kiểm tra và tư vấn các bệnh lý cơ xương khớp', 350000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836223/vbyxswr2y9eikcx2ffrv.jpg'),
+('Chụp X-quang khớp', 7, 'Thực hiện chụp X-quang để phát hiện bệnh', 600000, 'xuong-khop-x-quang.jpg'),
+('Khám phụ khoa định kỳ', 8, 'Kiểm tra và tư vấn các vấn đề về phụ khoa', 300000, 'san-phu-khoa-kham-phu-khoa.jpg'),
+('Siêu âm thai', 8, 'Siêu âm thai và tư vấn cho thai phụ', 500000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836225/amwkhfpjnnsqqx02epnf.jpg'),
+('Khám tổng quát cho trẻ', 9, 'Kiểm tra sức khỏe tổng quát cho trẻ', 250000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836223/fiadecryq5ofrokkefsd.jpg'),
+('Tiêm chủng mở rộng', 9, 'Thực hiện tiêm các loại vắc-xin cần thiết cho trẻ', 300000, 'nhi-khoa-tiem-chung.jpg'),
+('Khám da tổng quát', 10, 'Kiểm tra và tư vấn các vấn đề về da', 200000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836225/bgiu0zvtlwqyx2aozouv.jpg'),
+('Điều trị mụn', 10, 'Chăm sóc và điều trị các loại mụn', 500000, 'da-lieu-dieu-tri-mun.jpg');
 
 INSERT INTO TIMEWORK (day_of_week, start_time, end_time)
 VALUES 
@@ -73,7 +63,7 @@ VALUES
     ('MONDAY', '14:00:00', '15:00:00'),
     ('MONDAY', '15:00:00', '16:00:00'),
     ('MONDAY', '16:00:00', '17:00:00'),
-    
+
     ('TUESDAY', '08:00:00', '09:00:00'),
     ('TUESDAY', '09:00:00', '10:00:00'),
     ('TUESDAY', '10:00:00', '11:00:00'),
@@ -90,6 +80,7 @@ VALUES
     ('WEDNESDAY', '13:00:00', '14:00:00'),
     ('WEDNESDAY', '14:00:00', '15:00:00'),
     ('WEDNESDAY', '15:00:00', '16:00:00'),
+	('WEDNESDAY', '16:00:00', '17:00:00'),
 
     ('THURSDAY', '08:00:00', '09:00:00'),
     ('THURSDAY', '09:00:00', '10:00:00'),
@@ -115,118 +106,128 @@ VALUES
     ('SATURDAY', '11:00:00', '12:00:00'),
     ('SATURDAY', '13:00:00', '14:00:00'),
     ('SATURDAY', '14:00:00', '15:00:00'),
-    ('SATURDAY', '15:00:00', '16:00:00');
+    ('SATURDAY', '15:00:00', '16:00:00'),
+    ('SATURDAY', '16:00:00', '17:00:00');
 
-INSERT INTO DOCTOR_DETAIL (doctordetail_information, doctordetail_experience, doctordetail_award_recognization)
-VALUES 
-    ('Chuyên gia Tim mạch', '10 năm kinh nghiệm trong lĩnh vực tim mạch', 'Giải thưởng Tim mạch xuất sắc 2020'),
-    ('Chuyên gia Nhi khoa', '8 năm kinh nghiệm trong lĩnh vực nhi khoa', 'Giải thưởng Bác sĩ Nhi khoa 2019'),
-    ('Chuyên gia Chỉnh hình', '12 năm kinh nghiệm trong phẫu thuật chỉnh hình', 'Giải thưởng Chỉnh hình 2021'),
-    ('Chuyên gia Thần kinh', '9 năm kinh nghiệm trong lĩnh vực thần kinh', 'Giải thưởng Thần kinh học 2018'),
-    ('Chuyên gia Da liễu', '7 năm kinh nghiệm trong da liễu', 'Giải thưởng Da liễu 2019'),
-    ('Chuyên gia Tiêu hóa', '11 năm kinh nghiệm trong lĩnh vực tiêu hóa', 'Giải thưởng Tiêu hóa 2022'),
-    ('Chuyên gia Ung bướu', '15 năm kinh nghiệm trong ung bướu', 'Giải thưởng Ung bướu 2020'),
-    ('Chuyên gia Tâm lý', '9 năm kinh nghiệm trong sức khỏe tâm thần', 'Giải thưởng Tâm lý học 2021'),
-    ('Chuyên gia Hô hấp', '13 năm kinh nghiệm trong sức khỏe hô hấp', 'Giải thưởng Hô hấp 2017'),
-    ('Chuyên gia Thấp khớp', '10 năm kinh nghiệm trong lĩnh vực thấp khớp', 'Giải thưởng Thấp khớp 2021');
-
-INSERT INTO USER (user_username, user_password, user_email, user_role)
-VALUES 
-    ('admin', 'admin', 'admin@example.com', 'ADMIN'),
-    
-    ('pa_anh', 'anh1234#', 'anh@example.com', 'PATIENT'),
-    ('pa_bao', 'bao1234#', 'bao@example.com', 'PATIENT'),
-    ('pa_cuong', 'cuong1234#', 'cuong@example.com', 'PATIENT'),
-    ('pa_danh', 'danh1234#', 'danh@example.com', 'PATIENT'),
-    ('pa_giang', 'giang1234#', 'giang@example.com', 'PATIENT'),
-    ('pa_tan', 'tan1234#', 'tan@example.com', 'PATIENT'),
-    ('pa_duc', 'duc1234#', 'duc@example.com', 'PATIENT'),
-    ('pa_hue', 'hue1234#', 'hue@example.com', 'PATIENT'),
-    ('pa_chinh', 'chinh1234#', 'chinh@example.com', 'PATIENT'),
-    ('pa_nhung', 'nhung1234#', 'nhung@example.com', 'PATIENT'),
-    
-    ('em_quan', 'quan1234#', 'quan@example.com', 'EMPLOYEE'),
-    ('em_trung', 'trung1234#', 'trung@example.com', 'EMPLOYEE'),
-    ('em_quoc', 'quoc1234#', 'quoc@example.com', 'EMPLOYEE'),
-    ('em_lac', 'lac1234#', 'lac@example.com', 'EMPLOYEE'),
-    ('em_linh', 'linh1234#', 'linh@example.com', 'EMPLOYEE'),
-    ('em_luong', 'luong1234#', 'luong@example.com', 'EMPLOYEE'),
-    ('em_tham', 'thang1234#', 'tham@example.com', 'EMPLOYEE'),
-    ('em_anh', 'anh1234#', 'viet@example.com', 'EMPLOYEE'),
-    ('em_phuong', 'phuong1234#', 'phuong@example.com', 'EMPLOYEE'),
-    ('em_tu', 'tu1234#', 'tu@example.com', 'EMPLOYEE'),
-    
-	('doc_khai', 'khai1234#', 'khai@example.com', 'DOCTOR'),
-    ('doc_hoang', 'hoang1234#', 'hoang@example.com', 'DOCTOR'),
-    ('doc_anh', 'anh1234#', 'anhdoc@example.com', 'DOCTOR'),
-    ('doc_ly', 'ly1234#', 'ly@example.com', 'DOCTOR'),
-    ('doc_phuc', 'phuc1234#', 'phuc@example.com', 'DOCTOR'),
-    ('doc_quan', 'quan1234#', 'quandoc@example.com', 'DOCTOR'),
-    ('doc_hieu', 'hieu1234#', 'hieu@example.com', 'DOCTOR'),
-    ('doc_van', 'van1234#', 'van@example.com', 'DOCTOR'),
-    ('doc_loc', 'loc1234#', 'loc@example.com', 'DOCTOR'),
-    ('doc_tu', 'tu1234#', 'tudoc@example.com', 'DOCTOR');
-    
-INSERT INTO PATIENT (patient_userId, patient_name, patient_address, patient_phonenumber, patient_gender, patient_date_of_birth, patient_image)
-VALUES 
-    (1, 'Nguyễn Vân Anh', '123 Đường Hùng Vương, Quận Hải Châu, TP. Đà Nẵng', '+84912340001', b'0', '1991-02-15',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa2_ruttml.jpg'), 
-    (2, 'Nguyễn Văn Bảo', '456 Đường Trần Phú, Quận Hải Châu, TP. Đà Nẵng', '+84912340002', b'1', '1992-03-20',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa1_wjygvu.jpg'),
-    (3, 'Phạm Quốc Cường', '789 Đường Phạm Văn Đồng, Quận Sơn Trà, TP. Đà Nẵng', '+84912340003', b'1', '1993-04-25',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242271/pa6_kacpe9.jpg'),
-    (4, 'Trần Hoàng Danh', '101 Đường Nguyễn Văn Linh, Quận Hải Châu, TP. Đà Nẵng', '+84912340004', b'1', '1994-05-30',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242271/pa7_kwuqww.jpg'),
-    (5, 'Võ Minh Giang', '202 Đường Bạch Đằng, Quận Hải Châu, TP. Đà Nẵng', '+84912340005', b'0', '1995-06-10',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa3_aao2ah.jpg'),
-    (6, 'Đặng Văn Tân', '234 Đường Hoàng Diệu, Quận Hải Châu, TP. Đà Nẵng', '+84912340006', b'1', '1996-07-15',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242268/pa8_r9rkoh.jpg'),
-    (7, 'Bùi Đức Anh', '567 Đường Nguyễn Tất Thành, Quận Thanh Khê, TP. Đà Nẵng', '+84912340007', b'1', '1997-08-20',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242268/pa9_tdn3vr.jpg'),
-    (8, 'Lê Thị Huệ', '890 Đường Lê Duẩn, Quận Thanh Khê, TP. Đà Nẵng', '+84912340008', b'0', '1998-09-25',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242272/pa4_fwpehi.jpg'),
-    (9, 'Nguyễn Văn Chính', '321 Đường Điện Biên Phủ, Quận Thanh Khê, TP. Đà Nẵng', '+84912340009', b'1', '1999-10-30',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa10_bcgrhx.jpg'),
-    (10, 'Lê Hoàng Nhung', '654 Đường Võ Văn Kiệt, Quận Sơn Trà, TP. Đà Nẵng', '+84912340010', b'0', '2000-11-10',
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242272/pa5_wbufsg.jpg');
-INSERT INTO EMPLOYEE (employee_userId, employee_name, employee_phonenumber, employee_gender, department_id, employee_status, employee_image)
+INSERT INTO DOCTOR_DETAIL (doctordetail_information, doctordetail_experience, doctordetail_award_recognization) 
 VALUES
-    (1, 'Nguyễn Văn Quân', '+84901234567', 1, 1, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
-    (2, 'Lê Minh Trung', '+84902345678', 0, 2, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242272/pa5_wbufsg.jpg'),
-    (3, 'Trần Quốc Khánh', '+84903456789', 1, 3, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242260/pa17_q82v5g.jpg'),
-    (4, 'Nguyễn Văn Lạc', '+84904567890', 0, 4, 'OFF', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242265/pa12_lc3xry.jpg'),
-    (5, 'Phạm Thị Linh', '+84905678901', 0, 5, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242264/pa13_xrkes1.jpg'),
-    (6, 'Hoàng Thị Lương', '+84906789012', 0, 6, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242263/pa15_ujr1bn.jpg'),
-    (7, 'Nguyễn Thị Thắm', '+84907890123', 0, 7, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242263/pa16_wx2amq.jpg'),
-    (8, 'Lê Thị Ánh', '+84908901234', 0, 8, 'OFF', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242259/pa18_chzhoo.jpg'),
-    (9, 'Hồ Thị Phương', '+84909012345', 0, 9, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242259/pa19_ofppky.jpg'),
-    (10, 'Trần Lê Tú', '+84900123456', 0, 10, 'ON', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242259/pa20_k6cnbr.jpg');
+    ('Bác sĩ Răng-Hàm-Mặt hàng đầu', '12 năm kinh nghiệm trong điều trị nha khoa', 'Giải thưởng Bác sĩ Nha khoa xuất sắc 2021'),
+    ('Chuyên gia chỉnh nha', '10 năm kinh nghiệm trong chỉnh nha thẩm mỹ', 'Giải thưởng Chỉnh nha quốc tế 2018'),
+	('Bác sĩ tim mạch chuyên sâu', '15 năm kinh nghiệm trong phẫu thuật tim', 'Giải thưởng Quốc gia về Tim mạch 2020'),
+    ('Bác sĩ hồi sức tim mạch', '9 năm kinh nghiệm trong cấp cứu và hồi sức tim mạch', 'Giải thưởng Y khoa 2017'),
+    ('Chuyên gia nội tiết hàng đầu', '10 năm kinh nghiệm trong điều trị tiểu đường', 'Giải thưởng Nội tiết học 2020'),
+    ('Bác sĩ nội tiết chuyên sâu', '12 năm kinh nghiệm trong điều trị rối loạn nội tiết', 'Giải thưởng Điều trị rối loạn nội tiết 2019'),
+    ('Bác sĩ chuyên khoa hô hấp', '14 năm kinh nghiệm trong điều trị bệnh phổi mãn tính', 'Giải thưởng Quốc tế về Hô hấp 2018'),
+    ('Chuyên gia phẫu thuật hô hấp', '11 năm kinh nghiệm trong phẫu thuật nội soi hô hấp', 'Giải thưởng Hô hấp xuất sắc 2021'),
+    ('Bác sĩ chuyên khoa tiêu hóa', '13 năm kinh nghiệm trong điều trị viêm loét dạ dày', 'Giải thưởng Điều trị dạ dày xuất sắc 2019'),
+    ('Chuyên gia phẫu thuật tiêu hóa', '10 năm kinh nghiệm trong phẫu thuật nội soi tiêu hóa', 'Giải thưởng Phẫu thuật Tiêu hóa 2020'),
+    ('Bác sĩ thần kinh chuyên sâu', '10 năm kinh nghiệm điều trị đau đầu mãn tính', 'Giải thưởng Quốc tế về Thần kinh học 2021'),
+    ('Chuyên gia thần kinh trẻ em', '9 năm kinh nghiệm trong điều trị thần kinh nhi khoa', 'Giải thưởng Bác sĩ thần kinh nhi xuất sắc 2018'),
+    ('Bác sĩ xương khớp chuyên sâu', '11 năm kinh nghiệm trong điều trị viêm khớp', 'Giải thưởng Y học Xương khớp 2020'),
+    ('Chuyên gia phục hồi chức năng', '13 năm kinh nghiệm trong vật lý trị liệu và phục hồi chức năng', 'Giải thưởng Phục hồi chức năng 2021'),
+    ('Bác sĩ sản khoa chuyên sâu', '16 năm kinh nghiệm trong đỡ đẻ và chăm sóc thai sản', 'Giải thưởng Quốc gia về Sản khoa 2019'),
+    ('Chuyên gia phụ khoa', '12 năm kinh nghiệm trong điều trị viêm nhiễm phụ khoa', 'Giải thưởng Quốc tế về Phụ khoa 2018'),
+    ('Bác sĩ nhi khoa chuyên sâu', '9 năm kinh nghiệm điều trị các bệnh về đường hô hấp ở trẻ', 'Giải thưởng Bác sĩ Nhi khoa xuất sắc 2020'),
+    ('Chuyên gia dinh dưỡng nhi khoa', '10 năm kinh nghiệm trong tư vấn dinh dưỡng trẻ em', 'Giải thưởng Quốc gia về Nhi khoa 2021'),
+    ('Bác sĩ da liễu chuyên sâu', '8 năm kinh nghiệm trong điều trị nám và tàn nhang', 'Giải thưởng Quốc gia về Da liễu 2020'),
+    ('Chuyên gia thẩm mỹ da', '10 năm kinh nghiệm trong trị liệu laser thẩm mỹ', 'Giải thưởng Quốc tế về Thẩm mỹ da 2019');
 
-INSERT INTO DOCTOR (doctor_userId, doctor_name, doctor_address, doctor_phonenumber, doctor_gender, doctor_date_of_birth, department_id, doctordetail_id, doctor_image, doctor_status)
+INSERT INTO USER (user_username, user_password, user_email, user_role, user_image)
+VALUES     
+('pa_anh', '$2a$10$jnytaQEJOJsgyfdVHHmpf.qRSuScHxGgqs91XLwu720psGC.PNi8C', 'anh@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa2_ruttml.jpg'),
+('pa_bao', '$2a$10$SlWDXpG4L2wYHUUyA4RxROIfOoPOdl9iMxCegDqxKNN7i1iiWu/OC', 'bao@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa1_wjygvu.jpg'),
+('pa_cuong', '$2a$10$4ky0d3fkOzoQPNOKtqyTOOiMumHf7FsRhvcyLeucq8XVv9NpY2oVe', 'cuong@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242271/pa6_kacpe9.jpg'),
+('pa_danh', '$2a$10$tHA4W1z5YDsx58Kgbq/T7upgZIfI5gQ9qgV4Za9jg9cGDdYhTh2IW', 'danh@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242271/pa7_kwuqww.jpg'),
+('pa_giang', '$2a$10$35VNN6N7AI7B42Rn3joaMOsR8/PL/.W.ItAx7Mr0LMkKOSJ8fBo..', 'giang@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa3_aao2ah.jpg'),
+('pa_tan', '$2a$10$zDpsDj.fYpTgD/gt7QDN5.8j9FUVUQsRZnRUjSnFHdg34B0aP680C', 'tan@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242268/pa8_r9rkoh.jpg'),
+('pa_duc', '$2a$10$qq2FabHNKx3EFUXKQJMgpeafc6J5Co30uRNdt.6Ovxm/WerEorFPC', 'duc@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242268/pa9_tdn3vr.jpg'),
+('pa_hue', '$2a$10$w.ugi3OXD/.Tl9zrfKttluCKKpeX2DYs74WvkezIGIwSDJSQWtjwy', 'hue@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242272/pa4_fwpehi.jpg'),
+('pa_chinh', '$2a$10$Qve36Z15CJr8j/BIzTrJWuNoXU8..ZiWtmzWiRbp0UCrVve14RZQq', 'chinh@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa10_bcgrhx.jpg'),
+('pa_nhung', '$2a$10$.GGH8GNvoJcUIQVYsy9fLe//.IgKT/aybjb.bKOgvRXhhh4sTX3.O', 'nhung@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242272/pa5_wbufsg.jpg'),
+
+('em_quan', '$2a$10$c8kWoQk6IWXDw4qzDVdAP.2B1pgnE2KJsJtefzppVPbgkDKQNIEf.', 'quan@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242267/pa11_hfy4fy.jpg'),
+('em_trung', '$2a$10$3vJ.IYu0JQllIwFrKfsGb.jRiKJzKiix5NBNI58jOW9D5rrYp4QFW', 'trung@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242272/pa5_wbufsg.jpg'),
+('em_khanh', '$2a$10$mWah7W2RcpC5yBc3hcWj0ODtUQbvkB6SjhSaIGKhdakY82GaP5.D2', 'quoc@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242260/pa17_q82v5g.jpg'),
+('em_lac', '$2a$10$4w2KavIMR./63LR5pKSMtukHSCB9xQdEXUJpp6btR0C8TXLnfm9vS', 'lac@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242265/pa12_lc3xry.jpg'),
+('em_linh', '$2a$10$OgcyfwBQjOVyXpBvQ.95g.wOVp3QefSh26MN6gQL03lV2INmjcmKS', 'linh@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242264/pa13_xrkes1.jpg'),
+('em_luong', '$2a$10$qXQciW13knMZ6F47pbWAs.i4wFwIlGCNiYX2vTrkfTaKWNrCYwJpC', 'luong@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242263/pa15_ujr1bn.jpg'),
+('em_tham', '$2a$10$x0qaxF1Eg4kQkZPqoAqhJuGeZVVNmRfL95aAv/tUT1kQdlAZqR/GO', 'tham@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242263/pa16_wx2amq.jpg'),
+('em_anh', '$2a$10$vRMN3ynbsKzYcJbOPNJNPOoTYNLyG9MHTlD.8riEOc90ebN1tTP5S', 'viet@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242259/pa18_chzhoo.jpg'),
+('em_phuong', '$2a$10$uO1UKTUe6beP6dG/R/BElu4P7nNficGEsT1duKO9g4dZBt/oow9K2', 'phuong@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242259/pa19_ofppky.jpg'),
+('em_tu', '$2a$10$8pZMovrJPAzNS0EQeBRrK.fUvC/bt.zyIh65DFFrvMmi70QzkFBu.', 'tu@gmail.com', 'EMPLOYEE', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242259/pa20_k6cnbr.jpg'),
+
+('doc_khai', '$2a$10$bqA6hY0Q5.36VaqMiohg6e55Q56LoM.HYCn.HickRlv6NJ9WEt08i', 'khai@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc4_rvnhzx.jpg'),
+('doc_hoang', '$2a$10$kkPleyJGCNmny54j2DKWwuscZiLumjq.w.a9Oy6gf9zgPja/GmJDy', 'hoang@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc6_drk8g8.jpg'),
+('doc_anh', '$2a$10$cqYSTY.YsFimxjfs1/CIc.WdwLJukUJHO037sH5XtTBCIVXj7JzPu', 'anhdoc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc2_dpk9gm.jpg'),
+('doc_ly', '$2a$10$FMEIAN2Y0gJpaX8J07vPHOaDDWQu7iA6Ku2p2W6h1C3G0rM4p8WdK', 'ly@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc5_zfcris.jpg'),
+('doc_phuc', '$2a$10$q7Y3c7PbZhqBysj4hMen0eFDGTK9LDxDhrP6CuXP3eMFsA5RUV3Iu', 'phuc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc6_drk8g8.jpg'),
+('doc_quan', '$2a$10$0dqq6GKK/U1w9Tf9ENMd4e9kwWXcfj22clsdniwAWwctsQBeVBeYG', 'quandoc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc7_nndmxf.jpg'),
+('doc_hieu', '$2a$10$4YB.AJXGEfTMEHUQHpjda.6eXiO6J.fm75HZ3ZSPtdokj6JgFngxi', 'hieu@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc9_pozgu9.jpg'),
+('doc_van', '$2a$10$rHQhztnfalTXme1.yGnWnOXaPm/j7nBeUjRno9zSEYRHwp6gE3iVe', 'van@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc8_rzalke.jpg'),
+('doc_loc', '$2a$10$WQtiwbQYi7tCPD5HQ9QjaOTX3./JRyE885uj2xcP9Vbm.Kjq5hVDi', 'loc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc10_nowqn6.jpg'),
+('doc_tu', '$2a$10$G7IXJ5Nn7lAxyglo5JOE7edjDegi.2QZ4AkTNkJkE7n0gw3WncU9i', 'tudoc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc8_rzalke.jpg'),
+('doc_trung', '$2a$10$jhusG9StbuVh4dnUep5lsukN0JBraWOs0fKy5qGfx4MgqoP47LMGS', 'trungdoc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc11_qwerty.jpg'),
+('doc_minh', '$2a$10$akhU8uCRIr7zRKfTM2jsW..y5SFYfLIF3AioOMMTZ3VJJA1Uu0n.e', 'minh@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc12_asdfgh.jpg'),
+('doc_hai', '$2a$10$rVrY6hGJuFj1t72zQYg0HuGFBiXfznjXWiCUFlxAhc783JfnJCcSe', 'hai@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc13_zxcvbn.jpg'),
+('doc_dung', '$2a$10$lNGIaFMqCP3L5Ecl92acqucDHL0HvnLyp6hxAuAjhsCfnTAAFDNYa', 'dung@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc14_plokmn.jpg'),
+('doc_hoa', '$2a$10$tinYYWlmS2eVV7e6XPN1QORY7pr4TfeuyAWpRiBZj1iNV8APwClUy', 'hoa@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc15_uytrew.jpg'),
+('doc_binh', '$2a$10$i27IjcY5LvXFBsjwjWgPce6J8Ovn/rkKRIGPiZuubWJnCKou0ilme', 'binh@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc16_oiuytr.jpg'),
+('doc_hung', '$2a$10$0mBaQkSyb412qiLpL1eXYul3bV6oLIqWSo6N9YCatfwdXSJM.6Rjy', 'hung@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc17_wedrtg.jpg'),
+('doc_nhan', '$2a$10$owXQ28DBdrszUFv6vzS9H.V5s8P.zFi4SyiULq9uilAU22WCRRt0e', 'nhan@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc18_qazwsx.jpg'),
+('doc_tam', '$2a$10$He868WWSNwCnwuZ36rnlbexOQIyVojM2JoPs/.OFnq5ipFL4o6qjO', 'tam@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc19_bgtres.jpg'),
+('doc_linh', '$2a$10$taANXCuX.EGkMbO8NiW6GOWLgBeHSG31kPbZXxyGAClJ.gpzvF1lm', 'linhdoc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc20_loiknj.jpg');
+
+INSERT INTO PATIENT (patient_userId, patient_name, patient_address, patient_phonenumber, patient_gender, patient_date_of_birth)
 VALUES 
-    (1, 'Nguyễn Văn Khải', '123 Đường Lê Duẩn, Quận Hải Châu', '+84901234567', 1, '1980-05-10', 1, 1,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc4_rvnhzx.jpg', 'ON'),
-    (2, 'Trần Minh Hoàng', '56 Đường Nguyễn Văn Linh, Quận Thanh Khê', '+84902345678', 1, '1985-07-20', 2, 2,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc6_drk8g8.jpg', 'ON'),
-    (3, 'Phạm Thị Ánh', '89 Đường Phan Châu Trinh, Quận Sơn Trà', '+84903456789', 0, '1990-03-15', 3, 3,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc2_dpk9gm.jpg', 'ON'),
-    (4, 'Lê Thu Lý', '22 Đường Võ Nguyên Giáp, Quận Ngũ Hành Sơn', '+84904567890', 0, '1978-12-01', 4, 4,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc5_zfcris.jpg', 'ON'),
-    (5, 'Đỗ Thanh Phúc', '40 Đường Nguyễn Hữu Thọ, Quận Liên Chiểu', '+84905678901', 1, '1988-11-22', 5, 5,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc6_drk8g8.jpg', 'ON'),
-    (6, 'Bùi Văn Quân', '67 Đường Tôn Đức Thắng, Quận Hải Châu', '+84906789012', 1, '1991-04-10', 6, 6,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc7_nndmxf.jpg', 'ON'),
-    (7, 'Ngô Hải Hiếu', '35 Đường Hoàng Diệu, Quận Thanh Khê', '+84907890123', 1, '1984-08-30', 7, 7,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc9_pozgu9.jpg', 'ON'),
-    (8, 'Dương Thị Vân', '76 Đường Điện Biên Phủ, Quận Sơn Trà', '+84908901234', 0, '1973-06-17', 8, 8, 
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc8_rzalke.jpg', 'ON'),
-    (9, 'Trịnh Văn Lộc', '52 Đường Trưng Nữ Vương, Quận Ngũ Hành Sơn', '+84909012345', 1, '1966-09-27', 9, 9,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc10_nowqn6.jpg', 'ON'),
-    (10, 'Đặng Văn Tư', '101 Đường Nguyễn Chí Thanh, Quận Hải Châu', '+84901123456', 0, '1979-02-13', 10, 10,
-    'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241976/doc8_rzalke.jpg', 'ON');
+    (1, 'Nguyễn Vân Anh', '123 Đường Hùng Vương, Quận Hải Châu, TP. Đà Nẵng', '+84912340001', b'0', '1991-02-15'), 
+    (2, 'Nguyễn Văn Bảo', '456 Đường Trần Phú, Quận Hải Châu, TP. Đà Nẵng', '+84912340002', b'1', '1992-03-20'),
+    (3, 'Phạm Quốc Cường', '789 Đường Phạm Văn Đồng, Quận Sơn Trà, TP. Đà Nẵng', '+84912340003', b'1', '1993-04-25'),
+    (4, 'Trần Hoàng Danh', '101 Đường Nguyễn Văn Linh, Quận Hải Châu, TP. Đà Nẵng', '+84912340004', b'1', '1994-05-30'),
+    (5, 'Võ Minh Giang', '202 Đường Bạch Đằng, Quận Hải Châu, TP. Đà Nẵng', '+84912340005', b'0', '1995-06-10'),
+    (6, 'Đặng Văn Tân', '234 Đường Hoàng Diệu, Quận Hải Châu, TP. Đà Nẵng', '+84912340006', b'1', '1996-07-15'),
+    (7, 'Bùi Đức Anh', '567 Đường Nguyễn Tất Thành, Quận Thanh Khê, TP. Đà Nẵng', '+84912340007', b'1', '1997-08-20'),
+    (8, 'Lê Thị Huệ', '890 Đường Lê Duẩn, Quận Thanh Khê, TP. Đà Nẵng', '+84912340008', b'0', '1998-09-25'),
+    (9, 'Nguyễn Văn Chính', '321 Đường Điện Biên Phủ, Quận Thanh Khê, TP. Đà Nẵng', '+84912340009', b'1', '1999-10-30'),
+    (10, 'Lê Hoàng Nhung', '654 Đường Võ Văn Kiệt, Quận Sơn Trà, TP. Đà Nẵng', '+84912340010', b'0', '2000-11-10');
+    
+INSERT INTO EMPLOYEE (employee_userId, employee_name, employee_phonenumber, employee_gender, department_id, employee_status)
+VALUES
+    (11, 'Nguyễn Văn Quân', '+84901234567', 1, 1, 'ON'),
+    (12, 'Lê Minh Trung', '+84902345678', 0, 2, 'ON'),
+    (13, 'Trần Quốc Khánh', '+84903456789', 1, 3, 'ON'),
+    (14, 'Nguyễn Văn Lạc', '+84904567890', 0, 4, 'OFF'),
+    (15, 'Phạm Thị Linh', '+84905678901', 0, 5, 'ON'),
+    (16, 'Hoàng Thị Lương', '+84906789012', 0, 6, 'ON'),
+    (17, 'Nguyễn Thị Thắm', '+84907890123', 0, 7, 'ON'),
+    (18, 'Lê Thị Ánh', '+84908901234', 0, 8, 'OFF'),
+    (19, 'Hồ Thị Phương', '+84909012345', 0, 9, 'ON'),
+    (20, 'Trần Lê Tú', '+84900123456', 0, 10, 'ON');
+
+INSERT INTO DOCTOR (doctor_userId, doctor_name, doctor_address, doctor_phonenumber, doctor_gender, doctor_date_of_birth, department_id, doctordetail_id, doctor_status)
+VALUES 
+    (21, 'Nguyễn Văn Khải', '123 Đường Lê Duẩn, Quận Hải Châu', '+84901234567', 1, '1980-05-10', 1, 1, 'ON'),
+    (22, 'Trần Minh Hoàng', '56 Đường Nguyễn Văn Linh, Quận Thanh Khê', '+84902345678', 1, '1985-07-20', 1, 2, 'ON'),
+    (23, 'Phạm Thị Ánh', '89 Đường Phan Châu Trinh, Quận Sơn Trà', '+84903456789', 0, '1990-03-15', 2, 3, 'ON'),
+    (24, 'Lê Thu Lý', '22 Đường Võ Nguyên Giáp, Quận Ngũ Hành Sơn', '+84904567890', 0, '1978-12-01', 2, 4, 'ON'),
+    (25, 'Đỗ Thanh Phúc', '40 Đường Nguyễn Hữu Thọ, Quận Liên Chiểu', '+84905678901', 1, '1988-11-22', 3, 5, 'ON'),
+    (26, 'Bùi Văn Quân', '67 Đường Tôn Đức Thắng, Quận Hải Châu', '+84906789012', 1, '1991-04-10', 3, 6,'ON'),
+    (27, 'Ngô Hải Hiếu', '35 Đường Hoàng Diệu, Quận Thanh Khê', '+84907890123', 1, '1984-08-30', 4, 7, 'ON'),
+    (28, 'Dương Thị Vân', '76 Đường Điện Biên Phủ, Quận Sơn Trà', '+84908901234', 0, '1973-06-17', 4, 8, 'ON'),
+    (29, 'Trịnh Văn Lộc', '52 Đường Trưng Nữ Vương, Quận Ngũ Hành Sơn', '+84909012345', 1, '1966-09-27', 5, 9, 'ON'),
+    (30, 'Đặng Văn Tư', '101 Đường Nguyễn Chí Thanh, Quận Hải Châu', '+84901123456', 0, '1979-02-13', 5, 10, 'ON'),
+    (31, 'Nguyễn Thành Trung', '12 Đường Hùng Vương, Quận Thanh Khê', '+84901123451', 1, '1987-10-15', 6, 11, 'ON'),
+    (32, 'Trần Văn Minh', '89 Đường Phạm Văn Đồng, Quận Hải Châu', '+84901123452', 1, '1992-07-30', 6, 12, 'ON'),
+    (33, 'Lê Hải Nam', '34 Đường Võ Thị Sáu, Quận Sơn Trà', '+84901123453', 1, '1985-04-25', 7, 13, 'ON'),
+    (34, 'Phạm Đức Dũng', '23 Đường Trần Phú, Quận Ngũ Hành Sơn', '+84901123454', 1, '1980-06-10', 7, 14, 'ON'),
+    (35, 'Hoàng Thị Hoa', '78 Đường Lý Thái Tổ, Quận Liên Chiểu', '+84901123455', 0, '1983-09-12', 8, 15, 'ON'),
+    (36, 'Đỗ Hữu Bình', '65 Đường Tôn Đức Thắng, Quận Hải Châu', '+84901123456', 1, '1990-12-15', 8, 16, 'ON'),
+    (37, 'Bùi Thanh Hùng', '44 Đường Nguyễn Văn Linh, Quận Sơn Trà', '+84901123457', 1, '1975-11-20', 9, 17, 'ON'),
+    (38, 'Ngô Thị Nhân', '12 Đường Phan Đình Phùng, Quận Thanh Khê', '+84901123458', 0, '1988-05-18', 9, 18, 'ON'),
+    (39, 'Trịnh Văn Tâm', '45 Đường Hoàng Sa, Quận Ngũ Hành Sơn', '+84901123459', 1, '1995-03-27', 9, 19, 'ON'),
+    (40, 'Dương Thị Linh', '102 Đường Trưng Nữ Vương, Quận Hải Châu', '+84901123460', 0, '1982-01-30', 10, 20, 'ON');
 
 INSERT INTO DOCTOR_SERVICE (doctor_id, service_id) VALUES
-(1, 1),
+(1, 1), 
 (1, 2),
 (2, 3),
 (2, 4),
@@ -245,20 +246,50 @@ INSERT INTO DOCTOR_SERVICE (doctor_id, service_id) VALUES
 (9, 17),
 (9, 18),
 (10, 19),
-(10, 20);
+(10, 20),
+(11, 1),
+(11, 2),
+(12, 3),
+(12, 4),
+(13, 5),
+(13, 6),
+(14, 7),
+(14, 8 ),
+(15, 9),
+(15, 10),
+(16, 11),
+(16, 12),
+(17, 13),
+(17, 14),
+(18, 15),
+(18, 16),
+(19, 17),
+(19, 18),
+(20, 19),
+(20, 20);
 
 INSERT INTO DOCTOR_TIMEWORK (doctortimework_year, week_of_year, timework_id, doctor_id, doctortimework_status)
  VALUES
     (2024, 1, 1, 1, 'Available'),
     (2024, 1, 2, 2, 'Busy'),
-    (2024, 2, 15, 3, 'Available'),
-    (2024, 2, 17, 4, 'Available'),
-    (2024, 3, 26, 5, 'Available'),
-    (2024, 3, 36, 6, 'Busy'),
-    (2024, 4, 10, 7, 'Available'),
-    (2024, 4, 16, 8, 'Busy'),
-    (2024, 5, 11, 9, 'Available'),
-    (2024, 5, 12, 10, 'Available');
+    (2024, 2, 3, 3, 'Available'),
+    (2024, 2, 4, 4, 'Available'),
+    (2024, 3, 5, 5, 'Available'),
+    (2024, 3, 6, 6, 'Busy'),
+    (2024, 4, 7, 7, 'Available'),
+    (2024, 4, 8, 8, 'Busy'),
+    (2024, 5, 9, 9, 'Available'),
+    (2024, 5, 10, 10, 'Available'),
+    (2024, 6, 11, 11, 'Available'),
+    (2024, 6, 12, 12, 'Busy'),
+    (2024, 7, 13, 13, 'Available'),
+    (2024, 7, 14, 14, 'Available'),
+    (2024, 8, 15, 15, 'Available'),
+    (2024, 8, 16, 16, 'Busy'),
+    (2024, 9, 17, 17, 'Available'),
+    (2024, 9, 18, 18, 'Busy'),
+    (2024, 10, 19, 19, 'Available'),
+    (2024, 10, 20, 20, 'Available');
     
 INSERT INTO APPOINTMENT (patient_id, doctortimework_id, employee_id, doctorservice_id, 
 						appointment_created_at, appointment_status, appointment_note
@@ -273,4 +304,3 @@ INSERT INTO APPOINTMENT (patient_id, doctortimework_id, employee_id, doctorservi
     (8, 8, 8, 8, '2024-11-10 15:00:00', 'Confirmed', 'Khám sản'),
     (9, 9, 9, 9, '2024-11-11 16:00:00', 'Completed', 'Khám thần kinh'),
     (10, 10, 10, 10, '2024-11-11 17:00:00', 'Pending', 'Chữa răng');
-

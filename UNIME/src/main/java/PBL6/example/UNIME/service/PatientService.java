@@ -64,10 +64,10 @@ public class PatientService {
         User user = new User();
         user.setPassword(request.getPatientPassword());
         user.setEmail(request.getPatientEmail());
+        user.setImage(request.getPatientImage());
         userService.updateUser(patient.getPatientUserId().getUserId(), user );
 
         // 4. cập nhật vào bẳng Patient
-        patient.setPatientImage(request.getPatientImage());
         patient.setPatientName(request.getPatientName());
         patient.setPatientGender(request.getPatientGender());
         patient.setPatientAddress(request.getPatientAddress());
@@ -99,17 +99,18 @@ public class PatientService {
     public PatientResponse createPatient(PatientRequest request) {
 
         //1. kiểm tra, khởi tạo user
-        User userTest = new User();
-        userTest.setUsername(request.getPatientUsername());
-        userTest.setPassword(request.getPatientPassword());
-        userTest.setEmail(request.getPatientEmail());
-        userTest.setRole(Role.PATIENT.name());
-        User user = userService.createUser(userTest);
+        User user = new User();
+        user.setUsername(request.getPatientUsername());
+        user.setPassword(request.getPatientPassword());
+        if(request.getPatientImage() == null){
+            user.setImage("https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731150727/e3e8df1e56e1c8839457b42bdcd750e5_smkmhm.jpg");
+        } else user.setImage(request.getPatientImage());
+        user.setEmail(request.getPatientEmail());
+        user.setRole(Role.PATIENT.name());
 
         //2. Tạo patient
         Patient patient = new Patient();
-        patient.setPatientUserId(user);
-        patient.setPatientImage(request.getPatientImage());
+        patient.setPatientUserId(userService.createUser(user));
         patient.setPatientName(request.getPatientName());
         patient.setPatientAddress(request.getPatientAddress());
         patient.setPatientGender(request.getPatientGender());
@@ -128,7 +129,7 @@ public class PatientService {
                 patient.getPatientUserId().getUsername(),
                 patient.getPatientUserId().getPassword(),
                 patient.getPatientUserId().getEmail(),
-                patient.getPatientImage(),
+                patient.getPatientUserId().getImage(),
                 patient.getPatientName(),
                 patient.getPatientAddress(),
                 patient.getPatientPhoneNumber(),

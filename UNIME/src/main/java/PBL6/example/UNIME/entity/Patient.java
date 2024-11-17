@@ -24,9 +24,6 @@ public class Patient{
     @JoinColumn(name = "patient_userId", referencedColumnName = "user_id", nullable = false, unique = true)
     User patientUserId;
 
-    @Column(name = "patient_image",  length = 255)
-    String patientImage;
-
     @Column(name = "patient_name", nullable = false, length = 255)
     String patientName;
 
