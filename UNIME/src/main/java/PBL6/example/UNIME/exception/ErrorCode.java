@@ -29,6 +29,7 @@ public enum ErrorCode {
     TIMEWORK_NOT_FOUND(2007, "Timework not found", HttpStatus.NOT_FOUND),
     DOCTORSERVICE_EXITED(2008, "Doctor service exited", HttpStatus.BAD_REQUEST),
     DOCTORSERVICE_NOT_FOUND(2009, "Doctor service not found", HttpStatus.NOT_FOUND),
+    DOCTORTIMEWORK_NOT_FOUND(2010, "Doctor timework not found", HttpStatus.NOT_FOUND),
     INVALID_DAY(2008, "Invalid day of week", HttpStatus.BAD_REQUEST),
     INVALID_TIME(2009, "Invalid time", HttpStatus.BAD_REQUEST),
     DOCTOR_DETAILS_NOT_FOUND(2003, "Doctor detail not found", HttpStatus.NOT_FOUND),
@@ -41,7 +42,7 @@ public enum ErrorCode {
     INVALID_EMAIL_FORMAT(3003, "Invalid email format", HttpStatus.BAD_REQUEST), // không đúng định dạng _@gmail.com
     INVALID_PHONE_NUMBER_FORMAT(3004, "Invalid phone number format", HttpStatus.BAD_REQUEST), // đúng định dạng số đt ko
     MISSING_REQUIRED_FIELDS(3005, "Missing required fields", HttpStatus.BAD_REQUEST), // để trống không điền đủ
-
+    INVALID_DATETIME_FORMAT(3006, "Invalid datetime format", HttpStatus.BAD_REQUEST)
 //    // Các mã lỗi liên quan đến hệ thống
 //    INTERNAL_SERVER_ERROR(5001, "Internal server error"),
 //    DATABASE_CONNECTION_FAILED(5002, "Database connection failed"),

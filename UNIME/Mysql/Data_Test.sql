@@ -1,4 +1,3 @@
-use unimehospital;
 -- disable foreign keys constraint
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -17,7 +16,7 @@ TRUNCATE TABLE user;
 -- enable foreign keys constraint
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO DEPARTMENT (department_name, department_description)
+INSERT INTO department (department_name, department_description)
 VALUES 
     ('Răng-Hàm-Mặt', 'Chăm sóc và điều trị các vấn đề về răng miệng và hàm mặt'),
     ('Tim Mạch', 'Chuyên khám và điều trị các bệnh lý về tim mạch'),
@@ -30,7 +29,7 @@ VALUES
     ('Nhi Khoa', 'Khám và điều trị các bệnh cho trẻ em'),
     ('Da Liễu', 'Chăm sóc và điều trị các vấn đề về da liễu');
     
-INSERT INTO SERVICE (service_name, department_id, service_description, service_price, service_image)
+INSERT INTO service (service_name, department_id, service_description, service_price, service_image)
 VALUES
 ('Khám tổng quát răng miệng', 1, 'Kiểm tra và tư vấn tình trạng răng miệng', 200000, 'rang-ham-mat-kham-tong-quat.jpg'),
 ('Nhổ răng khôn', 1, 'Nhổ răng khôn mọc lệch, mọc ngầm', 800000, 'rang-ham-mat-nho-rang-khon.jpg'),
@@ -53,7 +52,7 @@ VALUES
 ('Khám da tổng quát', 10, 'Kiểm tra và tư vấn các vấn đề về da', 200000, 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731836225/bgiu0zvtlwqyx2aozouv.jpg'),
 ('Điều trị mụn', 10, 'Chăm sóc và điều trị các loại mụn', 500000, 'da-lieu-dieu-tri-mun.jpg');
 
-INSERT INTO TIMEWORK (day_of_week, start_time, end_time)
+INSERT INTO timework (day_of_week, start_time, end_time)
 VALUES 
     ('MONDAY', '08:00:00', '09:00:00'),
     ('MONDAY', '09:00:00', '10:00:00'),
@@ -109,7 +108,7 @@ VALUES
     ('SATURDAY', '15:00:00', '16:00:00'),
     ('SATURDAY', '16:00:00', '17:00:00');
 
-INSERT INTO DOCTOR_DETAIL (doctordetail_information, doctordetail_experience, doctordetail_award_recognization) 
+INSERT INTO doctor_detail (doctordetail_information, doctordetail_experience, doctordetail_award_recognization) 
 VALUES
     ('Bác sĩ Răng-Hàm-Mặt hàng đầu', '12 năm kinh nghiệm trong điều trị nha khoa', 'Giải thưởng Bác sĩ Nha khoa xuất sắc 2021'),
     ('Chuyên gia chỉnh nha', '10 năm kinh nghiệm trong chỉnh nha thẩm mỹ', 'Giải thưởng Chỉnh nha quốc tế 2018'),
@@ -132,7 +131,7 @@ VALUES
     ('Bác sĩ da liễu chuyên sâu', '8 năm kinh nghiệm trong điều trị nám và tàn nhang', 'Giải thưởng Quốc gia về Da liễu 2020'),
     ('Chuyên gia thẩm mỹ da', '10 năm kinh nghiệm trong trị liệu laser thẩm mỹ', 'Giải thưởng Quốc tế về Thẩm mỹ da 2019');
 
-INSERT INTO USER (user_username, user_password, user_email, user_role, user_image)
+INSERT INTO user (user_username, user_password, user_email, user_role, user_image)
 VALUES     
 ('pa_anh', '$2a$10$jnytaQEJOJsgyfdVHHmpf.qRSuScHxGgqs91XLwu720psGC.PNi8C', 'anh@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa2_ruttml.jpg'),
 ('pa_bao', '$2a$10$SlWDXpG4L2wYHUUyA4RxROIfOoPOdl9iMxCegDqxKNN7i1iiWu/OC', 'bao@gmail.com', 'PATIENT', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731242275/pa1_wjygvu.jpg'),
@@ -177,7 +176,7 @@ VALUES
 ('doc_tam', '$2a$10$He868WWSNwCnwuZ36rnlbexOQIyVojM2JoPs/.OFnq5ipFL4o6qjO', 'tam@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc19_bgtres.jpg'),
 ('doc_linh', '$2a$10$taANXCuX.EGkMbO8NiW6GOWLgBeHSG31kPbZXxyGAClJ.gpzvF1lm', 'linhdoc@gmail.com', 'DOCTOR', 'https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731241977/doc20_loiknj.jpg');
 
-INSERT INTO PATIENT (patient_userId, patient_name, patient_address, patient_phonenumber, patient_gender, patient_date_of_birth)
+INSERT INTO patient (patient_userId, patient_name, patient_address, patient_phonenumber, patient_gender, patient_date_of_birth)
 VALUES 
     (1, 'Nguyễn Vân Anh', '123 Đường Hùng Vương, Quận Hải Châu, TP. Đà Nẵng', '+84912340001', b'0', '1991-02-15'), 
     (2, 'Nguyễn Văn Bảo', '456 Đường Trần Phú, Quận Hải Châu, TP. Đà Nẵng', '+84912340002', b'1', '1992-03-20'),
@@ -190,7 +189,7 @@ VALUES
     (9, 'Nguyễn Văn Chính', '321 Đường Điện Biên Phủ, Quận Thanh Khê, TP. Đà Nẵng', '+84912340009', b'1', '1999-10-30'),
     (10, 'Lê Hoàng Nhung', '654 Đường Võ Văn Kiệt, Quận Sơn Trà, TP. Đà Nẵng', '+84912340010', b'0', '2000-11-10');
     
-INSERT INTO EMPLOYEE (employee_userId, employee_name, employee_phonenumber, employee_gender, department_id, employee_status)
+INSERT INTO employee (employee_userId, employee_name, employee_phonenumber, employee_gender, department_id, employee_status)
 VALUES
     (11, 'Nguyễn Văn Quân', '+84901234567', 1, 1, 'ON'),
     (12, 'Lê Minh Trung', '+84902345678', 0, 2, 'ON'),
@@ -203,7 +202,7 @@ VALUES
     (19, 'Hồ Thị Phương', '+84909012345', 0, 9, 'ON'),
     (20, 'Trần Lê Tú', '+84900123456', 0, 10, 'ON');
 
-INSERT INTO DOCTOR (doctor_userId, doctor_name, doctor_address, doctor_phonenumber, doctor_gender, doctor_date_of_birth, department_id, doctordetail_id, doctor_status)
+INSERT INTO doctor (doctor_userId, doctor_name, doctor_address, doctor_phonenumber, doctor_gender, doctor_date_of_birth, department_id, doctordetail_id, doctor_status)
 VALUES 
     (21, 'Nguyễn Văn Khải', '123 Đường Lê Duẩn, Quận Hải Châu', '+84901234567', 1, '1980-05-10', 1, 1, 'ON'),
     (22, 'Trần Minh Hoàng', '56 Đường Nguyễn Văn Linh, Quận Thanh Khê', '+84902345678', 1, '1985-07-20', 1, 2, 'ON'),
@@ -226,7 +225,7 @@ VALUES
     (39, 'Trịnh Văn Tâm', '45 Đường Hoàng Sa, Quận Ngũ Hành Sơn', '+84901123459', 1, '1995-03-27', 9, 19, 'ON'),
     (40, 'Dương Thị Linh', '102 Đường Trưng Nữ Vương, Quận Hải Châu', '+84901123460', 0, '1982-01-30', 10, 20, 'ON');
 
-INSERT INTO DOCTOR_SERVICE (doctor_id, service_id) VALUES
+INSERT INTO doctor_service (doctor_id, service_id) VALUES
 (1, 1), 
 (1, 2),
 (2, 3),
@@ -268,7 +267,7 @@ INSERT INTO DOCTOR_SERVICE (doctor_id, service_id) VALUES
 (20, 19),
 (20, 20);
 
-INSERT INTO DOCTOR_TIMEWORK (doctortimework_year, week_of_year, timework_id, doctor_id, doctortimework_status)
+INSERT INTO doctor_timework (doctortimework_year, week_of_year, timework_id, doctor_id, doctortimework_status)
  VALUES
     (2024, 1, 1, 1, 'Available'),
     (2024, 1, 2, 2, 'Busy'),
@@ -291,7 +290,7 @@ INSERT INTO DOCTOR_TIMEWORK (doctortimework_year, week_of_year, timework_id, doc
     (2024, 10, 19, 19, 'Available'),
     (2024, 10, 20, 20, 'Available');
     
-INSERT INTO APPOINTMENT (patient_id, doctortimework_id, employee_id, doctorservice_id, 
+INSERT INTO appointment (patient_id, doctortimework_id, employee_id, doctorservice_id, 
 						appointment_created_at, appointment_status, appointment_note
 ) VALUES 
     (1, 1, 1, 1, '2024-10-16 08:00:00', 'Pending', 'Khám tổng quát'),
@@ -304,3 +303,4 @@ INSERT INTO APPOINTMENT (patient_id, doctortimework_id, employee_id, doctorservi
     (8, 8, 8, 8, '2024-11-10 15:00:00', 'Confirmed', 'Khám sản'),
     (9, 9, 9, 9, '2024-11-11 16:00:00', 'Completed', 'Khám thần kinh'),
     (10, 10, 10, 10, '2024-11-11 17:00:00', 'Pending', 'Chữa răng');
+ALTER TABLE appointment CHANGE COLUMN employee_id employee_id INT;

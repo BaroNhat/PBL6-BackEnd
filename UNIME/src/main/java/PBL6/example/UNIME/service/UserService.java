@@ -1,5 +1,6 @@
 package PBL6.example.UNIME.service;
 
+import PBL6.example.UNIME.dto.request.PasswordRequest;
 import PBL6.example.UNIME.entity.User;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
@@ -46,10 +47,25 @@ public class UserService {
                 throw new AppException(ErrorCode.EMAIL_ALREADY_REGISTERED);
             }
         }
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         user.setImage(request.getImage());
         return userRepository.save(user);
+    }
+
+    public String updatePassword(String username, PasswordRequest passwordRequest) {
+        User user = userRepository.findByusername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
+        log.info("oldPasswork: {}", user.getPassword());
+        log.info("request: {}_ {}", passwordRequest.getOldPassword(), passwordRequest.getNewPassword());
+        if(!verifyPassword(passwordRequest.getOldPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        user.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
+        userRepository.save(user);
+        return "Thành công";
+    }
+    public boolean verifyPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     public void deleteUser(Integer user_id) {

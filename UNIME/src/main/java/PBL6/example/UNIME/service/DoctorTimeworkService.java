@@ -1,7 +1,7 @@
 package PBL6.example.UNIME.service;
 
-import PBL6.example.UNIME.dto.request.DoctorTimeworkRequest;
-import PBL6.example.UNIME.dto.response.DoctorResponse;
+import PBL6.example.UNIME.dto.request.DoctorTimeworkCreateRequest;
+import PBL6.example.UNIME.dto.request.DoctorTimeworkUpdateRequest;
 import PBL6.example.UNIME.dto.response.DoctorTimeworkResponse;
 import PBL6.example.UNIME.entity.*;
 import PBL6.example.UNIME.enums.DayOfWeek;
@@ -12,12 +12,15 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,12 +29,11 @@ import java.util.stream.Collectors;
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class DoctorTimeworkService {
 
-    private final PBL6.example.UNIME.service.DoctorService doctorService;
-    private final TimeworkService timeworkService;
-    private final DoctorTimeworkRepository doctorTimeworkRepository;
-    private final EmployeeService employeeService;
+    TimeworkService timeworkService;
+    DoctorTimeworkRepository doctorTimeworkRepository;
+    EmployeeService employeeService;
 
-    public void createDoctorTimework( Doctor doctor, DoctorTimeworkRequest request) {
+    public void createDoctorTimework( Doctor doctor, DoctorTimeworkCreateRequest request) {
 
         request.validateRequest();
         DayOfWeek dow = parseDayOfWeek(request.getDayOfWeek());
@@ -52,32 +54,24 @@ public class DoctorTimeworkService {
 
     }
 
-//    public String updateDoctorTimework(String username, DoctorTimeworkRequest request) {
-//        Integer employeeDepartmentId = employeeService.getEmployeeByUsername(username).getDepartment().getDepartmentId();
-//
-//        if(!employeeDepartmentId.equals(request.getDoctorId().)) {
-//            throw new AppException(ErrorCode.FORBIDDEN);
-//        }
-//
-//        request.validateRequest();
-//        DayOfWeek dow = parseDayOfWeek(request.getDayOfWeek());
-//        LocalTime startTime = parseTime(request.getStartTime());
-//        LocalTime endTime = parseTime(request.getEndTime());
-//
-//        Timework timework = timeworkService.getTimeworkByInfo(dow,startTime,endTime);
-//        log.info(" {} = {} = {}",dow,startTime,endTime);
-//        if(timework == null) throw new AppException(ErrorCode.TIMEWORK_NOT_FOUND);
-//
-//
-//        DoctorTimework doctorTimework = new DoctorTimework();
-//        doctorTimework.setYear(request.getDoctorTimeworkYear());
-//        doctorTimework.setWeekOfYear(request.getWeekOfYear());
-//        doctorTimework.setTimeWork(timework);
-//        doctorTimework.setStatus(request.getDoctorTimeworkStatus());
-//        doctorTimeworkRepository.save(doctorTimework);
-//
-//        return "Thanh cong";
-//    }
+    public String updateDoctorTimework(String username, DoctorTimeworkUpdateRequest request) {
+
+        DoctorTimework doctorTimework = doctorTimeworkRepository.findById(request.getDoctorTimeworkId()).
+                orElseThrow(()->new AppException(ErrorCode.DOCTORTIMEWORK_NOT_FOUND));
+
+        Integer employeeDepartmentId = employeeService.getEmployeeByUsername(username).getDepartment().getDepartmentId();
+        Integer doctorDepartmentId = doctorTimework.getDoctor().getDepartment().getDepartmentId();
+        log.info("employeeDepartmentId = {}",employeeDepartmentId);
+        log.info("doctorDepartmentId = {}",doctorDepartmentId);
+        if(!employeeDepartmentId.equals(doctorDepartmentId)) {
+            throw new AppException(ErrorCode.FORBIDDEN);
+        }
+
+        doctorTimework.setStatus(request.getDoctorTimeworkStatus());
+        doctorTimeworkRepository.save(doctorTimework);
+
+        return "Thanh cong";
+    }
 
     public List<DoctorTimeworkResponse> getAllDoctorTimeworkByWeek(Employee employee, String week_year) {
         String[] strings = week_year.split("_");
@@ -95,6 +89,23 @@ public class DoctorTimeworkService {
                 .collect(Collectors.toList());
     }
 
+    public List<DoctorTimeworkResponse> getListTimeworkOfDoctor(Doctor doctor) {
+        LocalDate today = LocalDate.now();
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        int year = today.getYear();
+        int week = today.get(weekFields.weekOfYear());
+        int nextWeek = getNextWeek(week,year);
+        int nextYear = (nextWeek == 1 )? year+1: (year);
+        log.info("week: {} ___year:  {}", week, year);
+        log.info("nextWeek: {}  ___nextYear: {}", nextWeek, nextYear);
+
+        List<DoctorTimework> doctorTimeworkList = doctorTimeworkRepository.findDoctorTimeworkBydoctor(doctor,week,year,nextWeek,nextYear);
+
+        return doctorTimeworkList
+                .stream()
+                .map(this::mapToServiceResponse)
+                .collect(Collectors.toList());
+    }
 
 
     private DoctorTimeworkResponse mapToServiceResponse(DoctorTimework doctorTimework) {
@@ -108,6 +119,13 @@ public class DoctorTimeworkService {
                 doctorTimework.getDoctor().getDoctorId(),
                 doctorTimework.getStatus()
         );
+    }
+    //===============================================//
+
+    public  Integer getNextWeek(Integer weekOfYear, Integer year) {
+        LocalDate lastDayOfYear = LocalDate.of(year, 12, 31);
+        int maxWeeks = lastDayOfYear.get(WeekFields.of(Locale.getDefault()).weekOfYear());
+        return weekOfYear < maxWeeks ? weekOfYear + 1 : 1; // Nếu là tuần cuối cùng, quay về tuần 1
     }
 
     public DayOfWeek parseDayOfWeek(String day) {

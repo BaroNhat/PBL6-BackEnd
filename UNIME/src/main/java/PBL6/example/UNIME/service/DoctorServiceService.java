@@ -5,9 +5,6 @@ import PBL6.example.UNIME.dto.response.DoctorResponse;
 import PBL6.example.UNIME.dto.response.ServiceResponse;
 import PBL6.example.UNIME.entity.Doctor;
 import PBL6.example.UNIME.entity.DoctorService;
-import PBL6.example.UNIME.entity.Employee;
-import PBL6.example.UNIME.entity.User;
-import PBL6.example.UNIME.enums.Role;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.DoctorRepository;
@@ -17,10 +14,7 @@ import PBL6.example.UNIME.repository.ServiceRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,10 +29,6 @@ public class DoctorServiceService {
     DoctorRepository doctorRepository;
     ServiceRepository serviceRepository;
     EmployeeService employeeService;
-    private final ServiceService serviceService;
-    private final UserService userService;
-    private final EmployeeRepository employeeRepository;
-    private final PBL6.example.UNIME.service.DoctorService doctorService;
 
     public List<DoctorResponse> addDoctorForService(String username, DoctorServiceRequest request) {
         checkEmployeeDepartmentAccess(username, request.getServiceID());
@@ -122,7 +112,6 @@ public class DoctorServiceService {
                 doctor.getDoctorId(),
 
                 doctor.getDoctorUserId().getUsername(),
-                doctor.getDoctorUserId().getPassword(),
                 doctor.getDoctorUserId().getEmail(),
                 doctor.getDoctorUserId().getImage(),
 

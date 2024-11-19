@@ -2,6 +2,7 @@ package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.dto.request.PatientRequest;
 import PBL6.example.UNIME.dto.response.PatientResponse;
+import PBL6.example.UNIME.entity.Employee;
 import PBL6.example.UNIME.entity.Patient;
 import PBL6.example.UNIME.entity.User;
 import PBL6.example.UNIME.enums.Role;
@@ -62,7 +63,6 @@ public class PatientService {
         }
         // 3. cập nhật vào bảng User
         User user = new User();
-        user.setPassword(request.getPatientPassword());
         user.setEmail(request.getPatientEmail());
         user.setImage(request.getPatientImage());
         userService.updateUser(patient.getPatientUserId().getUserId(), user );
@@ -120,6 +120,14 @@ public class PatientService {
         return mapToResponse(patientRepository.save(patient));
     }
 
+
+    public Patient getPatientByUsername(String username) {
+        User user = userService.getUserByUsername(username);
+        Patient patient = patientRepository.findBypatientUserId(user)
+                .orElseThrow( ()-> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
+
+        return patient;
+    }
     // chuyển Patient => PatientResponse
     private PatientResponse mapToResponse(Patient patient) {
 
@@ -127,7 +135,6 @@ public class PatientService {
                 patient.getPatientId(),
                 patient.getPatientUserId().getUserId(),
                 patient.getPatientUserId().getUsername(),
-                patient.getPatientUserId().getPassword(),
                 patient.getPatientUserId().getEmail(),
                 patient.getPatientUserId().getImage(),
                 patient.getPatientName(),
