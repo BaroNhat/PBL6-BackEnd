@@ -1,6 +1,5 @@
 package PBL6.example.UNIME.dto.request;
 
-import PBL6.example.UNIME.enums.DayOfWeek;
 import PBL6.example.UNIME.enums.DoctorTimeworkStatus;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
@@ -10,18 +9,13 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 @Slf4j
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DoctorTimeworkRequest {
-
+public class DoctorTimeworkCreateRequest {
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
     Integer doctorTimeworkYear;
 

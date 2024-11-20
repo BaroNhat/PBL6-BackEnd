@@ -26,3 +26,4 @@ create table APPOINTMENT(
 									  REFERENCES DOCTOR_SERVICE (doctorservice_id)					
     
 );
+ALTER TABLE APPOINTMENT CHANGE COLUMN employee_id employee_id INT;

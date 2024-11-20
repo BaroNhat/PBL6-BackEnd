@@ -12,7 +12,6 @@ public class EmployeeResponse {
     int employeeId;
 
     String employeeUsername;
-    String employeePassword;
     String employeeEmail;
 
     String employeeImage;

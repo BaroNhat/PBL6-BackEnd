@@ -111,7 +111,6 @@ public class DoctorService {
 
         //1. cập nhật User
         User user = new User();
-        user.setPassword(request.getDoctorPassword());
         user.setEmail(request.getDoctorEmail());
         user.setImage(request.getDoctorImage());
         userService.updateUser(doctor.getDoctorUserId().getUserId(), user);
@@ -163,7 +162,6 @@ public class DoctorService {
                 doctor.getDoctorId(),
 
                 doctor.getDoctorUserId().getUsername(),
-                doctor.getDoctorUserId().getPassword(),
                 doctor.getDoctorUserId().getEmail(),
                 doctor.getDoctorUserId().getImage(),
 

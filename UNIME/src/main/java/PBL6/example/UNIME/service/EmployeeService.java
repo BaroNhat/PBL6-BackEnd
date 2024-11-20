@@ -110,7 +110,6 @@ public class EmployeeService {
 
         // 2. cập nhật vào bảng User
         User user = new User();
-        user.setPassword(request.getEmployeePassword());
         user.setImage(request.getEmployeeImage());
         user.setEmail(request.getEmployeeEmail());
         userService.updateUser(employee.getEmployeeUserId().getUserId(), user);
@@ -133,7 +132,6 @@ public class EmployeeService {
                 employee.getEmployeeId(),
 
                 employee.getEmployeeUserId().getUsername(),
-                employee.getEmployeeUserId().getPassword(),
                 employee.getEmployeeUserId().getEmail(),
                 employee.getEmployeeUserId().getImage(),
 

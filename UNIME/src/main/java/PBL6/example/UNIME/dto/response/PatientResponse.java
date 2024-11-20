@@ -14,7 +14,6 @@ public class PatientResponse {
     int patientId;
     Integer userId;
     String patientUsername;
-    String patientPassword;
     String patientEmail;
     String patientImage;
     String patientName;

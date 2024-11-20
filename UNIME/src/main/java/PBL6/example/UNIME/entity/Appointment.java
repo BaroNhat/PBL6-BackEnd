@@ -21,17 +21,21 @@ public class Appointment {
     @Column(name = "appointment_id", nullable = false, updatable = false)
     Integer appointmentId;
 
-    @Column(name = "patient_id", nullable = false)
-    Integer patientId;
+    @ManyToOne
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
+    Patient patient;
 
-    @Column(name = "doctortimework_id", nullable = false)
-    Integer doctortimeworkId;
+    @ManyToOne
+    @JoinColumn(name = "doctortimework_id", referencedColumnName = "doctortimework_id")
+    DoctorTimework doctortimework;
 
-    @Column(name = "employee_id", nullable = false)
-    Integer employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    Employee employee;
 
-    @Column(name = "doctorservice_id", nullable = false)
-    Integer doctorserviceId;
+    @ManyToOne
+    @JoinColumn(name = "doctorservice_id", referencedColumnName = "doctorservice_id")
+    DoctorService doctorservice;
 
     @Column(name = "appointment_created_at", nullable = false, updatable = false)
     LocalDateTime appointmentCreatedAt = LocalDateTime.now();

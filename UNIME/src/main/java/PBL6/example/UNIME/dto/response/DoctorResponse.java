@@ -20,7 +20,6 @@ public class DoctorResponse {
     Integer doctorId;
 
     String username;
-    String password;
     String email;
 
     String doctorImage;

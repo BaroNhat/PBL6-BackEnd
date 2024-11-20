@@ -29,8 +29,8 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private String[] PUBLIC_POST_URL = { "/patients", "/auth/token", "/auth/introspect"};
-    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" , "/doctorservice/get/**"};
+    private String[] PUBLIC_POST_URL = { "/patients", "/auth/token", "/auth/introspect", "/sendOtp"};
+    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" , "/doctorservice/get/**", "/doctortimework/get/listByDoctor/*"};
 
     @Value("${jwt.signerKey}")
     private String signerKey;
