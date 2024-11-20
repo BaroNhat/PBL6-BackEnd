@@ -20,9 +20,9 @@ public class OTPService {
         Resend resend = new Resend("re_UwUSKQNg_EMC7CsQgrUDzsMzcZwXQfBmx");
         String randomOtp = generteOtp();
         CreateEmailOptions params = CreateEmailOptions.builder()
-                .from("admin <hospital@unime.site>")
+                .from("UNIME <hospital@unime.site>")
                 .to(request.getEmail())
-                .subject("Receive OTP from Unime Hospital ")
+                .subject("Welcome to Unime Hospital ")
                 .html("<strong>Your OTP is: " + randomOtp + "</strong>")
                 .build();
         try {
