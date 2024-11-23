@@ -127,6 +127,9 @@ public class EmployeeService {
 
         return employee;
     }
+    public Employee findEmployeeById(Integer employeeId){
+        return employeeRepository.findById(employeeId).orElseThrow(()-> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
+    }
     private EmployeeResponse mapToResponse(Employee employee) {
         return new EmployeeResponse(
                 employee.getEmployeeId(),

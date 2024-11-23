@@ -20,12 +20,12 @@ public class AppointmentReponse {
     String startTime;
     String endTime;
 
-    String doctorserviceName;
+    String serviceName;
 
     String appointmentCreatedAt ;
     String appointmentStatus ;
 
-    Integer employeeId;
+    String employeeName;
     String appointmentNote;
 
 }

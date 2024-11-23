@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,10 +70,10 @@ public class DoctorTimeworkController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ApiResponse<String> UpdateDoctorTimeworkById(@RequestBody DoctorTimeworkUpdateRequest requests) {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
         return ApiResponse.<String>builder()
-                .result(doctorTimeworkService.updateDoctorTimework(authentication.getName(), requests))
+                .result(doctorTimeworkService.updateDoctorTimework(requests.getDoctorTimeworkId(), requests.getDoctorTimeworkStatus()))
                 .build();
     }
 }

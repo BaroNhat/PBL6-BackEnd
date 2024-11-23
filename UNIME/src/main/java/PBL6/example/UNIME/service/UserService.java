@@ -60,10 +60,15 @@ public class UserService {
         if(!verifyPassword(passwordRequest.getOldPassword(), user.getPassword())) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-        user.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
-        userRepository.save(user);
+        updatePassword(user, passwordRequest.getNewPassword());
         return "Thành công";
     }
+
+    public void updatePassword(User user, String newPass) {
+        user.setPassword(passwordEncoder.encode(newPass));
+        userRepository.save(user);
+    }
+
     public boolean verifyPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }

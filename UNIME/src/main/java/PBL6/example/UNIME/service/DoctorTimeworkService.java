@@ -5,6 +5,7 @@ import PBL6.example.UNIME.dto.request.DoctorTimeworkUpdateRequest;
 import PBL6.example.UNIME.dto.response.DoctorTimeworkResponse;
 import PBL6.example.UNIME.entity.*;
 import PBL6.example.UNIME.enums.DayOfWeek;
+import PBL6.example.UNIME.enums.DoctorTimeworkStatus;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.*;
@@ -54,20 +55,13 @@ public class DoctorTimeworkService {
 
     }
 
-    public String updateDoctorTimework(String username, DoctorTimeworkUpdateRequest request) {
+    public String updateDoctorTimework(Integer doctorTimeworkId , String doctorTimeworkStatus) {
 
-        DoctorTimework doctorTimework = doctorTimeworkRepository.findById(request.getDoctorTimeworkId()).
+        DoctorTimework doctorTimework = doctorTimeworkRepository.findById(doctorTimeworkId).
                 orElseThrow(()->new AppException(ErrorCode.DOCTORTIMEWORK_NOT_FOUND));
 
-        Integer employeeDepartmentId = employeeService.getEmployeeByUsername(username).getDepartment().getDepartmentId();
-        Integer doctorDepartmentId = doctorTimework.getDoctor().getDepartment().getDepartmentId();
-        log.info("employeeDepartmentId = {}",employeeDepartmentId);
-        log.info("doctorDepartmentId = {}",doctorDepartmentId);
-        if(!employeeDepartmentId.equals(doctorDepartmentId)) {
-            throw new AppException(ErrorCode.FORBIDDEN);
-        }
-
-        doctorTimework.setStatus(request.getDoctorTimeworkStatus());
+        if(!DoctorTimeworkStatus.contains(doctorTimeworkStatus)) throw new AppException(ErrorCode.INVALID_KEY);
+        doctorTimework.setStatus(doctorTimeworkStatus);
         doctorTimeworkRepository.save(doctorTimework);
 
         return "Thanh cong";
