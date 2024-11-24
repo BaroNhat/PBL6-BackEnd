@@ -1,12 +1,7 @@
 package PBL6.example.UNIME.controller;
 
-import PBL6.example.UNIME.dto.request.AuthenticationRequest;
 import PBL6.example.UNIME.dto.request.PasswordRequest;
 import PBL6.example.UNIME.dto.response.ApiResponse;
-import PBL6.example.UNIME.dto.response.AuthenticationResponse;
-import PBL6.example.UNIME.entity.User;
-import PBL6.example.UNIME.exception.AppException;
-import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.UserRepository;
 import PBL6.example.UNIME.service.UserService;
 import lombok.AccessLevel;

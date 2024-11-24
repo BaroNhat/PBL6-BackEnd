@@ -47,10 +47,7 @@ public class DoctorTimeworkCreateRequest {
         log.info("doctortimeworkStatus: {}", doctorTimeworkStatus);
         log.info("weekOfYear: {}", weekOfYear);
         // Kiểm tra CHECK_DOCTOR_TIMEWORK_STATUS
-        if (!(DoctorTimeworkStatus.Available.name().equals(doctorTimeworkStatus)
-                || DoctorTimeworkStatus.Busy.name().equals(doctorTimeworkStatus))) {
-            throw new AppException(ErrorCode.INVALID_KEY);
-        }
+        DoctorTimeworkStatus.contains(doctorTimeworkStatus);
 
         // Kiểm tra CHECK_WEEK_OF_YEAR
         if (weekOfYear == null || weekOfYear < 0 || weekOfYear >= 54) {
