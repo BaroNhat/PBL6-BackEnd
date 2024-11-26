@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: unimehospital-backend
+    env: java  # Dùng Docker hoặc để mặc định
+    buildCommand: "./mvnw clean package -DskipTests"  # Build Spring Boot
+    startCommand: "java -jar target/UNIME-0.0.1-SNAPSHOT.jar"  # Chạy JAR file
+    plan: free
+    branch: main
+    region: oregon  # Chọn region phù hợp
