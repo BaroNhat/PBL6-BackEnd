@@ -14,7 +14,7 @@ create table APPOINTMENT(
     appointment_created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     appointment_status VARCHAR(255) DEFAULT 'Pending' NOT NULL,
     appointment_note VARCHAR(255),
-    CONSTRAINT CHECK_APPOINMENT_STATUS CHECK (appointment_status IN ('Confirmed', 'Pending', 'Completed')),
+    CONSTRAINT CHECK_APPOINMENT_STATUS CHECK (appointment_status IN ('Cancelled', 'Pending', 'Completed')),
     CONSTRAINT UNQ_DOCTORTIMEWORK UNIQUE(doctortimework_id),
     CONSTRAINT FK_APPOINTMENT_PATIENT FOREIGN KEY (patient_id)
 									  REFERENCES PATIENT(patient_id),
@@ -26,4 +26,7 @@ create table APPOINTMENT(
 									  REFERENCES DOCTOR_SERVICE (doctorservice_id)					
     
 );
+ALTER TABLE appointment DROP CONSTRAINT CHECK_APPOINMENT_STATUS ;
+ALTER TABLE appointment ADD CONSTRAINT CHECK_APPOINMENT_STATUS CHECK (appointment_status IN ('Cancelled', 'Pending', 'Completed')) ;
+
 ALTER TABLE APPOINTMENT CHANGE COLUMN employee_id employee_id INT;

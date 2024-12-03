@@ -35,9 +35,14 @@ public class DepartmentService {
 
     // Phương thức lấy phòng ban theo ID = > public
 
-    public DepartmentResponse getDepartmentById(Integer departmentId) {
+    public DepartmentResponse getDepartmentResponseById(Integer departmentId) {
         return mapToResponse(departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND)));
+    }
+
+    public Department getDepartmentById(Integer departmentId) {
+        return departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
     }
     @PreAuthorize("hasRole('ADMIN')")
     public DepartmentResponse updateDepartment(Integer departmentId, DepartmentRequest request) {

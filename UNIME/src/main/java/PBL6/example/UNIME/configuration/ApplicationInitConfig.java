@@ -24,7 +24,6 @@ public class ApplicationInitConfig {
                 User user = new User().builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .image("https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731150727/e3e8df1e56e1c8839457b42bdcd750e5_smkmhm.jpg")
                         .email("admin@gmail.com")
                         .role(Role.ADMIN.name())
                         .build();

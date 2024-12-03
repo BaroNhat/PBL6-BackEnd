@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,26 +23,23 @@ public class ServiceController {
     ServiceService serviceService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<ServiceResponse> createService(@RequestBody @Valid ServiceRequest request) {
         ApiResponse<ServiceResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(serviceService.createService(request));
         return apiResponse;
     }
 
-    @GetMapping("/{service_id}")
-    ApiResponse<ServiceResponse> getServiceById(@PathVariable("service_id") Integer serviceId) {
-        return ApiResponse.<ServiceResponse>builder()
-                .result(serviceService.getServiceById(serviceId))
-                .build();
-    }
 
     @PutMapping("/{service_id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<ServiceResponse> updateService(@PathVariable("service_id") Integer serviceId, @RequestBody ServiceRequest request) {
         return ApiResponse.<ServiceResponse>builder()
                 .result(serviceService.updateService(serviceId, request))
                 .build();
     }
     @DeleteMapping("/{service_id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<String> deleteService(@PathVariable("service_id") Integer serviceId) {
         serviceService.deleteService(serviceId);
         return ApiResponse.<String>builder()
@@ -58,10 +56,16 @@ public class ServiceController {
                 .build();
     }
 
-    @GetMapping("/get/{service_name}")
+    @GetMapping("/get/byName/{service_name}")
     ApiResponse<List<ServiceResponse>> getServiceByName(@PathVariable("service_name") String serviceName) {
         return ApiResponse.<List<ServiceResponse>>builder()
                 .result(serviceService.findServiceByName(serviceName))
+                .build();
+    }
+    @GetMapping("/get/byId/{service_id}")
+    ApiResponse<ServiceResponse> getServiceById(@PathVariable("service_id") Integer serviceId) {
+        return ApiResponse.<ServiceResponse>builder()
+                .result(serviceService.getServiceById(serviceId))
                 .build();
     }
 

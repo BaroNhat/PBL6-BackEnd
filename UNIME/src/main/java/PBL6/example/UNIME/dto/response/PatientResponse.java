@@ -12,9 +12,11 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PatientResponse {
     int patientId;
+
     Integer userId;
     String patientUsername;
     String patientEmail;
+
     String patientImage;
     String patientName;
     String patientAddress;

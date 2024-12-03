@@ -26,11 +26,11 @@ public class DoctorTimework {
     @Column(name = "week_of_year", nullable = false)
     Integer weekOfYear;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timework_id", nullable = false)
     Timework timeWork;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
     Doctor doctor;
 

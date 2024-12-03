@@ -1,6 +1,12 @@
 USE unimehospital;
-ALTER TABLE patient DROP COLUMN patient_name ;
-ALTER TABLE doctor DROP COLUMN doctor_name;
-ALTER TABLE employee DROP COLUMN employee_name;
+
+ALTER TABLE patient ADD COLUMN patient_name VARCHAR(255) Not NULL ;
+ALTER TABLE patient ADD COLUMN patient_image VARCHAR(255) Not NULL ;
+ALTER TABLE doctor ADD COLUMN doctor_name VARCHAR(255) Not NULL ;
+ALTER TABLE doctor ADD COLUMN doctor_image VARCHAR(255) Not NULL;
+ALTER TABLE doctor ADD COLUMN doctor_description VARCHAR(255) Not NULL;
+ALTER TABLE employee ADD COLUMN employee_name VARCHAR(255) Not NULL ;
+ALTER TABLE employee ADD COLUMN employee_image VARCHAR(255) Not NULL ;
+
 ALTER Table service ADD service_image  VARCHAR(255) Not NULL ;
-ALTER TABLE user ADD user_name VARCHAR(255) NOT NULL;
+ALTER TABLE user DROP user_image;

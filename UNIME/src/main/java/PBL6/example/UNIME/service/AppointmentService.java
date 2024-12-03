@@ -18,10 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,10 +40,10 @@ public class AppointmentService {
     AppointmentRepository appointmentRepository;
     PatientService patientService;
     EmployeeService employeeService;
-    private final UserService userService;
-    private final DoctorService doctorService;
-    private final TimeworkRespository timeworkRespository;
-    private final DoctorTimeworkService doctorTimeworkService;
+    UserService userService;
+    DoctorService doctorService;
+    TimeworkRespository timeworkRespository;
+    DoctorTimeworkService doctorTimeworkService;
 
 
     public String createAppointment(String username, AppointmentCreateRequest request) {
@@ -100,19 +102,18 @@ public class AppointmentService {
     public List<AppointmentReponse> getAppointmentsByDepartment(String username) {
         Department department = employeeService.getEmployeeByUsername(username).getDepartment();
         log.info("11");
-        List<Appointment> appointments = appointmentRepository.findByDepartment(department.getDepartmentId());
+
         log.info("12");
-        return appointments.stream()
-                .map(this::mapToResponse)
+        return appointmentRepository.findByDepartment(department.getDepartmentId()).stream()
+                .map(this::mapToAppointmentResponse)
                 .collect(Collectors.toList());
     }
 
     // GetList for Doctor
     public List<AppointmentReponse> getAppointmentsByDoctorId(String username) {
         Doctor doctor = doctorService.getDoctorByUsername(username);
-        List<Appointment> appointments = appointmentRepository.findByDoctor(doctor.getDoctorId());
-        return appointments.stream()
-                .map(this::mapToResponse)
+        return appointmentRepository.findByDoctor(doctor.getDoctorId()).stream()
+                .map(this::mapToAppointmentResponse)
                 .collect(Collectors.toList());
     }
 
@@ -135,23 +136,20 @@ public class AppointmentService {
 //        return parsedDateTime;
 //    }
 
-    private AppointmentReponse mapToResponse(Appointment appointment) {
-        return new AppointmentReponse(
-                appointment.getAppointmentId(),
-
-                appointment.getPatient().getPatientName(),
-                appointment.getDoctorservice().getDoctor().getDoctorName(),
-
-                appointment.getDoctortimework().getTimeWork().getDayOfWeek().name(),
-                appointment.getDoctortimework().getTimeWork().getStartTime().format(FORMATTIME),
-                appointment.getDoctortimework().getTimeWork().getEndTime().format(FORMATTIME),
-
-                appointment.getDoctorservice().getService().getServiceName(),
-                appointment.getAppointmentCreatedAt().format(FORMATDATETIME),
-                appointment.getAppointmentStatus(),
-
-                appointment.getEmployee() != null ? appointment.getEmployee().getEmployeeName() : null,
-                appointment.getAppointmentNote()
-        );
+    public AppointmentReponse mapToAppointmentResponse(Map<String, Object> map) {
+        return AppointmentReponse.builder()
+                .appointmentId((Integer) map.get("appointmentId"))
+                .patientName((String) map.get("patientName"))
+                .doctorName((String) map.get("doctorName"))
+                .dayOfWeek((String) map.get("dayOfWeek"))
+                .startTime(((LocalTime) map.get("startTime")).format(FORMATTIME))
+                .endTime(((LocalTime) map.get("endTime")).format(FORMATTIME))
+                .serviceName((String) map.get("serviceName"))
+                .appointmentCreatedAt(((LocalDateTime) map.get("appointmentCreatedAt")).format(FORMATDATETIME)) // Định dạng ngày giờ
+                .appointmentStatus((String) map.get("appointmentStatus"))
+                .employeeId((String) map.get("employeeId"))
+                .employeeName((String) map.get("employeeName"))
+                .appointmentNote((String) map.get("appointmentNote"))
+                .build();
     }
 }

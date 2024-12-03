@@ -3,13 +3,7 @@ server:
   servlet:
     context-path: /UNIME
 
-spring:
-  datasource:
-    url: "jdbc:mysql://root:fnkCycRqiVdqYfdEtAggsOEDsOvDtcpY@autorack.proxy.rlwy.net:41772/UnimeHospital"
-#    url: "jdbc:mysql://localhost:3306/unimehospital"
-    username: root
-    password: fnkCycRqiVdqYfdEtAggsOEDsOvDtcpY
-#    password: 2706phuongnhung
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -20,3 +14,5 @@ spring:
 #    open-in-view: false
 jwt:
   signerKey: "4UXF7e8ExKlokbDG0p+/6ICPRLVRVt/GTksOF/+8p5vD+BiPaoKAJJbwmoywIcbv"
+  valid-duration: 5
+  refreshable-duration: 120
