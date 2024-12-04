@@ -24,7 +24,7 @@ public class Service {
     @Column(name = "service_name", nullable = false)
     String serviceName ;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "department_id", nullable = false)
     Department department;
 

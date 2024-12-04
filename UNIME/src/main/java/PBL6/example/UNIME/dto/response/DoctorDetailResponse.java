@@ -1,10 +1,5 @@
 package PBL6.example.UNIME.dto.response;
 
-import PBL6.example.UNIME.entity.Department;
-import PBL6.example.UNIME.entity.DoctorDetail;
-import PBL6.example.UNIME.entity.User;
-import PBL6.example.UNIME.enums.Status;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,25 +10,22 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DoctorResponse {
+public class DoctorDetailResponse {
 
     Integer doctorId;
-
-    String username;
-    String email;
-
     String doctorImage;
     String doctorName;
     String doctorAddress;
     String doctorPhoneNumber;
-    boolean doctorGender;
+    Boolean doctorGender;
     LocalDate doctorDateOfBirth;
+    String doctorDescription;
+
+    String doctorEmail;
 
     String departmentName;
-    String doctorStatus;
 
     String doctordetailInformation;
     String doctordetailExperience;
     String doctordetailAwardRecognization;
-
 }

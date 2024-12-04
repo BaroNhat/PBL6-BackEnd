@@ -1,5 +1,6 @@
 package PBL6.example.UNIME.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,11 +30,11 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private String[] PUBLIC_POST_URL = { "/patients", "/auth/token", "/auth/introspect", "/mail/**"};
-    private String[] PUBLIC_GET_URL = { "/doctors/get/*", "/departments/get/*", "/services/get/*", "/timeworks/get/*" , "/doctorservice/get/**", "/doctortimework/get/listByDoctor/*"};
+    private String[] PUBLIC_POST_URL = { "/patients", "/auth/**", "/mail/**"};
+    private String[] PUBLIC_GET_URL = { "/doctors/get/**", "/departments/get/*", "/services/get/**", "/timeworks/get/*" , "/doctorservice/get/**", "/doctortimework/get/listByDoctor/*"};
 
-    @Value("${jwt.signerKey}")
-    private String signerKey;
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -55,7 +56,8 @@ public class SecurityConfig {
 
         // Cấu hình cho máy chủ tài nguyên OAuth2 với JWT
         httpSecurity.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
+                oauth2.jwt(jwtConfigurer ->
+                                jwtConfigurer.decoder(customJwtDecoder)
                                 .jwtAuthenticationConverter(jwtConverter()))
                         .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
         );
@@ -102,16 +104,6 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
 
         return converter;
-    }
-
-    @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
-
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build() ;
     }
 
     @Bean

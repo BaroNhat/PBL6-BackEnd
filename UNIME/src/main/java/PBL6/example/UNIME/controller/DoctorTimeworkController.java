@@ -31,24 +31,19 @@ import java.util.List;
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class DoctorTimeworkController {
     DoctorTimeworkService doctorTimeworkService;
-    private final DoctorService doctorService;
     private final EmployeeService employeeService;
     private final DoctorRepository doctorRepository;
 
     @PostMapping()
     public ApiResponse<String> addDoctorTimework(@RequestBody List<DoctorTimeworkCreateRequest> requests) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        Doctor doctor = doctorService.getDoctorByUsername(authentication.getName());
-        for (DoctorTimeworkCreateRequest request : requests) {
-            doctorTimeworkService.createDoctorTimework(doctor, request);
-        }
-
+        doctorTimeworkService.createDoctorTimework(authentication.getName(), requests);
         return ApiResponse.<String>builder()
                 .result("All doctor timeworks have been created successfully.")
                 .build();
     }
 
-    @GetMapping("/get/listByWeek/{week_year}")
+    @GetMapping("/get/listByWeek/{week_year}") // 3s
     public ApiResponse<List<DoctorTimeworkResponse>> getAllDoctorTimeworkByWeek(@PathVariable("week_year") String week_year) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         Employee employee = employeeService.getEmployeeByUsername(authentication.getName());
@@ -58,11 +53,12 @@ public class DoctorTimeworkController {
                 .build();
     }
 
-    @GetMapping("/get/listByDoctor/{doctor_id}")
+    @GetMapping("/get/listByDoctor/{doctor_id}")  // 1s
     public ApiResponse<List<DoctorTimeworkResponse>> getListTimeworkOfDoctor(@PathVariable("doctor_id") Integer doctorId) {
 
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(()-> new AppException(ErrorCode.DOCTORS_NOT_FOUND));
+
         List<DoctorTimeworkResponse> list = doctorTimeworkService.getListTimeworkOfDoctor(doctor);
         return ApiResponse.<List<DoctorTimeworkResponse>>builder()
                 .result(list)

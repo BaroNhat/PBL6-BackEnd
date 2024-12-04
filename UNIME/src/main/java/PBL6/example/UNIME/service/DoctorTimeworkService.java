@@ -22,6 +22,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,7 +33,14 @@ public class DoctorTimeworkService {
 
     TimeworkService timeworkService;
     DoctorTimeworkRepository doctorTimeworkRepository;
-    EmployeeService employeeService;
+    DoctorService doctorService;
+
+    public void createDoctorTimework(String  username, List<DoctorTimeworkCreateRequest> requests) {
+        Doctor doctor = doctorService.getDoctorByUsername(username);
+        for (DoctorTimeworkCreateRequest request : requests) {
+            createDoctorTimework(doctor, request);
+        }
+    }
 
     public void createDoctorTimework( Doctor doctor, DoctorTimeworkCreateRequest request) {
 
@@ -71,15 +79,10 @@ public class DoctorTimeworkService {
         String[] strings = week_year.split("_");
         Integer year = Integer.valueOf(strings[1]);
         Integer week = Integer.valueOf(strings[0]);
-
-        List<DoctorTimework> doctorTimeworkList = doctorTimeworkRepository.findByDepartmentAndWeek(
-                employee.getDepartment().getDepartmentId(),
-                week,
-                year
-                );
-        return doctorTimeworkList
+        log.info("getAllDoctorTimeworkByWeek");
+        return doctorTimeworkRepository.findByDepartmentAndWeek(employee.getDepartment(), week, year)
                 .stream()
-                .map(this::mapToServiceResponse)
+                .map(this::mapToDoctorTimeworkResponse)
                 .collect(Collectors.toList());
     }
 
@@ -92,28 +95,28 @@ public class DoctorTimeworkService {
         int nextYear = (nextWeek == 1 )? year+1: (year);
         log.info("week: {} ___year:  {}", week, year);
         log.info("nextWeek: {}  ___nextYear: {}", nextWeek, nextYear);
+        log.info("doctorID: {}", doctor.getDoctorId());
 
-        List<DoctorTimework> doctorTimeworkList = doctorTimeworkRepository.findDoctorTimeworkBydoctor(doctor,week,year,nextWeek,nextYear);
-
-        return doctorTimeworkList
+        return doctorTimeworkRepository.findDoctorTimeworkBydoctor(doctor, week,year, DoctorTimeworkStatus.Available.name(), nextWeek,nextYear)
                 .stream()
-                .map(this::mapToServiceResponse)
+                .map(this::mapToDoctorTimeworkResponse)
                 .collect(Collectors.toList());
     }
 
 
-    private DoctorTimeworkResponse mapToServiceResponse(DoctorTimework doctorTimework) {
-        return new DoctorTimeworkResponse(
-                doctorTimework.getId(),
-                doctorTimework.getYear(),
-                doctorTimework.getWeekOfYear(),
-                doctorTimework.getTimeWork().getDayOfWeek().name(),
-                doctorTimework.getTimeWork().getStartTime().toString(),
-                doctorTimework.getTimeWork().getEndTime().toString(),
-                doctorTimework.getDoctor().getDoctorId(),
-                doctorTimework.getStatus()
-        );
-    }
+    private DoctorTimeworkResponse mapToDoctorTimeworkResponse(Map<String, Object> tuple) {
+    return DoctorTimeworkResponse.builder()
+            .doctorTimeworkId((Integer) tuple.get("id"))
+            .doctorTimeworkYear((Integer) tuple.get("year"))
+            .weekOfYear((Integer) tuple.get("weekOfYear"))
+            .dayOfWeek((DayOfWeek) tuple.get("dayOfWeek"))
+            .startTime((LocalTime) tuple.get("startTime"))
+            .endTime((LocalTime) tuple.get("endTime"))
+            .doctorId((Integer) tuple.get("doctorId"))
+            .doctorName((String) tuple.get("doctorName"))
+            .doctorTimeworkStatus((String) tuple.get("status"))
+            .build();
+}
     //===============================================//
 
     public  Integer getNextWeek(Integer weekOfYear, Integer year) {

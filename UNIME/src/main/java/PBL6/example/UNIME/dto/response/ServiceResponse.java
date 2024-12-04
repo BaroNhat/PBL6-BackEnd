@@ -14,5 +14,4 @@ public class ServiceResponse {
     String serviceImage;
     String serviceDescription;
     Integer servicePrice;
-    String departmentName;
 }
