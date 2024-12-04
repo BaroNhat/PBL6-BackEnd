@@ -64,10 +64,13 @@ public class PatientService {
         // 3. cập nhật vào bảng User
         User user = new User();
         user.setEmail(request.getPatientEmail());
-        user.setImage(request.getPatientImage());
         userService.updateUser(patient.getPatientUserId().getUserId(), user );
 
+
         // 4. cập nhật vào bẳng Patient
+        if(request.getPatientImage() == null){
+            patient.setPatientImage("https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731150727/e3e8df1e56e1c8839457b42bdcd750e5_smkmhm.jpg");
+        } else   patient.setPatientImage(request.getPatientImage());
         patient.setPatientName(request.getPatientName());
         patient.setPatientGender(request.getPatientGender());
         patient.setPatientAddress(request.getPatientAddress());
@@ -102,14 +105,14 @@ public class PatientService {
         User user = new User();
         user.setUsername(request.getPatientUsername());
         user.setPassword(request.getPatientPassword());
-        if(request.getPatientImage() == null){
-            user.setImage("https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731150727/e3e8df1e56e1c8839457b42bdcd750e5_smkmhm.jpg");
-        } else user.setImage(request.getPatientImage());
         user.setEmail(request.getPatientEmail());
         user.setRole(Role.PATIENT.name());
 
         //2. Tạo patient
         Patient patient = new Patient();
+        if(request.getPatientImage() == null){
+            patient.setPatientImage("https://res.cloudinary.com/dy8p5yjsd/image/upload/v1731150727/e3e8df1e56e1c8839457b42bdcd750e5_smkmhm.jpg");
+        } else   patient.setPatientImage(request.getPatientImage());
         patient.setPatientUserId(userService.createUser(user));
         patient.setPatientName(request.getPatientName());
         patient.setPatientAddress(request.getPatientAddress());
@@ -136,7 +139,7 @@ public class PatientService {
                 patient.getPatientUserId().getUserId(),
                 patient.getPatientUserId().getUsername(),
                 patient.getPatientUserId().getEmail(),
-                patient.getPatientUserId().getImage(),
+                patient.getPatientImage(),
                 patient.getPatientName(),
                 patient.getPatientAddress(),
                 patient.getPatientPhoneNumber(),

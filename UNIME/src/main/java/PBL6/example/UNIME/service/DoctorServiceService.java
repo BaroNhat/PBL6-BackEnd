@@ -1,7 +1,8 @@
 package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.dto.request.DoctorServiceRequest;
-import PBL6.example.UNIME.dto.response.DoctorResponse;
+import PBL6.example.UNIME.dto.response.DoctorDetailResponse;
+import PBL6.example.UNIME.dto.response.DoctorListResponse;
 import PBL6.example.UNIME.dto.response.ServiceResponse;
 import PBL6.example.UNIME.entity.Doctor;
 import PBL6.example.UNIME.entity.DoctorService;
@@ -30,7 +31,7 @@ public class DoctorServiceService {
     ServiceRepository serviceRepository;
     EmployeeService employeeService;
 
-    public List<DoctorResponse> addDoctorForService(String username, DoctorServiceRequest request) {
+    public List<DoctorListResponse> addDoctorForService(String username, DoctorServiceRequest request) {
         checkEmployeeDepartmentAccess(username, request.getServiceID());
 
         // Lấy service và doctor từ request
@@ -53,7 +54,7 @@ public class DoctorServiceService {
         return getDoctorByService(request.getServiceID());
     }
 
-    public List<DoctorResponse> delDoctorForSerVice(String username, DoctorServiceRequest request) {
+    public List<DoctorListResponse> delDoctorForSerVice(String username, DoctorServiceRequest request) {
         checkEmployeeDepartmentAccess(username, request.getServiceID());
 
         PBL6.example.UNIME.entity.Service service = serviceRepository.findById(request.getServiceID())
@@ -83,7 +84,7 @@ public class DoctorServiceService {
                 .collect(Collectors.toList());
     }
 
-    public List<DoctorResponse> getDoctorByService(Integer serviceId) {
+    public List<DoctorListResponse> getDoctorByService(Integer serviceId) {
         PBL6.example.UNIME.entity.Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_FOUND));
         List<PBL6.example.UNIME.entity.DoctorService> doctorServices = doctorServiceRepository.findByservice(service);
@@ -91,7 +92,7 @@ public class DoctorServiceService {
         // Lấy danh sách Service từ danh sách DoctorService
         return doctorServices.stream()
                 .map(DoctorService::getDoctor)
-                .map(this::mapToDoctorResponse)
+                .map(this::mapToDoctorListResponse)
                 .collect(Collectors.toList());
     }
 
@@ -107,26 +108,20 @@ public class DoctorServiceService {
             throw new AppException(ErrorCode.FORBIDDEN);
         }
     }
-    public DoctorResponse mapToDoctorResponse(Doctor doctor) {
-        return new DoctorResponse(
+
+    private DoctorListResponse mapToDoctorListResponse(Doctor doctor) {
+        return new DoctorListResponse(
+
                 doctor.getDoctorId(),
-
-                doctor.getDoctorUserId().getUsername(),
-                doctor.getDoctorUserId().getEmail(),
-                doctor.getDoctorUserId().getImage(),
-
+                doctor.getDoctorImage(),
                 doctor.getDoctorName(),
                 doctor.getDoctorAddress(),
                 doctor.getDoctorPhoneNumber(),
                 doctor.isDoctorGender(),
                 doctor.getDoctorDateOfBirth(),
+                doctor.getDoctorDescription()
 
-                doctor.getDepartment().getDepartmentName(),
-                doctor.getDoctorStatus(),
-
-                doctor.getDoctorDetail().getDoctordetailInformation(),
-                doctor.getDoctorDetail().getDoctordetailExperience(),
-                doctor.getDoctorDetail().getDoctordetailAwardRecognization());
+        );
     }
     private ServiceResponse mapToServiceResponse(PBL6.example.UNIME.entity.Service service) {
         return new ServiceResponse(
@@ -134,8 +129,7 @@ public class DoctorServiceService {
                 service.getServiceName(),
                 service.getServiceImage(),
                 service.getServiceDescription(),
-                service.getServicePrice(),
-                service.getDepartment().getDepartmentName()
+                service.getServicePrice()
         );
     }
 

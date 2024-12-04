@@ -47,7 +47,7 @@ public class DepartmentController {
     @GetMapping("/{department_id}")
     ApiResponse<DepartmentResponse> getDepartment(@PathVariable("department_id") Integer departmentId) {
         return ApiResponse.<DepartmentResponse>builder()
-                .result(departmentService.getDepartmentById(departmentId))
+                .result(departmentService.getDepartmentResponseById(departmentId))
                 .build();
     }
 
@@ -60,8 +60,8 @@ public class DepartmentController {
                 .build();
     }
 
-    @GetMapping("/get/{department_name}")
-    ApiResponse<List<DepartmentResponse>> findByDepartmentName (@PathVariable("department_name") String departmentName) {
+    @GetMapping("/get/")
+    ApiResponse<List<DepartmentResponse>> findByDepartmentName (@RequestParam("department_name") String departmentName) {
         return ApiResponse.<List<DepartmentResponse>>builder()
                 .result(departmentService.findDepartmentByName(departmentName))
                 .build();

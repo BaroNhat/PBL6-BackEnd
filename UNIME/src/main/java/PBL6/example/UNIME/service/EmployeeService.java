@@ -1,7 +1,8 @@
 package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.dto.request.EmployeeRequest;
-import PBL6.example.UNIME.dto.response.EmployeeResponse;
+import PBL6.example.UNIME.dto.response.EmployeeDetailResponse;
+import PBL6.example.UNIME.dto.response.EmployeeListResponse;
 import PBL6.example.UNIME.entity.Department;
 import PBL6.example.UNIME.entity.Employee;
 import PBL6.example.UNIME.entity.User;
@@ -32,46 +33,45 @@ public class EmployeeService {
     DepartmentService departmentService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    public EmployeeResponse createEmployee(@Valid EmployeeRequest request) {
+    public void createEmployee(@Valid EmployeeRequest request) {
         // Tìm department dựa trên departmentId từ request
         Department department = departmentService.getDepartmentByName(request.getDepartmentName());
         //1. kiểm tra, khởi tạo user
         User user = new User();
         user.setUsername(request.getEmployeeUsername());
         user.setPassword(request.getEmployeePassword());
-        user.setImage(request.getEmployeeImage());
         user.setEmail(request.getEmployeeEmail());
         user.setRole(Role.EMPLOYEE.name());
 
         // 2. Tạo Employee
         Employee employee = new Employee();
+        employee.setEmployeeImage(request.getEmployeeImage());
         employee.setEmployeeUserId(userService.createUser(user));
         employee.setEmployeeName(request.getEmployeeName());
         employee.setEmployeePhonenumber(request.getEmployeePhoneNumber());
         employee.setEmployeeGender(request.getEmployeeGender());
         employee.setEmployeeStatus("ON");
         employee.setDepartment(department);
-
-        return mapToResponse(employeeRepository.save(employee));
+        employeeRepository.save(employee);
     }
 
     @PostAuthorize("hasRole('ADMIN')")
-    public List<EmployeeResponse> getAllEmployee(){
+    public List<EmployeeListResponse> getAllEmployee(){
         List<Employee> employees = employeeRepository.findAll();
         return employees.stream()
-                .map(this::mapToResponse)
+                .map(this::mapToEmployeeListResponse)
                 .collect(Collectors.toList());
     }
 
     @PostAuthorize("hasRole('ADMIN')")
-    public EmployeeResponse getEmployeeById(Integer employeeId) {
-        return mapToResponse(employeeRepository.findById(employeeId)
+    public EmployeeDetailResponse getEmployeeById(Integer employeeId) {
+        return mapToEmployeeDetailResponse(employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND)));
     }
 
 
     @PreAuthorize("hasRole('ADMIN')")
-    public EmployeeResponse updateByAdmin(Integer employee_id, EmployeeRequest request){
+    public void updateByAdmin(Integer employee_id, EmployeeRequest request){
 
         //1. kiểm tra tồn tại Employee theo Username
         Employee employee = employeeRepository.findById(employee_id)
@@ -83,7 +83,7 @@ public class EmployeeService {
         //3. Cập nhật Status, Department
         employee.setDepartment(department);
         employee.setEmployeeStatus(request.getEmployeeStatus());
-        return mapToResponse(employeeRepository.save(employee));
+        employeeRepository.save(employee);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -95,29 +95,29 @@ public class EmployeeService {
     }
 
 //  ==== Token
-    public EmployeeResponse getMyInfo(String employee_username) {
+    public EmployeeDetailResponse getMyInfo(String employee_username) {
         User user = userService.getUserByUsername(employee_username);
         Employee employee = employeeRepository.findByemployeeUserId(user)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXITED));
 
-        return mapToResponse(employee);
+        return mapToEmployeeDetailResponse(employee);
     }
 
-    public EmployeeResponse updateMyInfo(String employee_username, EmployeeRequest request){
+    public void updateMyInfo(String employee_username, EmployeeRequest request){
         //1. kiểm tra tồn tại Employee theo Username
         Employee employee = employeeRepository.findByemployeeUserId(userService.getUserByUsername(employee_username))
                 .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
 
         // 2. cập nhật vào bảng User
         User user = new User();
-        user.setImage(request.getEmployeeImage());
         user.setEmail(request.getEmployeeEmail());
         userService.updateUser(employee.getEmployeeUserId().getUserId(), user);
 
+        employee.setEmployeeImage(employee.getEmployeeImage());
         employee.setEmployeeName(request.getEmployeeName());
         employee.setEmployeePhonenumber(request.getEmployeePhoneNumber());
         employee.setEmployeeGender(request.getEmployeeGender());
-        return mapToResponse(employeeRepository.save(employee));
+        employeeRepository.save(employee);
     }
 // =========
     public Employee getEmployeeByUsername(String username) {
@@ -130,14 +130,14 @@ public class EmployeeService {
     public Employee findEmployeeById(Integer employeeId){
         return employeeRepository.findById(employeeId).orElseThrow(()-> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
     }
-    private EmployeeResponse mapToResponse(Employee employee) {
-        return new EmployeeResponse(
+    private EmployeeDetailResponse mapToEmployeeDetailResponse(Employee employee) {
+        return new EmployeeDetailResponse(
                 employee.getEmployeeId(),
 
                 employee.getEmployeeUserId().getUsername(),
                 employee.getEmployeeUserId().getEmail(),
-                employee.getEmployeeUserId().getImage(),
 
+                employee.getEmployeeImage(),
                 employee.getEmployeeName(),
                 employee.getEmployeePhonenumber(),
                 employee.isEmployeeGender(),
@@ -146,4 +146,18 @@ public class EmployeeService {
                 employee.getDepartment().getDepartmentName()
         );
     }
+    private EmployeeListResponse mapToEmployeeListResponse(Employee employee) {
+        return new EmployeeListResponse(
+
+                employee.getEmployeeId(),
+                employee.getEmployeeImage(),
+                employee.getEmployeeName(),
+                employee.getEmployeePhonenumber(),
+                employee.isEmployeeGender(),
+                employee.getEmployeeStatus(),
+
+                employee.getDepartment().getDepartmentName()
+        );
+    }
+
 }

@@ -25,6 +25,7 @@ public class AppointmentReponse {
     String appointmentCreatedAt ;
     String appointmentStatus ;
 
+    String employeeId;
     String employeeName;
     String appointmentNote;
 

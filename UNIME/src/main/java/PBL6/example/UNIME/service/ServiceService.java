@@ -25,7 +25,6 @@ public class ServiceService {
     ServiceRepository serviceRepository;
     DepartmentService departmentService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     public ServiceResponse createService(ServiceRequest request) {
         if(serviceRepository.existsByserviceName(request.getServiceName())) {
             throw new AppException(ErrorCode.SERVICE_EXITED);
@@ -43,13 +42,11 @@ public class ServiceService {
         return mapToResponse(serviceRepository.save(service));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public ServiceResponse getServiceById(Integer serviceId){
         return mapToResponse(serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_FOUND)));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public ServiceResponse updateService(Integer serviceId, ServiceRequest request) {
         // Tìm dịch vụ cần cập nhật theo ID
         Service service = serviceRepository.findById(serviceId)
@@ -67,7 +64,6 @@ public class ServiceService {
 
         return mapToResponse(serviceRepository.save(service));
     }
-    @PreAuthorize("hasRole('ADMIN')")
     public void deleteService(Integer serviceId) {
         Service service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_FOUND));
@@ -94,8 +90,7 @@ public class ServiceService {
                 service.getServiceName(),
                 service.getServiceImage(),
                 service.getServiceDescription(),
-                service.getServicePrice(),
-                service.getDepartment().getDepartmentName()
+                service.getServicePrice()
         );
     }
 }

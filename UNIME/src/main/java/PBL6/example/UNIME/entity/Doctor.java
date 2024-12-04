@@ -21,9 +21,12 @@ public class Doctor {
     @Column(name = "doctor_id")
     Integer doctorId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_userId", referencedColumnName = "user_id", nullable = false, unique = true)
     User doctorUserId;
+
+    @Column(name = "doctor_image", nullable = false, length = 255)
+    String doctorImage;
 
     @Column(name = "doctor_name", nullable = false, length = 255)
     String doctorName;
@@ -40,15 +43,18 @@ public class Doctor {
     @Column(name = "doctor_date_of_birth")
     LocalDate doctorDateOfBirth;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "department_id", nullable = false)
     Department department ;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctordetail_id", referencedColumnName = "doctordetail_id", unique = true)
     DoctorDetail doctorDetail;
 
     @Column(name = "doctor_status", nullable = false)
     String doctorStatus = Status.ON.name();
+
+    @Column(name = "doctor_description", nullable = false, length = 255)
+    String doctorDescription;
 
 }
