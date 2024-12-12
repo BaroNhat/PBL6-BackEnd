@@ -22,41 +22,37 @@ import java.util.List;
 public class TimeworkController {
     TimeworkService timeworkService;
 
-    @PostMapping
-    ApiResponse<TimeworkResponse> createTimework(@RequestBody @Valid TimeworkRequest request) {
-        ApiResponse<TimeworkResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(timeworkService.createTimework(request));
-        return apiResponse;
-    }
-    @GetMapping("/{timework_id}")
-    ApiResponse<TimeworkResponse> getTimework(@PathVariable("timework_id") Integer timeworkId) {
-        return ApiResponse.<TimeworkResponse>builder()
-                .result(timeworkService.getTimeworkById(timeworkId))
-                .build();
-
-    }
-
-    @PutMapping("/{timework_id}")
-    ApiResponse<TimeworkResponse> updateTimework(@PathVariable("timework_id") Integer timeworkId, @RequestBody @Valid TimeworkRequest request) {
-        return ApiResponse.<TimeworkResponse>builder()
-                .result(timeworkService.updateTimework(timeworkId, request))
-                .build();
-    }
-
-    @DeleteMapping("/{timework_id}")
-    ApiResponse<String> deleteTimework(@PathVariable("timework_id") Integer timeworkId) {
-        timeworkService.deleteTimework(timeworkId);
-        return ApiResponse.<String>builder()
-                .result("Timework has been deleted")
-                .build();
-    }
+//    @PostMapping
+//    ApiResponse<TimeworkResponse> createTimework(@RequestBody @Valid TimeworkRequest request) {
+//        ApiResponse<TimeworkResponse> apiResponse = new ApiResponse<>();
+//        apiResponse.setResult(timeworkService.createTimework(request));
+//        return apiResponse;
+//    }
+//    @GetMapping("/{timework_id}")
+//    ApiResponse<TimeworkResponse> getTimework(@PathVariable("timework_id") Integer timeworkId) {
+//        return ApiResponse.<TimeworkResponse>builder()
+//                .result(timeworkService.getTimeworkById(timeworkId))
+//                .build();
+//
+//    }
+//
+//    @PutMapping("/{timework_id}")
+//    ApiResponse<TimeworkResponse> updateTimework(@PathVariable("timework_id") Integer timeworkId, @RequestBody @Valid TimeworkRequest request) {
+//        return ApiResponse.<TimeworkResponse>builder()
+//                .result(timeworkService.updateTimework(timeworkId, request))
+//                .build();
+//    }
+//
+//    @DeleteMapping("/{timework_id}")
+//    ApiResponse<String> deleteTimework(@PathVariable("timework_id") Integer timeworkId) {
+//        timeworkService.deleteTimework(timeworkId);
+//        return ApiResponse.<String>builder()
+//                .result("Timework has been deleted")
+//                .build();
+//    }
 
     @GetMapping("/get/timewordList")
     ApiResponse<List<TimeworkResponse>> getAllTimeworks() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
 
         return ApiResponse.<List<TimeworkResponse>>builder()
                 .result(timeworkService.getAllTimeworks())

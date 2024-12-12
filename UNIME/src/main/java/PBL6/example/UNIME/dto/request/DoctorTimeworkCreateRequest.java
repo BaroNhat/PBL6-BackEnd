@@ -24,14 +24,7 @@ public class DoctorTimeworkCreateRequest {
 
     //
     @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
-    String dayOfWeek;
-
-    @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
-    String startTime;
-
-    @NotEmpty(message = "MISSING_REQUIRED_FIELDS")
-    String endTime;
-    //
+    Integer timework_id;
 
 //    @NotNull(message = "MISSING_REQUIRED_FIELDS")
     Integer doctorId;
