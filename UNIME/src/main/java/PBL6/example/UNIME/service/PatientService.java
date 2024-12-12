@@ -2,12 +2,14 @@ package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.dto.request.PatientRequest;
 import PBL6.example.UNIME.dto.response.PatientResponse;
+import PBL6.example.UNIME.entity.Appointment;
 import PBL6.example.UNIME.entity.Employee;
 import PBL6.example.UNIME.entity.Patient;
 import PBL6.example.UNIME.entity.User;
 import PBL6.example.UNIME.enums.Role;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
+import PBL6.example.UNIME.repository.AppointmentRepository;
 import PBL6.example.UNIME.repository.PatientRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +20,19 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class PatientService {
-
-    private static final Logger log = LoggerFactory.getLogger(PatientService.class);
     PatientRepository patientRepository;
     UserService userService;
+    AppointmentRepository appointmentRepository;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'DOCTOR')")
     public List<PatientResponse> getAllPatients(){
@@ -131,6 +134,19 @@ public class PatientService {
 
         return patient;
     }
+
+    public List<Integer> getPatientsHaveAppointment() {
+
+        List<Appointment> appointmentList = appointmentRepository.getAppointmentsToday();
+        log.info("Appointments fetched: " + appointmentList.size());
+        List<Integer> result = appointmentList.stream()
+                .map(a -> a.getPatient().getPatientId())
+                .distinct()
+                .collect(Collectors.toList());
+        log.info("Patients found: " + result.size());
+        return result;
+    }
+
     // chuyển Patient => PatientResponse
     private PatientResponse mapToResponse(Patient patient) {
 

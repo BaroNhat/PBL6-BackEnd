@@ -4,6 +4,8 @@ import PBL6.example.UNIME.dto.response.DoctorTimeworkResponse;
 import PBL6.example.UNIME.entity.Department;
 import PBL6.example.UNIME.entity.Doctor;
 import PBL6.example.UNIME.entity.DoctorTimework;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @Repository
 public interface  DoctorTimeworkRepository extends JpaRepository<DoctorTimework, Integer> {
+
 
 
     @Query("""
@@ -65,4 +68,7 @@ public interface  DoctorTimeworkRepository extends JpaRepository<DoctorTimework,
             @Param("weekOfYear") Integer weekOfYear,
             @Param("year") Integer year
     );
+
+
+
 }

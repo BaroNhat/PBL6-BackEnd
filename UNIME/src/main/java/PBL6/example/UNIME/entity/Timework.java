@@ -23,8 +23,7 @@ public class Timework {
     Integer id;
 
     @Column(name = "day_of_week", nullable = false, length = 20)
-    @Enumerated(EnumType.STRING)
-    DayOfWeek dayOfWeek;
+    String dayOfWeek;
 
     @Column(name = "start_time", nullable = false)
     LocalTime startTime;

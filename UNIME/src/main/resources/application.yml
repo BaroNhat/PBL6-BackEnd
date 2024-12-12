@@ -1,15 +1,18 @@
 server:
   port: 8888
+  address: 0.0.0.0
   servlet:
     context-path: /UNIME
 
 
+
   jpa:
-    hibernate:
-      ddl-auto: validate
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+    properties:
+      hibernate:
+        ddl-auto: validate
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 #    open-in-view: false
 jwt:
