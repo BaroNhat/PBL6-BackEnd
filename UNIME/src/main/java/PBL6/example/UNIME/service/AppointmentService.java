@@ -6,23 +6,29 @@ import PBL6.example.UNIME.dto.response.AppointmentReponse;
 import PBL6.example.UNIME.dto.response.PatientResponse;
 import PBL6.example.UNIME.entity.*;
 import PBL6.example.UNIME.enums.AppointmentStatus;
+import PBL6.example.UNIME.enums.DayOfWeek;
 import PBL6.example.UNIME.enums.DoctorTimeworkStatus;
 import PBL6.example.UNIME.enums.Role;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.*;
 import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.TextStyle;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -40,9 +46,7 @@ public class AppointmentService {
     AppointmentRepository appointmentRepository;
     PatientService patientService;
     EmployeeService employeeService;
-    UserService userService;
     DoctorService doctorService;
-    TimeworkRespository timeworkRespository;
     DoctorTimeworkService doctorTimeworkService;
 
 
@@ -101,9 +105,6 @@ public class AppointmentService {
     // GetList for Employee
     public List<AppointmentReponse> getAppointmentsByDepartment(String username) {
         Department department = employeeService.getEmployeeByUsername(username).getDepartment();
-        log.info("11");
-
-        log.info("12");
         return appointmentRepository.findByDepartment(department.getDepartmentId()).stream()
                 .map(this::mapToAppointmentResponse)
                 .collect(Collectors.toList());
@@ -117,24 +118,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-//    private LocalDateTime validateAppointmentCreatedAt(String appointmentCreatedAt) {
-//        if (appointmentCreatedAt == null || appointmentCreatedAt.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Appointment created time cannot be null or empty");
-//        }
-//        LocalDateTime parsedDateTime;
-//        try {
-//            parsedDateTime = LocalDateTime.parse(appointmentCreatedAt, FORMATTER);
-//        } catch (DateTimeParseException e) {
-//            throw new AppException(ErrorCode.INVALID_DATETIME_FORMAT);
-//        }
-//        if (parsedDateTime.isAfter(LocalDateTime.now().plusWeeks(2))) {
-//            throw new AppException(ErrorCode.INVALID_DATETIME_FORMAT);
-//        }
-//        if (parsedDateTime.isBefore(LocalDateTime.now().plusDays(2))) {
-//            throw new AppException(ErrorCode.INVALID_DATETIME_FORMAT);
-//        }
-//        return parsedDateTime;
-//    }
+
 
     public AppointmentReponse mapToAppointmentResponse(Map<String, Object> map) {
         return AppointmentReponse.builder()

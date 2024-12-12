@@ -88,7 +88,7 @@ public class UserService {
         return userRepository.findByemail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
     }
-    // get User theo Email
+
     public User getUserByUsername(String username) {
         return userRepository.findByusername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));

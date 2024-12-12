@@ -11,6 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface TimeworkRespository extends JpaRepository<Timework,Integer> {
-    Timework findByDayOfWeekAndStartTimeAndEndTime (DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime);
-
+    Timework findByDayOfWeekAndStartTimeAndEndTime (String dayOfWeek, LocalTime startTime, LocalTime endTime);
 }

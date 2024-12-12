@@ -26,59 +26,61 @@ import java.util.Optional;
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class TimeworkService {
     TimeworkRespository timeworkRespository;
-
+//
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public TimeworkResponse createTimework(TimeworkRequest request) {
+//        isDayOfWeek(request.getDayOfWeek());
+//        String dow = request.getDayOfWeek();
+//        LocalTime startTime = parseTime(request.getStartTime());
+//        LocalTime endTime = parseTime(request.getEndTime());
+//
+//        if (timeworkRespository.findByDayOfWeekAndStartTimeAndEndTime(dow, startTime, endTime) != null) {
+//            throw new AppException(ErrorCode.TIMEWORK_EXITED);
+//        }
+//
+//        Timework timework = new Timework();
+//        timework.setDayOfWeek(dow);
+//        timework.setStartTime(startTime);
+//        timework.setEndTime(endTime);
+//
+//        return mapToResponse(timeworkRespository.save(timework));
+//    }
+//
     @PreAuthorize("hasRole('ADMIN')")
-    public TimeworkResponse createTimework(TimeworkRequest request) {
-        DayOfWeek dow = parseDayOfWeek(request.getDayOfWeek());
-        LocalTime startTime = parseTime(request.getStartTime());
-        LocalTime endTime = parseTime(request.getEndTime());
-
-        if (timeworkRespository.findByDayOfWeekAndStartTimeAndEndTime(dow, startTime, endTime) != null) {
-            throw new AppException(ErrorCode.TIMEWORK_EXITED);
-        }
-
-        Timework timework = new Timework();
-        timework.setDayOfWeek(dow);
-        timework.setStartTime(startTime);
-        timework.setEndTime(endTime);
-
-        return mapToResponse(timeworkRespository.save(timework));
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public TimeworkResponse getTimeworkById(Integer timeworkId) {
-        return mapToResponse(timeworkRespository.findById(timeworkId)
-                .orElseThrow(() -> new AppException(ErrorCode.TIMEWORK_NOT_FOUND)));
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public TimeworkResponse updateTimework(Integer timeworkId, TimeworkRequest request) {
-        DayOfWeek dow = parseDayOfWeek(request.getDayOfWeek());
-        LocalTime startTime = parseTime(request.getStartTime());
-        LocalTime endTime = parseTime(request.getEndTime());
-
-
-        // Kiểm tra nếu đã có Timework với dayOfWeek và startTime này
-        Timework timeworkBequest = timeworkRespository.findByDayOfWeekAndStartTimeAndEndTime(dow, startTime, endTime);
-        if (timeworkBequest != null) {
-            if(timeworkBequest.getId().equals(timeworkId)) {}
-        }
-
-        Timework timeworkById = timeworkRespository.findById(timeworkId)
+    public Timework getTimeworkById(Integer timeworkId) {
+        return timeworkRespository.findById(timeworkId)
                 .orElseThrow(() -> new AppException(ErrorCode.TIMEWORK_NOT_FOUND));
-        timeworkById.setDayOfWeek(dow);
-        timeworkById.setStartTime(startTime);
-        timeworkById.setEndTime(endTime);
-
-        return mapToResponse(timeworkRespository.save(timeworkById));
-
     }
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deleteTimework(Integer timeworkId) {
-        Timework timework = timeworkRespository.findById(timeworkId)
-                .orElseThrow(() -> new AppException(ErrorCode.TIMEWORK_NOT_FOUND));
-        timeworkRespository.deleteById(timeworkId);
-    }
+//
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public TimeworkResponse updateTimework(Integer timeworkId, TimeworkRequest request) {
+//        isDayOfWeek(request.getDayOfWeek());
+//        String dow = request.getDayOfWeek();
+//        LocalTime startTime = parseTime(request.getStartTime());
+//        LocalTime endTime = parseTime(request.getEndTime());
+//
+//
+//        // Kiểm tra nếu đã có Timework với dayOfWeek và startTime này
+//        Timework timeworkBequest = timeworkRespository.findByDayOfWeekAndStartTimeAndEndTime(dow, startTime, endTime);
+//        if (timeworkBequest != null) {
+//            if(timeworkBequest.getId().equals(timeworkId)) {}
+//        }
+//
+//        Timework timeworkById = timeworkRespository.findById(timeworkId)
+//                .orElseThrow(() -> new AppException(ErrorCode.TIMEWORK_NOT_FOUND));
+//        timeworkById.setDayOfWeek(dow);
+//        timeworkById.setStartTime(startTime);
+//        timeworkById.setEndTime(endTime);
+//
+//        return mapToResponse(timeworkRespository.save(timeworkById));
+//
+//    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public void deleteTimework(Integer timeworkId) {
+//        Timework timework = timeworkRespository.findById(timeworkId)
+//                .orElseThrow(() -> new AppException(ErrorCode.TIMEWORK_NOT_FOUND));
+//        timeworkRespository.deleteById(timeworkId);
+//    }
 // ===== PUBLIC
     public List<TimeworkResponse> getAllTimeworks() {
         List<Timework> timeworks = timeworkRespository.findAll();
@@ -87,7 +89,7 @@ public class TimeworkService {
                 .toList();
     }
 
-    public Timework getTimeworkByInfo(DayOfWeek dow, LocalTime startTime, LocalTime endTime) {
+    public Timework getTimeworkByInfo(String dow, LocalTime startTime, LocalTime endTime) {
         return timeworkRespository.findByDayOfWeekAndStartTimeAndEndTime(dow,startTime,endTime);
     }
     //============
@@ -100,19 +102,19 @@ public class TimeworkService {
         );
     }
 
-    public DayOfWeek parseDayOfWeek(String day) {
-        try {
-            return DayOfWeek.valueOf(day.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new AppException(ErrorCode.INVALID_DAY);
-        }
-    }
-    public static LocalTime parseTime(String startTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        try {
-            return LocalTime.parse(startTime, formatter);
-        } catch (DateTimeParseException e) {
-            throw new AppException(ErrorCode.INVALID_TIME);
-        }
-    }
+//    public void isDayOfWeek(String day) {
+//        try {
+//            DayOfWeek.valueOf(day.toUpperCase());
+//        } catch (IllegalArgumentException e) {
+//            throw new AppException(ErrorCode.INVALID_DAY);
+//        }
+//    }
+//    public static LocalTime parseTime(String startTime) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//        try {
+//            return LocalTime.parse(startTime, formatter);
+//        } catch (DateTimeParseException e) {
+//            throw new AppException(ErrorCode.INVALID_TIME);
+//        }
+//    }
 }

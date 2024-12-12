@@ -22,7 +22,7 @@ public class Doctor {
     Integer doctorId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_userId", referencedColumnName = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "doctor_user_id", referencedColumnName = "user_id", nullable = false, unique = true)
     User doctorUserId;
 
     @Column(name = "doctor_image", nullable = false, length = 255)

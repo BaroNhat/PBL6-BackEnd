@@ -21,19 +21,19 @@ public class Appointment {
     @Column(name = "appointment_id", nullable = false, updatable = false)
     Integer appointmentId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
     Patient patient;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctortimework_id", referencedColumnName = "doctortimework_id")
     DoctorTimework doctortimework;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
     Employee employee;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctorservice_id", referencedColumnName = "doctorservice_id")
     DoctorService doctorservice;
 

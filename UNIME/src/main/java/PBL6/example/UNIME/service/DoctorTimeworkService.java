@@ -1,7 +1,6 @@
 package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.dto.request.DoctorTimeworkCreateRequest;
-import PBL6.example.UNIME.dto.request.DoctorTimeworkUpdateRequest;
 import PBL6.example.UNIME.dto.response.DoctorTimeworkResponse;
 import PBL6.example.UNIME.entity.*;
 import PBL6.example.UNIME.enums.DayOfWeek;
@@ -9,6 +8,9 @@ import PBL6.example.UNIME.enums.DoctorTimeworkStatus;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +22,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,34 +37,43 @@ public class DoctorTimeworkService {
     TimeworkService timeworkService;
     DoctorTimeworkRepository doctorTimeworkRepository;
     DoctorService doctorService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
+    @Transactional
     public void createDoctorTimework(String  username, List<DoctorTimeworkCreateRequest> requests) {
         Doctor doctor = doctorService.getDoctorByUsername(username);
-        for (DoctorTimeworkCreateRequest request : requests) {
-            createDoctorTimework(doctor, request);
+//        List<DoctorTimework> doctorTimeworkList =  requests.stream()
+//                .map((dt)-> maptoDoctorTimework(doctor,dt))
+//                .collect(Collectors.toList());
+        List<DoctorTimework> doctorTimeworkList = new ArrayList<>();
+        for(DoctorTimeworkCreateRequest request : requests) {
+            doctorTimeworkList.add(maptoDoctorTimework(doctor,request));
         }
+
+        batchInsertDoctorTimework(doctorTimeworkList);
+    }
+    private void batchInsertDoctorTimework(List<DoctorTimework> doctorTimeworks) {
+        String sql = "INSERT INTO doctor_timework (doctortimework_year, week_of_year, timework_id, doctor_id, doctortimework_status) VALUES ";
+        StringBuilder sb = new StringBuilder(sql);
+        for (int i = 0; i < doctorTimeworks.size(); i++) {
+            sb.append("(")
+                    .append(doctorTimeworks.get(i).getYear()).append(",")
+                    .append(doctorTimeworks.get(i).getWeekOfYear()).append(", ")
+                    .append(doctorTimeworks.get(i).getTimeWork().getId()).append(", ")
+                    .append(doctorTimeworks.get(i).getDoctor().getDoctorId()).append(", '")
+                    .append(doctorTimeworks.get(i).getStatus()).append("')");
+
+            if (i < doctorTimeworks.size() - 1) {
+                sb.append(", ");
+            }
+        }
+
+        jakarta.persistence.Query query = entityManager.createNativeQuery(sb.toString());
+        query.executeUpdate();
     }
 
-    public void createDoctorTimework( Doctor doctor, DoctorTimeworkCreateRequest request) {
 
-        request.validateRequest();
-        DayOfWeek dow = parseDayOfWeek(request.getDayOfWeek());
-        LocalTime startTime = parseTime(request.getStartTime());
-        LocalTime endTime = parseTime(request.getEndTime());
-        log.info(" {} = {} = {}",dow,startTime,endTime);
-        Timework timework = timeworkService.getTimeworkByInfo(dow,startTime,endTime);
-        if(timework == null) throw new AppException(ErrorCode.TIMEWORK_NOT_FOUND);
-
-
-        DoctorTimework doctorTimework = new DoctorTimework();
-        doctorTimework.setYear(request.getDoctorTimeworkYear());
-        doctorTimework.setWeekOfYear(request.getWeekOfYear());
-        doctorTimework.setTimeWork(timework);
-        doctorTimework.setDoctor(doctor);
-        doctorTimework.setStatus(request.getDoctorTimeworkStatus());
-        doctorTimeworkRepository.save(doctorTimework);
-
-    }
 
     public String updateDoctorTimework(Integer doctorTimeworkId , String doctorTimeworkStatus) {
 
@@ -117,18 +129,29 @@ public class DoctorTimeworkService {
             .doctorTimeworkStatus((String) tuple.get("status"))
             .build();
 }
-    //===============================================//
 
+    //===============================================//
     public  Integer getNextWeek(Integer weekOfYear, Integer year) {
         LocalDate lastDayOfYear = LocalDate.of(year, 12, 31);
         int maxWeeks = lastDayOfYear.get(WeekFields.of(Locale.getDefault()).weekOfYear());
         return weekOfYear < maxWeeks ? weekOfYear + 1 : 1; // Nếu là tuần cuối cùng, quay về tuần 1
     }
 
-    public DayOfWeek parseDayOfWeek(String day) {
+    private  DoctorTimework  maptoDoctorTimework(Doctor doctor,  DoctorTimeworkCreateRequest dtRequest ){
+        Timework timework = entityManager.getReference(Timework.class, dtRequest.getTimework_id());
+        return DoctorTimework.builder()
+                .year(dtRequest.getDoctorTimeworkYear())
+                .weekOfYear(dtRequest.getWeekOfYear())
+                .timeWork(timework)
+                .doctor(doctor)
+                .status(dtRequest.getDoctorTimeworkStatus())
+                .build();
+    }
+
+    public void isDayOfWeek(String day) {
         log.info("Day: {}", day);
         try {
-            return DayOfWeek.valueOf(day.toUpperCase());
+            DayOfWeek.valueOf(day.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new AppException(ErrorCode.INVALID_DAY);
         }
