@@ -19,7 +19,7 @@ public class DoctorTimeworkResponse {
     Integer doctorTimeworkYear;
     Integer weekOfYear;
 
-    DayOfWeek dayOfWeek;
+    String dayOfWeek;
     LocalTime startTime;
     LocalTime endTime;
 

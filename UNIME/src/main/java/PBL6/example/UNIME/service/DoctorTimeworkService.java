@@ -121,7 +121,7 @@ public class DoctorTimeworkService {
             .doctorTimeworkId((Integer) tuple.get("id"))
             .doctorTimeworkYear((Integer) tuple.get("year"))
             .weekOfYear((Integer) tuple.get("weekOfYear"))
-            .dayOfWeek((DayOfWeek) tuple.get("dayOfWeek"))
+            .dayOfWeek((String) tuple.get("dayOfWeek"))
             .startTime((LocalTime) tuple.get("startTime"))
             .endTime((LocalTime) tuple.get("endTime"))
             .doctorId((Integer) tuple.get("doctorId"))
