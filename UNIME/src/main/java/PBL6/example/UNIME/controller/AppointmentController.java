@@ -59,4 +59,12 @@ public class AppointmentController {
                 .result(appointmentService.getAppointmentsByDoctorId(authentication.getName()))
                 .build();
     }
+
+    @GetMapping("/getByPatient")
+    ApiResponse<List<AppointmentReponse>> getAppointmentsByPatient(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ApiResponse.<List<AppointmentReponse>>builder()
+                .result(appointmentService.getAppointmentsByPatientId(authentication.getName()))
+                .build();
+    }
 }

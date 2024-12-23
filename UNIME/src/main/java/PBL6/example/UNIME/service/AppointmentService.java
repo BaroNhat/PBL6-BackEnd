@@ -118,7 +118,36 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
+    public List<AppointmentReponse> getAppointmentsByPatientId(String username) {
+        List<Appointment> list = patientService.getAppointments(username);
+        return list.stream()
+                .map(this::mapToAppointmentResponse)
+                .collect(Collectors.toList());
 
+    }
+
+    public AppointmentReponse mapToAppointmentResponse(Appointment  appointments) {
+
+        return new AppointmentReponse(
+                appointments.getAppointmentId(),
+
+                appointments.getPatient().getPatientName(),
+                appointments.getDoctorservice().getDoctor().getDoctorName(),
+
+                appointments.getDoctortimework().getTimeWork().getDayOfWeek().toLowerCase(),
+                appointments.getDoctortimework().getTimeWork().getStartTime().format(FORMATTIME),
+                appointments.getDoctortimework().getTimeWork().getEndTime().format(FORMATTIME),
+
+                appointments.getDoctorservice().getService().getServiceName(),
+
+                appointments.getAppointmentCreatedAt().format(FORMATDATETIME),
+                appointments.getAppointmentStatus(),
+
+                appointments.getEmployee() != null ? appointments.getEmployee().getEmployeeId().toString() : null,
+                appointments.getEmployee() != null ? appointments.getEmployee().getEmployeeName() : null,
+                appointments.getAppointmentNote()
+        );
+    }
 
     public AppointmentReponse mapToAppointmentResponse(Map<String, Object> map) {
         return AppointmentReponse.builder()

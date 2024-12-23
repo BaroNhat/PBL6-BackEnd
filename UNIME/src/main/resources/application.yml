@@ -26,5 +26,5 @@ spring:
 #    open-in-view: false
 jwt:
   signerKey: "4UXF7e8ExKlokbDG0p+/6ICPRLVRVt/GTksOF/+8p5vD+BiPaoKAJJbwmoywIcbv"
-  valid-duration: 5
-  refreshable-duration: 120
+#  valid-duration: 5
+#  refreshable-duration: 120
