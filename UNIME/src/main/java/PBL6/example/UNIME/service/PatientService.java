@@ -147,6 +147,10 @@ public class PatientService {
         return result;
     }
 
+    public List<Appointment> getAppointments(String username) {
+        Patient patient  = getPatientByUsername(username);
+        return patient.getAppointments();
+    }
     // chuyển Patient => PatientResponse
     private PatientResponse mapToResponse(Patient patient) {
 
