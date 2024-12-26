@@ -38,6 +38,4 @@ public class Employee {
     @JoinColumn(name = "department_id", referencedColumnName = "department_id", nullable = false)
     Department department;
 
-    @Column(name = "employee_status", nullable = false)
-    String employeeStatus = Status.ON.name();
 }

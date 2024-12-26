@@ -48,7 +48,7 @@ public class DoctorRequest {
     LocalDate doctorDateOfBirth;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    String departmentName;
+    Integer departmentId;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
     String doctorDescription;

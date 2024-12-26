@@ -27,6 +27,7 @@ public class Department {
 
     @OneToMany(mappedBy = "department")
     List<Employee> employeeList;
+
     @OneToMany(mappedBy = "department")
     List<Doctor> departmentList;
 }

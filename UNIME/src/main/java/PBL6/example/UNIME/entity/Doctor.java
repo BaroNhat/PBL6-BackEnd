@@ -51,9 +51,6 @@ public class Doctor {
     @JoinColumn(name = "doctordetail_id", referencedColumnName = "doctordetail_id", unique = true)
     DoctorDetail doctorDetail;
 
-    @Column(name = "doctor_status", nullable = false)
-    String doctorStatus = Status.ON.name();
-
     @Column(name = "doctor_description", nullable = false, length = 255)
     String doctorDescription;
 

@@ -9,6 +9,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,42 +24,41 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class PatientController {
+
+    @Autowired
     PatientService patientService;
 
+    @PostMapping
+    ApiResponse<PatientResponse> createPatient(@RequestBody @Valid PatientRequest request) {
+        ApiResponse<PatientResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(patientService.createPatient(request));
+        return apiResponse;
+    }
+
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'DOCTOR')")
     ApiResponse<List<PatientResponse>> getAllPatients() {
-
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
         return ApiResponse.<List<PatientResponse>>builder()
                 .result(patientService.getAllPatients())
                 .build();
     }
 
     @GetMapping("/{patient_id}")
+    @PostAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'DOCTOR')")
     ApiResponse<PatientResponse> getPatient(@PathVariable("patient_id") Integer patient_id){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
         return ApiResponse.<PatientResponse>builder()
                 .result(patientService.getPatientById(patient_id))
                 .build();
     }
 
-    @DeleteMapping("/{patient_id}")
-    ApiResponse<String> deleteUser(@PathVariable("patient_id") Integer patient_id){
-
-        patientService.deletePatient(patient_id);
+    @PatchMapping("/{patient_id}")
+    @PostAuthorize("hasRole('ADMIN')")
+    ApiResponse<String> changePatientStatus(@PathVariable("patient_id") Integer patient_id){
         return ApiResponse.<String>builder()
-                .result( "Patient has been deleted")
+                .result( "Patient has been change to " + patientService.changePatientStatus(patient_id).getStatus() )
                 .build();
     }
 
-    // token
     @GetMapping("/myInfo")
     ApiResponse<PatientResponse> getMyInfo(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,6 +67,7 @@ public class PatientController {
                 .result(patientService.getMyInfo(authentication.getName()))
                 .build();
     }
+
     @PutMapping("/update")
     ApiResponse<PatientResponse> updatePatient(@RequestBody PatientRequest request){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,11 +78,4 @@ public class PatientController {
                 .build();
     }
 
-    // public
-    @PostMapping
-    ApiResponse<PatientResponse> createPatient(@RequestBody @Valid PatientRequest request) {
-        ApiResponse<PatientResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(patientService.createPatient(request));
-        return apiResponse;
-    }
 }

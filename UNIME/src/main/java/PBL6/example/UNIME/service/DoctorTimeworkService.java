@@ -36,16 +36,13 @@ public class DoctorTimeworkService {
 
     TimeworkService timeworkService;
     DoctorTimeworkRepository doctorTimeworkRepository;
-    DoctorService doctorService;
+    DoctorServiceImpl doctorService;
     @PersistenceContext
     private EntityManager entityManager;
 
     @Transactional
     public void createDoctorTimework(String  username, List<DoctorTimeworkCreateRequest> requests) {
         Doctor doctor = doctorService.getDoctorByUsername(username);
-//        List<DoctorTimework> doctorTimeworkList =  requests.stream()
-//                .map((dt)-> maptoDoctorTimework(doctor,dt))
-//                .collect(Collectors.toList());
         List<DoctorTimework> doctorTimeworkList = new ArrayList<>();
         for(DoctorTimeworkCreateRequest request : requests) {
             doctorTimeworkList.add(maptoDoctorTimework(doctor,request));

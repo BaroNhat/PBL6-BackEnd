@@ -21,9 +21,9 @@ public class Patient{
     @Column(name = "patient_id")
     Integer patientId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_userId", referencedColumnName = "user_id", nullable = false, unique = true)
-    User patientUserId;
+    User patientUser;
 
     @Column(name = "patient_image", nullable = false, length = 255)
     String patientImage;
