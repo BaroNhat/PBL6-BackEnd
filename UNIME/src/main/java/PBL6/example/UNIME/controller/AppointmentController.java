@@ -5,10 +5,12 @@ import PBL6.example.UNIME.dto.request.AppointmentUpdateRequest;
 import PBL6.example.UNIME.dto.response.ApiResponse;
 import PBL6.example.UNIME.dto.response.AppointmentReponse;
 import PBL6.example.UNIME.service.AppointmentService;
+import PBL6.example.UNIME.service.AppointmentServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class AppointmentController {
-    private final AppointmentService appointmentService;
+
+    @Autowired
+    AppointmentService appointmentService;
 
     @PostMapping
     ApiResponse<String> createAppointment(@RequestBody AppointmentCreateRequest request){
@@ -32,7 +36,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/updateCompleted")
-    @PreAuthorize("hasAnyRole('DOCTOR')")
+    @PreAuthorize("hasRole('DOCTOR')")
     ApiResponse<String> updateByDoctor(@RequestBody AppointmentUpdateRequest request){
         return ApiResponse.<String>builder()
                 .result(appointmentService.updateByDoctor(request)).build();

@@ -2,14 +2,16 @@ package PBL6.example.UNIME.controller;
 
 import PBL6.example.UNIME.dto.request.EmployeeRequest;
 import PBL6.example.UNIME.dto.response.ApiResponse;
-import PBL6.example.UNIME.dto.response.EmployeeDetailResponse;
-import PBL6.example.UNIME.dto.response.EmployeeListResponse;
+import PBL6.example.UNIME.dto.response.EmployeeResponse;
 import PBL6.example.UNIME.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +23,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class EmployeeController {
+
+    @Autowired
     EmployeeService employeeService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ApiResponse<String> createEmployee(@RequestBody @Valid EmployeeRequest request){
         employeeService.createEmployee(request);
@@ -31,47 +36,44 @@ public class EmployeeController {
                 .build();
     }
 
+    @PostAuthorize("hasRole('ADMIN')")
     @GetMapping
-    ApiResponse<List<EmployeeListResponse>> getAllEmployees(){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
-        return ApiResponse.<List<EmployeeListResponse>>builder()
+    ApiResponse<List<EmployeeResponse>> getAllEmployees(){
+        return ApiResponse.<List<EmployeeResponse>>builder()
                 .result(employeeService.getAllEmployee())
                 .build();
     }
 
+    @PostAuthorize("hasRole('ADMIN')")
     @GetMapping("/{employee_id}")
-    ApiResponse<EmployeeDetailResponse> getEmployeeById(@PathVariable("employee_id") Integer employeeId){
-        return ApiResponse.<EmployeeDetailResponse>builder()
+    ApiResponse<EmployeeResponse> getEmployeeById(@PathVariable("employee_id") Integer employeeId){
+        return ApiResponse.<EmployeeResponse>builder()
                 .result(employeeService.getEmployeeById(employeeId))
                 .build();
     }
 
-    @PutMapping("/update/{employee_id}")
-    ApiResponse<String> updateByAdmin(@PathVariable("employee_id") Integer employeeId, @RequestBody EmployeeRequest request){
-        employeeService.updateByAdmin(employeeId, request);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/updateDepartment/")
+    ApiResponse<String> changeEmployeeDepartment(@RequestParam("employee_id") Integer employeeId, @RequestParam("department_id") Integer departmentId){
         return ApiResponse.<String>builder()
-                .result("SUCCESS")
+                .result("Employee has been change to " + employeeService.changeEmployeeDepartment(employeeId, departmentId).getDepartmentName())
                 .build();
     }
 
-    @DeleteMapping("/{employee_id}")
-    ApiResponse<String> deleteEmployee(@PathVariable("employee_id") Integer employeeId){
-
-        employeeService.deleteEmployee(employeeId);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/updateStatus/{employee_id}")
+    ApiResponse<String> changeEmployeeStatus(@PathVariable("employee_id") Integer employeeId){
         return ApiResponse.<String>builder()
-                .result("SUCCESS")
+                .result("Employee has been change to " + employeeService.changeEmployeeStatus(employeeId).getStatus())
                 .build();
     }
 
 // ===
     @GetMapping("/myInfo")
-    ApiResponse<EmployeeDetailResponse> getEmployeeInfo(){
+    ApiResponse<EmployeeResponse> getEmployeeInfo(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return ApiResponse.<EmployeeDetailResponse>builder()
+        return ApiResponse.<EmployeeResponse>builder()
                 .result(employeeService.getMyInfo(authentication.getName()))
                 .build();
     }

@@ -1,13 +1,10 @@
 package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.entity.Doctor;
-import PBL6.example.UNIME.entity.DoctorTimework;
 import PBL6.example.UNIME.entity.Notification;
-import PBL6.example.UNIME.entity.Patient;
 import PBL6.example.UNIME.enums.Role;
 import PBL6.example.UNIME.repository.DoctorRepository;
 import PBL6.example.UNIME.repository.NotificationRepository;
-import PBL6.example.UNIME.repository.PatientRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,7 +24,7 @@ public class NotificationService {
 
     private final DoctorRepository doctorRepository;
     private final NotificationRepository notificationRepository;
-    private final PatientService patientService;
+    private final PatientServiceImpl patientService;
 
     @Scheduled(cron = "0 0 8 ? * SAT")//second, minute, hour, day of month, month, day(s) of week
     private void addNotifyDoctorSchedule(){

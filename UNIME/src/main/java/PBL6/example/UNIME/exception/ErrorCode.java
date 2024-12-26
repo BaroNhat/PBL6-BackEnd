@@ -23,8 +23,10 @@ public enum ErrorCode {
     PATIENT_NOT_FOUND(2001, "Patient not found", HttpStatus.NOT_FOUND),
     DEPARTMENT_NOT_FOUND(2002, "Department not found", HttpStatus.NOT_FOUND),
     DEPARTMENT_EXISTED(2003, "Department is already exist", HttpStatus.BAD_REQUEST),
+    DEPARTMENT_CAN_NOT_DELETE(2004, "Cannot delete department as it has associated employees/doctors.", HttpStatus.BAD_REQUEST),
     SERVICE_NOT_FOUND(2004, "Service not found", HttpStatus.NOT_FOUND),
     SERVICE_EXITED(2005, "Service exited", HttpStatus.BAD_REQUEST),
+    SERVICE_CAN_NOT_DELETE(2002, "Cannot delete service as it has associated doctors.", HttpStatus.BAD_REQUEST),
     TIMEWORK_EXITED(2006, "Timework exited", HttpStatus.BAD_REQUEST),
     TIMEWORK_NOT_FOUND(2007, "Timework not found", HttpStatus.NOT_FOUND),
     DOCTORSERVICE_EXITED(2008, "Doctor service exited", HttpStatus.BAD_REQUEST),
@@ -44,13 +46,6 @@ public enum ErrorCode {
     INVALID_PHONE_NUMBER_FORMAT(3004, "Invalid phone number format", HttpStatus.BAD_REQUEST), // đúng định dạng số đt ko
     MISSING_REQUIRED_FIELDS(3005, "Missing required fields", HttpStatus.BAD_REQUEST), // để trống không điền đủ
     INVALID_DATETIME_FORMAT(3006, "Invalid datetime format", HttpStatus.BAD_REQUEST)
-//    // Các mã lỗi liên quan đến hệ thống
-//    INTERNAL_SERVER_ERROR(5001, "Internal server error"),
-//    DATABASE_CONNECTION_FAILED(5002, "Database connection failed"),
-//
-//    // Các mã lỗi khác
-//    UNAUTHORIZED_ACCESS(4001, "Unauthorized access"),
-//    OPERATION_NOT_ALLOWED(4002, "Operation not allowed");
 
     ;
 

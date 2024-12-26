@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DoctorDetailResponse {
+public class DoctorResponse {
 
     Integer doctorId;
     String doctorImage;
@@ -22,6 +22,7 @@ public class DoctorDetailResponse {
     String doctorDescription;
 
     String doctorEmail;
+    String doctorStatus;
 
     String departmentName;
 
