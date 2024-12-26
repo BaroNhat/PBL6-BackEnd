@@ -10,9 +10,8 @@ import PBL6.example.UNIME.entity.Employee;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.DoctorRepository;
-import PBL6.example.UNIME.service.DoctorService;
 import PBL6.example.UNIME.service.DoctorTimeworkService;
-import PBL6.example.UNIME.service.EmployeeService;
+import PBL6.example.UNIME.service.EmployeeServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,7 +30,7 @@ import java.util.List;
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class DoctorTimeworkController {
     DoctorTimeworkService doctorTimeworkService;
-    private final EmployeeService employeeService;
+    private final EmployeeServiceImpl employeeService;
     private final DoctorRepository doctorRepository;
 
     @PostMapping()

@@ -16,7 +16,7 @@ import java.security.SecureRandom;
 @RequiredArgsConstructor
 public class MailService {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     public String sendOtp(String mail){
         Resend resend = new Resend("re_UwUSKQNg_EMC7CsQgrUDzsMzcZwXQfBmx");
@@ -50,7 +50,7 @@ public class MailService {
         } catch (ResendException e) {
             e.printStackTrace();
         }
-        userService.updatePassword(user, newPasswork);
+        userService.saveNewPassword(user, newPasswork);
         return "New passwword: " +newPasswork;
     }
 

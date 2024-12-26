@@ -1,5 +1,6 @@
 package PBL6.example.UNIME.entity;
 
+import PBL6.example.UNIME.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -30,4 +31,6 @@ public class User {
     @Column(name = "user_role", nullable = false, length = 10)
     String role;
 
+    @Column(name = "user_status")
+    String status = Status.ACTIVE.name();
 }

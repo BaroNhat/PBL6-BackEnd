@@ -8,17 +8,17 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EmployeeDetailResponse {
+public class EmployeeResponse {
     int employeeId;
 
     String employeeUsername;
     String employeeEmail;
+    String employeeStatus;
 
     String employeeImage;
     String employeeName;
     String employeePhoneNumber;
     boolean employeeGender;
-    String employeeStatus;
 
     String departmentName;
 }

@@ -25,6 +25,6 @@ public class ServiceRequest {
     int servicePrice;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    String departmentName;
+    Integer departmentId;
 
 }

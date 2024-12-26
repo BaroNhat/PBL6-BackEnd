@@ -2,101 +2,71 @@ package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.dto.request.PasswordRequest;
 import PBL6.example.UNIME.entity.User;
-import PBL6.example.UNIME.exception.AppException;
-import PBL6.example.UNIME.exception.ErrorCode;
-import PBL6.example.UNIME.repository.UserRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-@FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
-public class UserService {
-    UserRepository userRepository;
-    PasswordEncoder passwordEncoder;
+public interface UserService {
+    /**
+     * Creates a new user in the system.
+     *
+     * @param request the {@code User} object containing the user's details.
+     * @return the created {@code User} object.
+     */
+    public User createUser(User request);
 
-    public User createUser(User request) {
-        if(userRepository.existsByusername(request.getUsername())) {
-            throw new AppException(ErrorCode.USERNAME_ALREADY_TAKEN);
-        }
-        if(userRepository.existsByemail(request.getEmail())){
-            throw new AppException(ErrorCode.EMAIL_ALREADY_REGISTERED);
-        }
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEmail(request.getEmail());
-        user.setRole(request.getRole());
-        return userRepository.save(user);
-    }
+    /**
+     * Updates the details of an existing user.
+     *
+     * @param userId the ID of the user to update.
+     * @param request the {@code User} object containing the updated user details.
+     */
+    public void updateUser(Integer userId, User request);
 
-    public User updateUser(Integer userId, User request) {
+    /**
+     * Updates the password for a user identified by the username.
+     * Verifies the old password before updating to the new password.
+     *
+     * @param username the username of the user
+     * @param passwordRequest contains the old and new passwords
+     * @return a success message if the update is successful
+     */
+    public String saveNewPassword(String username, PasswordRequest passwordRequest);
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
-        if( userRepository.existsByemail(request.getEmail())){
-            User userByEmail = getUserByEmail(request.getEmail());
-            log.info(" === id:{} với id:{} ", userId, userByEmail.getUserId());
-            if(!userByEmail.getUserId().equals(userId)) {
-                throw new AppException(ErrorCode.EMAIL_ALREADY_REGISTERED);
-            }
-        }
-        user.setEmail(request.getEmail());
-        return userRepository.save(user);
-    }
+    /**
+     * Saves a new encrypted password for the given user.
+     *
+     * @param user the User entity whose password is to be updated
+     * @param newPass the new password to set
+     */
+    public void saveNewPassword(User user, String newPass);
 
-    public String updatePassword(String username, PasswordRequest passwordRequest) {
-        User user = userRepository.findByusername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
-        log.info("oldPasswork: {}", user.getPassword());
-        log.info("request: {}_ {}", passwordRequest.getOldPassword(), passwordRequest.getNewPassword());
-        if(!verifyPassword(passwordRequest.getOldPassword(), user.getPassword())) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
-        updatePassword(user, passwordRequest.getNewPassword());
-        return "Thành công";
-    }
+    /**
+     * Blocks the specified user account by setting its status to "LOCKED"
+     *
+     * @param user the {@code User} to delete.
+     */
+    public User changeUserStatus(User user);
 
-    public void updatePassword(User user, String newPass) {
-        user.setPassword(passwordEncoder.encode(newPass));
-        userRepository.save(user);
-    }
+    /**
+     * Checks if a user exists in the system by their email.
+     *
+     * @param email the email address to check.
+     * @return {@code true} if a user with the given email exists, {@code false} otherwise.
+     */
+    public boolean ExitByEmail(String email);
 
-    public boolean verifyPassword(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
-    }
+    /**
+     * Retrieves a user from the system by their email.
+     *
+     * @param email the email address of the user.
+     * @return the {@code User} object corresponding to the given email.
+     */
+    public User getUserByEmail(String email);
 
-    public void deleteUser(Integer user_id) {
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
-        userRepository.deleteById(user.getUserId());
-    }
+    /**
+     * Retrieves a user from the system by their username.
+     *
+     * @param username the username of the user.
+     * @return the {@code User} object corresponding to the given username.
+     */
+    public User getUserByUsername(String username);
 
-    public boolean ExitByEmail(String email){
-        return userRepository.existsByemail(email);
-    }
-    public boolean ExitByUsername(String username){
-        return userRepository.existsByusername(username);
-    }
-    // get User theo Email
-    public User getUserByEmail(String email) {
-        return userRepository.findByemail(email)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
-    }
-
-    public User getUserByUsername(String username) {
-        return userRepository.findByusername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
-    }
-
-    // get User theo id
-    public User getUserById(Integer user_id){
-        return userRepository.findByuserId(user_id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
-    }
 }

@@ -42,8 +42,6 @@ public class EmployeeRequest {
     LocalDate employeeDateOfBirth;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    String departmentName;
-
-    String employeeStatus;
+    Integer departmentId;
 
 }

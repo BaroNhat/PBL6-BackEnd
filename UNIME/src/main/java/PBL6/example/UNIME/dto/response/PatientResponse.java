@@ -16,6 +16,7 @@ public class PatientResponse {
     Integer userId;
     String patientUsername;
     String patientEmail;
+    String patientStatus;
 
     String patientImage;
     String patientName;
