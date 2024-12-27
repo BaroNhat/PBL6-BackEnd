@@ -3,11 +3,11 @@ package PBL6.example.UNIME.controller;
 import PBL6.example.UNIME.dto.response.ApiResponse;
 import PBL6.example.UNIME.dto.response.AppointmentReponse;
 import PBL6.example.UNIME.service.AppointmentHistoryService;
-import PBL6.example.UNIME.service.AppointmentHistoryServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +45,14 @@ public class AppointmentHistoryController {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         return ApiResponse.<List<AppointmentReponse>>builder()
                 .result(appointmentHistoryService.getByPatient(authentication.getName()))
+                .build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getAll")
+    ApiResponse<List<AppointmentReponse>> getAppointments(){
+        return ApiResponse.<List<AppointmentReponse>>builder()
+                .result(appointmentHistoryService.getAllAppointments())
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package PBL6.example.UNIME.repository;
 
 import PBL6.example.UNIME.entity.Appointment;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -57,6 +58,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "JOIN FETCH tw.timeWork " +
             "WHERE a.patient.patientUser.username =:username ")
     List<Appointment> findByPatient(@Param("username") String username );
+
+    @Query(" SELECT a " +
+            "FROM Appointment a " +
+            "JOIN FETCH a.doctorservice ds " +
+            "JOIN FETCH ds.service s " +
+            "JOIN FETCH ds.doctor d " +
+            "JOIN FETCH a.patient " +
+            "JOIN FETCH a.doctortimework tw " +
+            "JOIN FETCH tw.timeWork ")
+    List<Appointment> findAll();
 
     @Query(" SELECT a " +
             "FROM Appointment a " +

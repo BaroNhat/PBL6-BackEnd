@@ -8,21 +8,24 @@ import PBL6.example.UNIME.dto.response.ApiResponse;
 import PBL6.example.UNIME.dto.response.AuthenticationResponse;
 import PBL6.example.UNIME.dto.response.IntrospectResponse;
 import PBL6.example.UNIME.service.AuthenticationService;
+import PBL6.example.UNIME.service.AuthenticationServiceImpl;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:8081", "https://unimehospital.vercel.app", "https://unime.site"})
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
-    AuthenticationService authenticationService;
+    AuthenticationService  authenticationService;
 
 
     @PostMapping("/token")
@@ -41,7 +44,6 @@ public class AuthenticationController {
                 .result(result)
                 .build();
     }
-
 
     @PostMapping("/refresh")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)

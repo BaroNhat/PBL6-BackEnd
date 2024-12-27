@@ -28,9 +28,9 @@ public class AppointmentHistoryServiceImpl implements   AppointmentHistoryServic
 
 
     @Override
-    public AppointmentReponse addAppointment(Appointment appointment) {
+    public void addAppointment(Appointment appointment) {
         AppointmentHistory ah = mapToAppointmentHistory(appointment);
-        return mapToAppointmentResponse(appointmentHistoryRepository.save(ah));
+        appointmentHistoryRepository.save(ah);
     }
 
     @Override
@@ -56,6 +56,13 @@ public class AppointmentHistoryServiceImpl implements   AppointmentHistoryServic
                 .getDepartment();
         List<AppointmentHistory> appointmentHistoryList = appointmentHistoryRepository.findBydepartmentId(department.getDepartmentId());
         return appointmentHistoryList.stream()
+                .map(this::mapToAppointmentResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AppointmentReponse> getAllAppointments() {
+        return appointmentHistoryRepository.findAll().stream()
                 .map(this::mapToAppointmentResponse)
                 .collect(Collectors.toList());
     }
