@@ -15,11 +15,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,14 +26,13 @@ import java.util.stream.Collectors;
 public class AppointmentServiceImpl implements AppointmentService{
 
     DateTimeFormatter FORMATTIME = DateTimeFormatter.ofPattern("HH:mm");
-    DateTimeFormatter FORMATDATETIME = DateTimeFormatter.ofPattern("HH:mm");
     PatientRepository patientRepository;
     DoctorTimeworkRepository doctorTimeworkRepository;
     DoctorServiceRepository doctorServiceRepository;
     AppointmentRepository appointmentRepository;
-    EmployeeServiceImpl employeeService;
-    DoctorServiceImpl doctorService;
     DoctorTimeworkService doctorTimeworkService;
+    EmployeeRepository employeeRepository;
+    AppointmentHistoryService appointmentHistoryService;
 
 
     public String createAppointment(String username, AppointmentCreateRequest request) {
@@ -64,55 +60,85 @@ public class AppointmentServiceImpl implements AppointmentService{
         Appointment appointment = appointmentRepository.findById(request.getAppointmentId())
                 .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
 
-        if(!AppointmentStatus.contains(request.getAppointmentStatus())) throw new AppException(ErrorCode.INVALID_KEY);
-        appointment.setAppointmentStatus(request.getAppointmentStatus());
+        appointment.setAppointmentStatus(AppointmentStatus.Completed.name());
 
-        appointmentRepository.save(appointment);
+        // theem vao history và xóa record hiện tại
+        appointmentHistoryService.addAppointment(appointment);
+        appointmentRepository.delete(appointment);
+
         return "Thanh cong";
     }
 
 
     public String updateByEmployee(String username, AppointmentUpdateRequest request) {
-        Employee employee = employeeService.getEmployeeByUsername(username);
+        Employee employee = employeeRepository.findByemployeeUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
         log.info("11");
         Appointment appointment = appointmentRepository.findById(request.getAppointmentId())
                 .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
         log.info("22");
-        if(!AppointmentStatus.contains(request.getAppointmentStatus())) throw new AppException(ErrorCode.INVALID_KEY);
-        appointment.setAppointmentStatus(request.getAppointmentStatus());
-
+        appointment.setAppointmentStatus(AppointmentStatus.Cancelled.name());
+        String note = "Bệnh viện đã hủy lịch ";
         if (request.getAppointmentNote() != null) {
-            appointment.setAppointmentNote(request.getAppointmentNote());
+            note +="vì lí do: " + request.getAppointmentNote();
         }
+        appointment.setAppointmentNote(note);
         appointment.setEmployee(employee);
 
-
-        appointmentRepository.save(appointment);
+        // theem vao history và xóa record hiện tại
+        appointmentHistoryService.addAppointment(appointment);
+        appointmentRepository.delete(appointment);
+        /// Thiếu nhá ^-^
+        // goọi mail thông báo hủy cho doc và patien
+        DoctorTimework dt = appointment.getDoctortimework();
+        dt.setStatus(DoctorTimeworkStatus.Available.name());
+        doctorTimeworkRepository.save(dt);
 
         return "Thanh cong";
     }
 
-    // GetList for Employee
+    public String updateByPatient(AppointmentUpdateRequest request) {
+        log.info("11");
+        Appointment appointment = appointmentRepository.findById(request.getAppointmentId())
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+        log.info("22");
+        appointment.setAppointmentStatus(AppointmentStatus.Cancelled.name());
+        String note = "Bệnh nhân đã tự hủy lịch ";
+        if (request.getAppointmentNote() != null) {
+            note +="vì lí do: " + request.getAppointmentNote();
+        }
+        appointment.setAppointmentNote(note);
+        appointmentRepository.save(appointment);
+        // theem vao history và xóa record hiện tại
+        appointmentHistoryService.addAppointment(appointment);
+        appointmentRepository.delete(appointment);
+        /// Thiếu nhá ^-^
+        // goọi mail thông báo hủy cho doc và patien
+        DoctorTimework dt = appointment.getDoctortimework();
+        dt.setStatus(DoctorTimeworkStatus.Available.name());
+        doctorTimeworkRepository.save(dt);
+
+        return "Thanh cong";
+    }
+
     public List<AppointmentReponse> getAppointmentsByDepartment(String username) {
-        Department department = employeeService.getEmployeeByUsername(username).getDepartment();
+        Department department = employeeRepository.findByemployeeUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND))
+                .getDepartment();
         return appointmentRepository.findByDepartment(department.getDepartmentId()).stream()
                 .map(this::mapToAppointmentResponse)
                 .collect(Collectors.toList());
     }
 
-    // GetList for Doctor
     public List<AppointmentReponse> getAppointmentsByDoctorId(String username) {
-        Doctor doctor = doctorService.getDoctorByUsername(username);
-        return appointmentRepository.findByDoctor(doctor.getDoctorId()).stream()
+        List<Appointment> re = appointmentRepository.findByDoctor(username);
+        return re.stream()
                 .map(this::mapToAppointmentResponse)
                 .collect(Collectors.toList());
     }
 
     public List<AppointmentReponse> getAppointmentsByPatientId(String username) {
-        Patient patient = patientRepository.findBypatientUserUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.PATIENT_NOT_FOUND));
-        List<Appointment> list = patient.getAppointments();
-        return list.stream()
+        return appointmentRepository.findByPatient(username).stream()
                 .map(this::mapToAppointmentResponse)
                 .collect(Collectors.toList());
 
@@ -126,13 +152,14 @@ public class AppointmentServiceImpl implements AppointmentService{
                 appointments.getPatient().getPatientName(),
                 appointments.getDoctorservice().getDoctor().getDoctorName(),
 
+                appointments.getDoctortimework().getYear(),
+                appointments.getDoctortimework().getWeekOfYear(),
                 appointments.getDoctortimework().getTimeWork().getDayOfWeek().toLowerCase(),
                 appointments.getDoctortimework().getTimeWork().getStartTime().format(FORMATTIME),
                 appointments.getDoctortimework().getTimeWork().getEndTime().format(FORMATTIME),
 
                 appointments.getDoctorservice().getService().getServiceName(),
 
-                appointments.getAppointmentCreatedAt().format(FORMATDATETIME),
                 appointments.getAppointmentStatus(),
 
                 appointments.getEmployee() != null ? appointments.getEmployee().getEmployeeId().toString() : null,
@@ -141,20 +168,4 @@ public class AppointmentServiceImpl implements AppointmentService{
         );
     }
 
-    public AppointmentReponse mapToAppointmentResponse(Map<String, Object> map) {
-        return AppointmentReponse.builder()
-                .appointmentId((Integer) map.get("appointmentId"))
-                .patientName((String) map.get("patientName"))
-                .doctorName((String) map.get("doctorName"))
-                .dayOfWeek((String) map.get("dayOfWeek"))
-                .startTime(((LocalTime) map.get("startTime")).format(FORMATTIME))
-                .endTime(((LocalTime) map.get("endTime")).format(FORMATTIME))
-                .serviceName((String) map.get("serviceName"))
-                .appointmentCreatedAt(((LocalDateTime) map.get("appointmentCreatedAt")).format(FORMATDATETIME)) // Định dạng ngày giờ
-                .appointmentStatus((String) map.get("appointmentStatus"))
-                .employeeId((String) map.get("employeeId"))
-                .employeeName((String) map.get("employeeName"))
-                .appointmentNote((String) map.get("appointmentNote"))
-                .build();
-    }
 }

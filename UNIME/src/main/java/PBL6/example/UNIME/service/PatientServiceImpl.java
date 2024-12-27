@@ -30,7 +30,6 @@ public class PatientServiceImpl implements PatientService {
     UserService userService;
 
     PatientRepository patientRepository;
-    AppointmentRepository appointmentRepository;
 
     @Override
     public List<PatientResponse> getAllPatients(){
@@ -117,19 +116,6 @@ public class PatientServiceImpl implements PatientService {
         return mapToResponseDetail(patientRepository.save(patient));
     }
 
-
-    @Override
-    public List<Integer> getPatientsHaveAppointment() {
-
-        List<Appointment> appointmentList = appointmentRepository.getAppointmentsToday();
-        log.info("Appointments fetched: " + appointmentList.size());
-        List<Integer> result = appointmentList.stream()
-                .map(a -> a.getPatient().getPatientId())
-                .distinct()
-                .collect(Collectors.toList());
-        log.info("Patients found: " + result.size());
-        return result;
-    }
 
     public Patient getPatientByPatientId(Integer patient_id) {
         return patientRepository.findById(patient_id)

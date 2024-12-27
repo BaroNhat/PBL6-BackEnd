@@ -16,13 +16,14 @@ public class AppointmentReponse {
     String patientName;
     String doctorName;
 
+    Integer year;
+    Integer weekOfYear;
     String dayOfWeek;
     String startTime;
     String endTime;
 
     String serviceName;
 
-    String appointmentCreatedAt ;
     String appointmentStatus ;
 
     String employeeId;
