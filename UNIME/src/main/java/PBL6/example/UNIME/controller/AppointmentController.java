@@ -78,4 +78,12 @@ public class AppointmentController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getAll")
+    ApiResponse<List<AppointmentReponse>> getAppointments(){
+        return ApiResponse.<List<AppointmentReponse>>builder()
+                .result(appointmentService.getAllAppointments())
+                .build();
+    }
+
 }
