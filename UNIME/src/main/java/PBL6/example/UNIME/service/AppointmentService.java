@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface AppointmentService {
 
-    public String createAppointment(String username, AppointmentCreateRequest request);
-    public String updateByDoctor( AppointmentUpdateRequest request);
-    public String updateByEmployee(String username, AppointmentUpdateRequest request);
-    public List<AppointmentReponse> getAppointmentsByDepartment(String username);
-    public List<AppointmentReponse> getAppointmentsByDoctorId(String username);
-    public List<AppointmentReponse> getAppointmentsByPatientId(String username);
-
+     String createAppointment(String username, AppointmentCreateRequest request);
+     String updateByDoctor( AppointmentUpdateRequest request);
+     String updateByEmployee(String username, AppointmentUpdateRequest request);
+     String updateByPatient(AppointmentUpdateRequest request);
+     List<AppointmentReponse> getAppointmentsByDepartment(String username);
+     List<AppointmentReponse> getAppointmentsByDoctorId(String username);
+     List<AppointmentReponse> getAppointmentsByPatientId(String username);
     }

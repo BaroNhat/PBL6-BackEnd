@@ -41,11 +41,17 @@ public class AppointmentController {
         return ApiResponse.<String>builder()
                 .result(appointmentService.updateByDoctor(request)).build();
     }
-    @PutMapping("/updateCancelled")
+    @PutMapping("/updateCancelledByEmployee")
     ApiResponse<String> updateByEmployee(@RequestBody AppointmentUpdateRequest request){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         return ApiResponse.<String>builder()
                 .result(appointmentService.updateByEmployee(authentication.getName(), request)).build();
+    }
+    @PutMapping("/updateCancelledByPatient")
+    @PreAuthorize("hasRole('PATIENT')")
+    ApiResponse<String> updateByPatient(@RequestBody AppointmentUpdateRequest request){
+        return ApiResponse.<String>builder()
+                .result(appointmentService.updateByPatient(request)).build();
     }
 
     @GetMapping("/getByDepartment")
@@ -71,4 +77,5 @@ public class AppointmentController {
                 .result(appointmentService.getAppointmentsByPatientId(authentication.getName()))
                 .build();
     }
+
 }
