@@ -14,8 +14,5 @@ public class AppointmentUpdateRequest {
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
     Integer appointmentId;
 
-    @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    String appointmentStatus ;
-
     String appointmentNote;
 }

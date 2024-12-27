@@ -56,12 +56,4 @@ public interface PatientService {
      */
     public PatientResponse createPatient(PatientRequest request);
 
-    /**
-     * Retrieves a list of IDs of patients who have at least one appointment.
-     *
-     * @return a list of patient IDs who have appointments.
-     */
-    public List<Integer> getPatientsHaveAppointment();
-
-
 }

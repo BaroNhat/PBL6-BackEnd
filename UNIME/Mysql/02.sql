@@ -72,6 +72,7 @@ create table DOCTOR(
 	CONSTRAINT FK_DOCTOR_DETAIL FOREIGN KEY (doctordetail_id)
 									  REFERENCES DOCTOR_DETAIL(doctordetail_id)
 );
+ALTER TABLE doctor CHANGE COLUMN doctor_userId doctor_user_id  INT NOT NULL;
 
 
 -- bảng dịch vụ theo từng bác sĩ (bác sĩ quan hệ n-n với dịch vụ)
