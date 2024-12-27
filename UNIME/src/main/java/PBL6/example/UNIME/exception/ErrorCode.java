@@ -13,6 +13,7 @@ public enum ErrorCode {
 
     // lỗi đăng nhập
     USER_NOT_EXITED(1011, "User Not Exited", HttpStatus.BAD_REQUEST),
+    TOKEN(1012, "Unauthenticated", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1012, "Unauthenticated", HttpStatus.BAD_REQUEST),
 
     // Các mã lỗi liên quan đến thông tin đăng kí
@@ -49,9 +50,9 @@ public enum ErrorCode {
 
     ;
 
-    private  int code;
-    private  String message;
-    private HttpStatusCode httpStatusCode;
+    private final int code;
+    private final String message;
+    private final HttpStatusCode httpStatusCode;
 
     ErrorCode(int code, String message, HttpStatusCode httpStatusCode) {
         this.code = code;

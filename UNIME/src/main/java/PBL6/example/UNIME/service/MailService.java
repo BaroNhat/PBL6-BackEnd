@@ -16,7 +16,7 @@ import java.security.SecureRandom;
 @RequiredArgsConstructor
 public class MailService {
 
-    private final UserServiceImpl userService;
+     UserService userService;
 
     public String sendOtp(String mail){
         Resend resend = new Resend("re_UwUSKQNg_EMC7CsQgrUDzsMzcZwXQfBmx");
