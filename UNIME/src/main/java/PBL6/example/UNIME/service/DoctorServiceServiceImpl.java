@@ -57,9 +57,9 @@ public class DoctorServiceServiceImpl implements DoctorServiceService {
 
         List<Appointment> list = appointmentRepository.findByDoctorService(doctorServiceId);
         if (list.isEmpty()) {
-            DoctorService doctorService = list.getFirst().getDoctorservice();
+            DoctorService doctorService = list.get(0).getDoctorservice();
             doctorServiceRepository.delete(doctorService);
-        }else new AppException(ErrorCode.DOCTORSERVICE_CAN_NOT_DELETE);
+        }else throw new AppException(ErrorCode.DOCTORSERVICE_CAN_NOT_DELETE);
     }
 
 
