@@ -30,7 +30,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     DoctorTimeworkRepository doctorTimeworkRepository;
     DoctorServiceRepository doctorServiceRepository;
     AppointmentRepository appointmentRepository;
-    DoctorTimeworkService doctorTimeworkService;
+    DoctorTimeworkServiceImpl doctorTimeworkService;
     EmployeeRepository employeeRepository;
     AppointmentHistoryService appointmentHistoryService;
 

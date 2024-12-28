@@ -139,7 +139,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if(isRefresh){
             expiryTime = new Date(signedJWT.getJWTClaimsSet().getIssueTime()
-                    .toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli());
+                    .toInstant().plus(REFRESHABLE_DURATION, ChronoUnit.HOURS).toEpochMilli());
         }
 
         var verified = signedJWT.verify(verifier);
@@ -163,7 +163,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 issuer("UNIMEHospital.com").
                 issueTime(new Date()).
                 expirationTime(new Date(
-                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
+                        Instant.now().plus(VALID_DURATION, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole())
