@@ -1,5 +1,6 @@
 package PBL6.example.UNIME.repository;
 
+import PBL6.example.UNIME.entity.Appointment;
 import PBL6.example.UNIME.entity.Doctor;
 import PBL6.example.UNIME.entity.DoctorService;
 import PBL6.example.UNIME.entity.Service;
@@ -28,4 +29,5 @@ public interface DoctorServiceRepository extends JpaRepository <DoctorService, I
             "WHERE s.serviceId = :service_id AND d.doctorId =:doctor_id")
     DoctorService findByDoctorAndService(@Param("doctor_id") Integer doctorId,
                                          @Param("service_id") Integer serviceId);
+
 }

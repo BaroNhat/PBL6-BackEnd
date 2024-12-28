@@ -86,7 +86,7 @@ public class DoctorController {
                 .build();
     }
 
-    @GetMapping("/get/doctorList")// 2s
+    @GetMapping("/get/doctorList")
     ApiResponse<List<DoctorResponse>> getAllDoctorsActive(){
         return ApiResponse.<List<DoctorResponse>>builder()
                 .result(doctorService.getAllDoctorActive())

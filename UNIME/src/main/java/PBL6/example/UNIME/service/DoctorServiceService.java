@@ -9,7 +9,7 @@ import java.util.List;
 public interface DoctorServiceService {
 
     public void addDoctorForService(String username, DoctorServiceRequest request);
-    public void delDoctorForSerVice(String username, DoctorServiceRequest request);
+    public void delDoctorForSerVice(String username, Integer doctorServiceId);
     public List<ServiceResponse> getServicesByDoctorId(Integer doctorId);
     public List<DoctorResponse> getDoctorByService(Integer serviceId);
 

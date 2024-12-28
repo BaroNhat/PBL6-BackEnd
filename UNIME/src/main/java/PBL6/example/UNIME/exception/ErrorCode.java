@@ -32,6 +32,7 @@ public enum ErrorCode {
     TIMEWORK_NOT_FOUND(2007, "Timework not found", HttpStatus.NOT_FOUND),
     DOCTORSERVICE_EXITED(2008, "Doctor service exited", HttpStatus.BAD_REQUEST),
     DOCTORSERVICE_NOT_FOUND(2009, "Doctor service not found", HttpStatus.NOT_FOUND),
+    DOCTORSERVICE_CAN_NOT_DELETE(2009, "Cannot delete as it has associated appointment.", HttpStatus.NOT_FOUND),
     DOCTORTIMEWORK_NOT_FOUND(2010, "Doctor timework not found", HttpStatus.NOT_FOUND),
     APPOINTMENT_NOT_FOUND(2011, "Appointment not found", HttpStatus.NOT_FOUND),
     INVALID_DAY(2008, "Invalid day of week", HttpStatus.BAD_REQUEST),
