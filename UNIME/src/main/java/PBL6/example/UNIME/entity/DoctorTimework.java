@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalTime;
 import java.time.Year;
 
 @Data
@@ -36,6 +37,5 @@ public class DoctorTimework {
 
     @Column(name = "doctortimework_status", nullable = false, length = 255)
     String status = DoctorTimeworkStatus.Available.name();
-
 
 }

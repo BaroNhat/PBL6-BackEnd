@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -54,4 +55,17 @@ public class Doctor {
     @Column(name = "doctor_description", nullable = false, length = 255)
     String doctorDescription;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Doctor doctor = (Doctor) o;
+        return Objects.equals(doctorId, doctor.doctorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(doctorId);
+    }
 }

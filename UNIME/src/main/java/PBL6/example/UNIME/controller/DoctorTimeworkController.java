@@ -11,6 +11,7 @@ import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.DoctorRepository;
 import PBL6.example.UNIME.service.DoctorTimeworkService;
+import PBL6.example.UNIME.service.DoctorTimeworkServiceImpl;
 import PBL6.example.UNIME.service.EmployeeServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -45,20 +46,23 @@ public class DoctorTimeworkController {
     @GetMapping("/get/listByWeek/{week_year}") // 3s
     public ApiResponse<List<DoctorTimeworkResponse>> getAllDoctorTimeworkByWeek(@PathVariable("week_year") String week_year) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        Employee employee = employeeService.getEmployeeByUsername(authentication.getName());
-        List<DoctorTimeworkResponse> list = doctorTimeworkService.getAllDoctorTimeworkByWeek(employee, week_year);
+        List<DoctorTimeworkResponse> list = doctorTimeworkService.getAllDoctorTimeworkByWeek(authentication.getName(), week_year);
         return ApiResponse.<List<DoctorTimeworkResponse>>builder()
                 .result(list)
                 .build();
     }
 
     @GetMapping("/get/listByDoctor/{doctor_id}")  // 1s
-    public ApiResponse<List<DoctorTimeworkResponse>> getListTimeworkOfDoctor(@PathVariable("doctor_id") Integer doctorId) {
-
-        Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(()-> new AppException(ErrorCode.DOCTORS_NOT_FOUND));
-
-        List<DoctorTimeworkResponse> list = doctorTimeworkService.getListTimeworkOfDoctor(doctor);
+    public ApiResponse<List<DoctorTimeworkResponse>> getListAvailableTimeworkOfDoctor(@PathVariable("doctor_id") Integer doctorId) {
+        List<DoctorTimeworkResponse> list = doctorTimeworkService.getListAvailableTimeworkOfDoctor(doctorId);
+        return ApiResponse.<List<DoctorTimeworkResponse>>builder()
+                .result(list)
+                .build();
+    }
+    @GetMapping("/get/listByDoctor")  // 1s
+    public ApiResponse<List<DoctorTimeworkResponse>> getListTimeworkOfDoctor() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<DoctorTimeworkResponse> list = doctorTimeworkService.getListTimeworkOfDoctor(authentication.getName());
         return ApiResponse.<List<DoctorTimeworkResponse>>builder()
                 .result(list)
                 .build();

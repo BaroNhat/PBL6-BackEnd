@@ -3,10 +3,12 @@ package PBL6.example.UNIME.service;
 import PBL6.example.UNIME.dto.request.DoctorServiceRequest;
 import PBL6.example.UNIME.dto.response.DoctorResponse;
 import PBL6.example.UNIME.dto.response.ServiceResponse;
+import PBL6.example.UNIME.entity.Appointment;
 import PBL6.example.UNIME.entity.Doctor;
 import PBL6.example.UNIME.entity.DoctorService;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
+import PBL6.example.UNIME.repository.AppointmentRepository;
 import PBL6.example.UNIME.repository.DoctorRepository;
 import PBL6.example.UNIME.repository.DoctorServiceRepository;
 import PBL6.example.UNIME.repository.ServiceRepository;
@@ -28,6 +30,7 @@ public class DoctorServiceServiceImpl implements DoctorServiceService {
     DoctorRepository doctorRepository;
     ServiceRepository serviceRepository;
     EmployeeService employeeService;
+    private final AppointmentRepository appointmentRepository;
 
     public void addDoctorForService(String username, DoctorServiceRequest request) {
 
@@ -50,16 +53,13 @@ public class DoctorServiceServiceImpl implements DoctorServiceService {
         doctorServiceRepository.save(doctorService);
     }
 
-    public void delDoctorForSerVice(String username, DoctorServiceRequest request) {
+    public void delDoctorForSerVice(String username, Integer doctorServiceId) {
 
-        PBL6.example.UNIME.entity.Service service = serviceRepository.findById(request.getServiceID())
-                .orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_FOUND));
-        checkEmployeeDepartmentAccess(username, service);
-
-        DoctorService doctorService = doctorServiceRepository.findByDoctorAndService(request.getDoctorID(), request.getServiceID());
-        if (doctorService == null) throw new AppException(ErrorCode.DOCTORSERVICE_NOT_FOUND);
-
-        doctorServiceRepository.delete(doctorService);
+        List<Appointment> list = appointmentRepository.findByDoctorService(doctorServiceId);
+        if (list.isEmpty()) {
+            DoctorService doctorService = list.getFirst().getDoctorservice();
+            doctorServiceRepository.delete(doctorService);
+        }else new AppException(ErrorCode.DOCTORSERVICE_CAN_NOT_DELETE);
     }
 
 
