@@ -24,3 +24,4 @@ jwt:
   signerKey: "4UXF7e8ExKlokbDG0p+/6ICPRLVRVt/GTksOF/+8p5vD+BiPaoKAJJbwmoywIcbv"
   valid-duration: 1
   refreshable-duration: 2
+
