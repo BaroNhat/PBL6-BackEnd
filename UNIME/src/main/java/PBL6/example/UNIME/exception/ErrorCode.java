@@ -42,13 +42,14 @@ public enum ErrorCode {
     EMPLOYEE_NOT_FOUND(2005, "Employee not found", HttpStatus.NOT_FOUND),
     // Các mã lỗi liên quan đến dữ liệu đầu vào
     INVALID_KEY(3000, "Invalid key", HttpStatus.BAD_REQUEST),
-    INVALID_USERNAME_FORMAT(3001, "Invalid username format", HttpStatus.BAD_REQUEST), // lớn hơn 6 kí tự
-    INVALID_PASSWORD_FORMAT(3002, "Invalid password format", HttpStatus.BAD_REQUEST), // lớn hơn 8 kí tự
-    INVALID_EMAIL_FORMAT(3003, "Invalid email format", HttpStatus.BAD_REQUEST), // không đúng định dạng _@gmail.com
-    INVALID_PHONE_NUMBER_FORMAT(3004, "Invalid phone number format", HttpStatus.BAD_REQUEST), // đúng định dạng số đt ko
-    MISSING_REQUIRED_FIELDS(3005, "Missing required fields", HttpStatus.BAD_REQUEST), // để trống không điền đủ
-    INVALID_DATETIME_FORMAT(3006, "Invalid datetime format", HttpStatus.BAD_REQUEST)
+    INVALID_USERNAME_FORMAT(3001, "Invalid username format", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD_FORMAT(3002, "Invalid password format", HttpStatus.BAD_REQUEST),
+    INVALID_EMAIL_FORMAT(3003, "Invalid email format", HttpStatus.BAD_REQUEST),
+    INVALID_PHONE_NUMBER_FORMAT(3004, "Invalid phone number format", HttpStatus.BAD_REQUEST),
+    MISSING_REQUIRED_FIELDS(3005, "Missing required fields", HttpStatus.BAD_REQUEST),
+    INVALID_DATETIME_FORMAT(3006, "Invalid datetime format", HttpStatus.BAD_REQUEST),
 
+    CAN_NOT_CONVERT(3300,"Cannot converter object", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

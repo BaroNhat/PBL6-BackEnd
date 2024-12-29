@@ -152,7 +152,7 @@ public class MailService {
         return String.valueOf(otp);
     }
 
-    public LocalDate getDateFromWeekAndDayOfWeek(Integer week, Integer year, DayOfWeek dayOfWeekStr) {
+    private LocalDate getDateFromWeekAndDayOfWeek(Integer week, Integer year, DayOfWeek dayOfWeekStr) {
         // Validate week number
         if (week < 1 || week > 53) {
             throw new IllegalArgumentException("Week number must be between 1 and 53");
@@ -161,20 +161,8 @@ public class MailService {
         WeekFields weekFields = WeekFields.of(vietnam);
         LocalDate date =  firstDayOfYear
                 .with(weekFields.weekOfWeekBasedYear(), week)
-                .with(weekFields.dayOfWeek(), getDayOfWeek(dayOfWeekStr));
+                .with(weekFields.dayOfWeek(), dayOfWeekStr.getValue());
         return date;
     }
 
-    private static int getDayOfWeek(DayOfWeek dayOfWeekStr) {
-        return switch (dayOfWeekStr) {
-            case DayOfWeek.MONDAY -> 1;
-            case DayOfWeek.TUESDAY  -> 2;
-            case DayOfWeek.WEDNESDAY -> 3;
-            case DayOfWeek.THURSDAY -> 4;
-            case DayOfWeek.FRIDAY -> 5;
-            case DayOfWeek.SATURDAY -> 6;
-            case DayOfWeek.SUNDAY -> 7;
-            default -> throw new IllegalArgumentException("Invalid day of the week: " + dayOfWeekStr);
-        };
-    }
 }

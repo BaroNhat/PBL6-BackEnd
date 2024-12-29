@@ -59,20 +59,30 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "WHERE a.patient.patientUser.username =:username ")
     List<Appointment> findByPatient(@Param("username") String username );
 
-    @Query(" SELECT a " +
-            "FROM Appointment a " +
-            "JOIN FETCH a.doctorservice ds " +
-            "JOIN FETCH ds.service s " +
-            "JOIN FETCH ds.doctor d " +
-            "JOIN FETCH a.patient " +
-            "JOIN FETCH a.doctortimework tw " +
-            "JOIN FETCH tw.timeWork ")
+    @Query("""
+        SELECT a
+            FROM Appointment a
+            JOIN FETCH a.doctortimework tw
+            JOIN FETCH tw.timeWork
+            JOIN FETCH a.patient
+            JOIN FETCH a.doctorservice ds
+            JOIN FETCH ds.service
+            JOIN FETCH ds.doctor d
+            JOIN FETCH d.doctorUserId
+    """)
     List<Appointment> findAll();
 
-    @Query(" SELECT a " +
-            "FROM Appointment a " +
-            "JOIN FETCH a.doctortimework tw "+
-            "WHERE a.appointmentId =:id ")
+    @Query("""
+            SELECT a
+            FROM Appointment a
+            JOIN FETCH a.doctortimework tw
+            JOIN FETCH a.patient
+            JOIN FETCH a.doctorservice ds
+            JOIN FETCH ds.service
+            JOIN FETCH ds.doctor d
+            JOIN FETCH d.doctorUserId
+            WHERE a.appointmentId =:id
+        """)
     Optional<Appointment> findById(@Param("id") Integer id);
 
     @Query("SELECT a " +

@@ -1,10 +1,10 @@
 package PBL6.example.UNIME.dto.response;
 
-import PBL6.example.UNIME.enums.DayOfWeek;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalTime;
+
 
 @Data
 @NoArgsConstructor
