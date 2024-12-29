@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@EnableScheduling  // Bật tính năng Scheduling
+@EnableScheduling
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class DoctorTimeworkServiceImpl implements DoctorTimeworkService {
 
@@ -55,6 +56,7 @@ public class DoctorTimeworkServiceImpl implements DoctorTimeworkService {
         int year = LocalDate.now().plusDays(14).getYear();
         int week = LocalDate.now().plusDays(14).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
         log.info("week: {} ___year:  {}", week, year);
+        log.info("Current Time: {}", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         List<Doctor> doctorsWithoutSchedule = getDoctorsWithoutSchedule(week, year);
         log.info("doctorsWithoutSchedule: "+ doctorsWithoutSchedule.size());
 
@@ -161,13 +163,14 @@ public class DoctorTimeworkServiceImpl implements DoctorTimeworkService {
 
 
     private DoctorTimeworkResponse mapToDoctorTimeworkResponse(DoctorTimework doctorTimework) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         return DoctorTimeworkResponse.builder()
                 .doctorTimeworkId(doctorTimework.getId())
                 .doctorTimeworkYear(doctorTimework.getYear())
                 .weekOfYear(doctorTimework.getWeekOfYear())
-                .dayOfWeek(doctorTimework.getTimeWork().toString())
-                .startTime(doctorTimework.getTimeWork().getStartTime())
-                .endTime(doctorTimework.getTimeWork().getEndTime())
+                .dayOfWeek(doctorTimework.getTimeWork().getDayOfWeek())
+                .startTime(doctorTimework.getTimeWork().getStartTime().format(dtf))
+                .endTime(doctorTimework.getTimeWork().getEndTime().format(dtf))
                 .doctorId(doctorTimework.getDoctor().getDoctorId())
                 .doctorName(doctorTimework.getDoctor().getDoctorName())
                 .doctorTimeworkStatus(doctorTimework.getStatus())

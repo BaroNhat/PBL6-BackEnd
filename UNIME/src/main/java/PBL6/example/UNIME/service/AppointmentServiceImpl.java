@@ -13,14 +13,19 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.IsoFields;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@EnableScheduling
 @RequiredArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class AppointmentServiceImpl implements AppointmentService{
@@ -33,6 +38,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     DoctorTimeworkServiceImpl doctorTimeworkService;
     EmployeeRepository employeeRepository;
     AppointmentHistoryService appointmentHistoryService;
+    MailService mailService;
 
 
     public String createAppointment(String username, AppointmentCreateRequest request) {
@@ -85,17 +91,37 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setAppointmentNote(note);
         appointment.setEmployee(employee);
 
-        // theem vao history và xóa record hiện tại
+//         theem vao history và xóa record hiện tại
         appointmentHistoryService.addAppointment(appointment);
         appointmentRepository.delete(appointment);
         /// Thiếu nhá ^-^
         // goọi mail thông báo hủy cho doc và patien
+//        mailService.sendCancelEmail(appointment);
+
         DoctorTimework dt = appointment.getDoctortimework();
         dt.setStatus(DoctorTimeworkStatus.Available.name());
         doctorTimeworkRepository.save(dt);
 
         return "Thanh cong";
     }
+
+
+    @Scheduled(fixedRate = 600000)
+//    @Scheduled(cron = "0 0 1 * * MON")
+    public void autoCancelAppointment() {
+        List<Appointment> allAppointments = appointmentRepository.findAll();
+        LocalDate today = LocalDate.now().minusWeeks(1);
+        int year = today.getYear();
+        int week = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+
+    }
+
+    private boolean isBeforeToday(Appointment appointment) {
+
+
+        return true;
+    }
+
 
     public String updateByPatient(AppointmentUpdateRequest request) {
         log.info("11");
@@ -114,6 +140,8 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.delete(appointment);
         /// Thiếu nhá ^-^
         // goọi mail thông báo hủy cho doc và patien
+//        mailService.sendCancelEmail(appointment);
+
         DoctorTimework dt = appointment.getDoctortimework();
         dt.setStatus(DoctorTimeworkStatus.Available.name());
         doctorTimeworkRepository.save(dt);
