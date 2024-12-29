@@ -2,8 +2,6 @@ package PBL6.example.UNIME.service;
 
 import PBL6.example.UNIME.dto.request.DoctorTimeworkCreateRequest;
 import PBL6.example.UNIME.dto.response.DoctorTimeworkResponse;
-import PBL6.example.UNIME.entity.Doctor;
-import PBL6.example.UNIME.entity.Employee;
 
 import java.util.List;
 
