@@ -23,6 +23,10 @@ public interface  DoctorTimeworkRepository extends JpaRepository<DoctorTimework,
             @Param("year") Integer year
     );
 
-
+    @Query("""
+    SELECT dtw
+    FROM DoctorTimework dtw JOIN FETCH dtw.timeWork
+""")
+    List<DoctorTimework> findAll();
 
 }

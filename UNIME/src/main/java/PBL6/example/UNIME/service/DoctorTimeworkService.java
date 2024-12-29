@@ -12,6 +12,5 @@ public interface DoctorTimeworkService {
     List<DoctorTimeworkResponse> getAllDoctorTimeworkByWeek(String username, String week_year);
     List<DoctorTimeworkResponse> getListAvailableTimeworkOfDoctor(Integer doctorId);
     List<DoctorTimeworkResponse> getListTimeworkOfDoctor(String username);
-    void deleteDoctorTimework();
 
     }

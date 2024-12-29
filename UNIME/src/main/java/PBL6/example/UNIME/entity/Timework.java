@@ -1,7 +1,6 @@
 package PBL6.example.UNIME.entity;
 
 
-import PBL6.example.UNIME.enums.DayOfWeek;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
