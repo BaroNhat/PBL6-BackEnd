@@ -17,10 +17,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.IsoFields;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
 public class AppointmentServiceImpl implements AppointmentService{
-
+    Locale vietnam = new Locale("vi", "VN");
     DateTimeFormatter FORMATTIME = DateTimeFormatter.ofPattern("HH:mm");
     PatientRepository patientRepository;
     DoctorTimeworkRepository doctorTimeworkRepository;
@@ -38,7 +41,6 @@ public class AppointmentServiceImpl implements AppointmentService{
     DoctorTimeworkServiceImpl doctorTimeworkService;
     EmployeeRepository employeeRepository;
     AppointmentHistoryService appointmentHistoryService;
-    MailService mailService;
 
 
     public String createAppointment(String username, AppointmentCreateRequest request) {
@@ -106,20 +108,34 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
 
-    @Scheduled(fixedRate = 600000)
-//    @Scheduled(cron = "0 0 1 * * MON")
+//    @Scheduled(fixedRate = 600000)
+    @Scheduled(cron = "0 0 18 * * ?")
     public void autoCancelAppointment() {
         List<Appointment> allAppointments = appointmentRepository.findAll();
-        LocalDate today = LocalDate.now().minusWeeks(1);
-        int year = today.getYear();
-        int week = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-
+        int i = 0;
+        for (Appointment appointment : allAppointments) {
+            if(isBeforeToday(appointment)){
+                log.info("i: "+ ++i);
+                appointment.setAppointmentStatus(AppointmentStatus.Cancelled.name());
+                appointment.setAppointmentNote("Bệnh viện đã hủy lịch vì lí do: Bệnh nhân đã không đến đúng lịch đã đặt");
+                appointmentHistoryService.addAppointment(appointment);
+                appointmentRepository.delete(appointment);
+            }
+        }
     }
 
     private boolean isBeforeToday(Appointment appointment) {
+        int year = appointment.getDoctortimework().getYear();
+        int week = appointment.getDoctortimework().getWeekOfYear();
 
+        String dayOfWeekStr = appointment.getDoctortimework().getTimeWork().getDayOfWeek();
+        DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekStr);
 
-        return true;
+        LocalDate date = getDateFromWeekAndDayOfWeek(week, year, dayOfWeek);
+
+        LocalDate today = LocalDate.now();
+
+        return (date.isBefore(today))?true:false;
     }
 
 
@@ -179,7 +195,20 @@ public class AppointmentServiceImpl implements AppointmentService{
                 .collect(Collectors.toList());
     }
 
-    public AppointmentReponse mapToAppointmentResponse(Appointment  appointments) {
+    private LocalDate getDateFromWeekAndDayOfWeek(int week, int year, DayOfWeek dayOfWeek) {
+        // Validate week number
+        if (week < 1 || week > 53) {
+            throw new AppException(ErrorCode.CAN_NOT_CONVERT);
+        }
+        LocalDate firstDayOfYear = LocalDate.of(year, 1, 1);
+        WeekFields weekFields = WeekFields.of(vietnam);
+        LocalDate date =  firstDayOfYear
+                .with(weekFields.weekOfWeekBasedYear(), week)
+                .with(weekFields.dayOfWeek(), dayOfWeek.getValue());
+        return date;
+    }
+
+    private AppointmentReponse mapToAppointmentResponse(Appointment  appointments) {
 
         return new AppointmentReponse(
                 appointments.getAppointmentId(),

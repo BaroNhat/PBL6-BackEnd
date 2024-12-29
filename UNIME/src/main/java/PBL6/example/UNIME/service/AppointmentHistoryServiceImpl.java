@@ -75,23 +75,17 @@ public class AppointmentHistoryServiceImpl implements   AppointmentHistoryServic
 
         AppointmentHistory history = new AppointmentHistory();
         history.setAppointmentId(appointment.getAppointmentId());
-
-        history.setPatientUsername(appointment.getPatient().getPatientUser().getUsername());
+        history.setPatientUsername(appointment.getPatient().getPatientName());
         history.setDoctorUsername(appointment.getDoctorservice().getDoctor().getDoctorUserId().getUsername());
-
         history.setDepartmentId(appointment.getDoctorservice().getDoctor().getDepartment().getDepartmentId());
-
         history.setPatientName(appointment.getPatient().getPatientName());
         history.setDoctorName(appointment.getDoctorservice().getDoctor().getDoctorName());
-
         history.setDoctorTimeWorkYear(appointment.getDoctortimework().getYear());
         history.setWeekOfYear(appointment.getDoctortimework().getWeekOfYear());
         history.setDayOfWeek(appointment.getDoctortimework().getTimeWork().getDayOfWeek().toLowerCase());
         history.setStartTime(appointment.getDoctortimework().getTimeWork().getStartTime());
         history.setEndTime(appointment.getDoctortimework().getTimeWork().getEndTime());
-
         history.setServiceName(appointment.getDoctorservice().getService().getServiceName());
-
         history.setAppointmentStatus(appointment.getAppointmentStatus());
         history.setAppointmentNote(appointment.getAppointmentNote());
 

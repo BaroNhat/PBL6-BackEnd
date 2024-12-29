@@ -53,10 +53,9 @@ public class DoctorTimeworkServiceImpl implements DoctorTimeworkService {
     @Scheduled(cron = "0 0 * * * SUN")
 //    @Scheduled(fixedRate = 60000)
     public void checkAndAutoCreateDoctorTimework() {
-        int year = LocalDate.now().plusDays(14).getYear();
-        int week = LocalDate.now().plusDays(14).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        int year = LocalDate.now().plusDays(7).getYear();
+        int week = LocalDate.now().plusDays(7).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
         log.info("week: {} ___year:  {}", week, year);
-        log.info("Current Time: {}", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         List<Doctor> doctorsWithoutSchedule = getDoctorsWithoutSchedule(week, year);
         log.info("doctorsWithoutSchedule: "+ doctorsWithoutSchedule.size());
 
@@ -92,10 +91,11 @@ public class DoctorTimeworkServiceImpl implements DoctorTimeworkService {
 
     public List<DoctorTimeworkResponse> getListAvailableTimeworkOfDoctor(Integer doctorId) {
         LocalDate today = LocalDate.now();
-        int year = today.getYear();
         int week = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-        int nextYear = today.plusWeeks(1).getYear();
-        int nextWeek = today.plusWeeks(1).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        int year = (week==1 && today.getDayOfMonth()>20)? today.getYear()+1: today.getYear() ;
+        LocalDate afDay = LocalDate.now().plusWeeks(1);
+        int nextWeek = afDay.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        int nextYear = (nextWeek==1 && afDay.getDayOfMonth()>20)? afDay.getYear()+1: afDay.getYear() ;
 
         log.info("week: {} ___year: {}", week, year);
         log.info("nextWeek: {}  ___nextYear: {}", nextWeek, nextYear);
@@ -122,14 +122,18 @@ public class DoctorTimeworkServiceImpl implements DoctorTimeworkService {
     @Override
     public List<DoctorTimeworkResponse> getListTimeworkOfDoctor(String username) {
         LocalDate today = LocalDate.now();
-        int year1 = today.getYear();
         int week1 = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        int year1 = (week1==1 && today.getDayOfMonth()>20)? today.getYear()+1: today.getYear();
 
         int year2 = today.plusWeeks(1).getYear();
         int week2 = today.plusWeeks(1).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
 
         int year3 = today.plusWeeks(2).getYear();
         int week3 = today.plusWeeks(2).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+
+
+        log.info("week: {} ___year: {}", week1, year1);
+        log.info("nextWeek: {}  ___nextYear: {}", week2, year2);
 
         List<DoctorTimework> list = new ArrayList<>();
 
@@ -152,12 +156,12 @@ public class DoctorTimeworkServiceImpl implements DoctorTimeworkService {
     @Scheduled(cron = "0 0 1 * * MON")
     public void deleteDoctorTimework() {
         List<DoctorTimework> allDoctorTimework = doctorTimeworkRepository.findAll();
-        LocalDate today = LocalDate.now().minusWeeks(1);
+        LocalDate today = LocalDate.now().minusDays(1);
         int year = today.getYear();
         int week = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
         for (DoctorTimework doctorTimework : allDoctorTimework) {
             if(doctorTimework.getYear()<year) doctorTimeworkRepository.delete(doctorTimework);
-            else if (doctorTimework.getWeekOfYear()<week) doctorTimeworkRepository.delete(doctorTimework);
+            else if (doctorTimework.getWeekOfYear()<week && doctorTimework.getYear()==year) doctorTimeworkRepository.delete(doctorTimework);
         }
     }
 
