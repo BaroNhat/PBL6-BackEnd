@@ -13,9 +13,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,10 +24,8 @@ import java.util.stream.Collectors;
 public class  EmployeeServiceImpl implements  EmployeeService {
     EmployeeRepository employeeRepository;
 
-    @Autowired
     DepartmentService departmentService;
 
-    @Autowired
     UserService userService;
 
     public void createEmployee(@Valid EmployeeRequest request) {
