@@ -9,6 +9,7 @@ import PBL6.example.UNIME.dto.response.AuthenticationResponse;
 import PBL6.example.UNIME.dto.response.IntrospectResponse;
 import PBL6.example.UNIME.entity.InvalidatedToken;
 import PBL6.example.UNIME.entity.User;
+import PBL6.example.UNIME.enums.Status;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.InvalidatedTokenRepository;
@@ -60,6 +61,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findByusername(request.getUsername())
                 .orElseThrow(()->  new AppException(ErrorCode.USER_NOT_EXITED)); // lỗi ko tìm ra username
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        if(user.getStatus().equals(Status.LOCKED.name()))
+            throw new AppException(ErrorCode.FORBIDDEN);
 
         // 2. kiểm tra password
         boolean authentication = passwordEncoder.matches(request.getPassword(),
