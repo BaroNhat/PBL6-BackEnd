@@ -88,7 +88,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     @Query("SELECT a " +
             "FROM Appointment a JOIN FETCH a.doctorservice " +
-            "WHERE a.doctorservice.doctorserviceId =: doctor_service_id ")
-    List<Appointment> findByDoctorService (@Param("doctor_service_id") Integer doctorServiceId);
+            "WHERE a.doctorservice.doctorserviceId = :doctorServiceId ")
+    List<Appointment> findByDoctorService (@Param("doctorServiceId") Integer doctorServiceId);
 }
 

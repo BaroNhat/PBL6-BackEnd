@@ -32,7 +32,7 @@ public class DoctorServiceCotroller {
                 .build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{doctor_service_id}")
     ApiResponse<String> delDoctorForService(@PathVariable("doctor_service_id") Integer doctorServiceId ) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         service.delDoctorForSerVice(authentication.getName(), doctorServiceId);

@@ -30,7 +30,7 @@ public class DoctorServiceServiceImpl implements DoctorServiceService {
     DoctorRepository doctorRepository;
     ServiceRepository serviceRepository;
     EmployeeService employeeService;
-    private final AppointmentRepository appointmentRepository;
+    AppointmentRepository appointmentRepository;
 
     public void addDoctorForService(String username, DoctorServiceRequest request) {
 
@@ -54,12 +54,12 @@ public class DoctorServiceServiceImpl implements DoctorServiceService {
     }
 
     public void delDoctorForSerVice(String username, Integer doctorServiceId) {
-
         List<Appointment> list = appointmentRepository.findByDoctorService(doctorServiceId);
         if (list.isEmpty()) {
-            DoctorService doctorService = list.get(0).getDoctorservice();
+            DoctorService doctorService = doctorServiceRepository.findById(doctorServiceId)
+                    .orElseThrow(() -> new AppException(ErrorCode.DOCTORSERVICE_NOT_FOUND));
             doctorServiceRepository.delete(doctorService);
-        }else throw new AppException(ErrorCode.DOCTORSERVICE_CAN_NOT_DELETE);
+        }else throw  new AppException(ErrorCode.DOCTORSERVICE_CAN_NOT_DELETE);
     }
 
 
