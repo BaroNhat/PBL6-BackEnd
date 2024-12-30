@@ -75,7 +75,7 @@ public class AppointmentHistoryServiceImpl implements   AppointmentHistoryServic
 
         AppointmentHistory history = new AppointmentHistory();
         history.setAppointmentId(appointment.getAppointmentId());
-        history.setPatientUsername(appointment.getPatient().getPatientName());
+        history.setPatientUsername(appointment.getPatient().getPatientUser().getUsername());
         history.setDoctorUsername(appointment.getDoctorservice().getDoctor().getDoctorUserId().getUsername());
         history.setDepartmentId(appointment.getDoctorservice().getDoctor().getDepartment().getDepartmentId());
         history.setPatientName(appointment.getPatient().getPatientName());
