@@ -53,10 +53,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "JOIN FETCH a.doctorservice ds " +
             "JOIN FETCH ds.service s " +
             "JOIN FETCH ds.doctor d " +
-            "JOIN FETCH a.patient " +
+            "JOIN FETCH a.patient p " +
+            "JOIN FETCH p.patientUser u "+
             "JOIN FETCH a.doctortimework tw " +
             "JOIN FETCH tw.timeWork " +
-            "WHERE a.patient.patientUser.username =:username ")
+            "WHERE u.username =:username ")
     List<Appointment> findByPatient(@Param("username") String username );
 
     @Query("""

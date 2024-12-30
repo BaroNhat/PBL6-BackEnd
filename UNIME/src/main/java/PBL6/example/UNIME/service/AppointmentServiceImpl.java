@@ -41,6 +41,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     DoctorTimeworkServiceImpl doctorTimeworkService;
     EmployeeRepository employeeRepository;
     AppointmentHistoryService appointmentHistoryService;
+    private final MailServiceImpl mailServiceImpl;
 
 
     public String createAppointment(String username, AppointmentCreateRequest request) {
@@ -98,7 +99,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.delete(appointment);
         /// Thiếu nhá ^-^
         // goọi mail thông báo hủy cho doc và patien
-//        mailService.sendCancelEmail(appointment);
+        mailServiceImpl.sendCancelEmail(appointment);
 
         DoctorTimework dt = appointment.getDoctortimework();
         dt.setStatus(DoctorTimeworkStatus.Available.name());
@@ -150,13 +151,12 @@ public class AppointmentServiceImpl implements AppointmentService{
             note +="vì lí do: " + request.getAppointmentNote();
         }
         appointment.setAppointmentNote(note);
-        appointmentRepository.save(appointment);
         // theem vao history và xóa record hiện tại
         appointmentHistoryService.addAppointment(appointment);
         appointmentRepository.delete(appointment);
         /// Thiếu nhá ^-^
         // goọi mail thông báo hủy cho doc và patien
-//        mailService.sendCancelEmail(appointment);
+        mailServiceImpl.sendCancelEmail(appointment);
 
         DoctorTimework dt = appointment.getDoctortimework();
         dt.setStatus(DoctorTimeworkStatus.Available.name());
