@@ -96,7 +96,7 @@ public class MailServiceImpl implements MailService {
         userService.saveNewPassword(user, newPasswork);
         return "New passwword: " +newPasswork;
     }
-    public String sendCancelEmail(Appointment appointments) {
+    public void sendCancelEmail(Appointment appointments) {
 
         String emailDoctor = appointments.getDoctorservice().getDoctor().getDoctorUserId().getEmail();
         String doctorName = appointments.getDoctortimework().getDoctor().getDoctorName();
@@ -130,19 +130,22 @@ public class MailServiceImpl implements MailService {
 
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from("UNIME <hospital@unime.site>")
-                .to(emailDoctor, emailPatient, "anchinhktvn123@gmail.com")
+                .to(emailDoctor, emailPatient)
                 .subject("Bệnh viện Unime gửi thông báo về lịch khám")
                 .html(htmlTemplate)
                 .build();
         try {
             CreateEmailResponse data = resend.emails().send(params);
-            return formattedDate;
         } catch (ResendException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to send email: " + e.getMessage());
         }
     }
-    public String sendSuccessMail(Appointment appointments) {
+
+
+
+    @Override
+    public void sendSuccessEmail(Appointment appointments) {
 
         String emailDoctor = appointments.getDoctorservice().getDoctor().getDoctorUserId().getEmail();
         String doctorName = appointments.getDoctortimework().getDoctor().getDoctorName();
@@ -175,23 +178,20 @@ public class MailServiceImpl implements MailService {
 
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from("UNIME <hospital@unime.site>")
-                .to(emailDoctor, emailPatient, "anchinhktvn123@gmail.com")
+                .to(emailDoctor, emailPatient)
                 .subject("Bệnh viện Unime gửi thông báo về lịch khám")
                 .html(htmlTemplate)
                 .build();
         try {
             CreateEmailResponse data = resend.emails().send(params);
-            return formattedDate;
         } catch (ResendException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to send email: " + e.getMessage());
         }
     }
 
-    @Override
-    public String sendSuccessEmail(Appointment appointments) {
-        return "";
-    }
+
+
 
     private String generateNum(int digitCount) {
 

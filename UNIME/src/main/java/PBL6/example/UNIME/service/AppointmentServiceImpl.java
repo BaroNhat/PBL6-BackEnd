@@ -98,11 +98,9 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setAppointmentNote(note);
         appointment.setEmployee(employee);
 
-//         theem vao history và xóa record hiện tại
         appointmentHistoryService.addAppointment(appointment);
         appointmentRepository.delete(appointment);
-        /// Thiếu nhá ^-^
-        // goọi mail thông báo hủy cho doc và patien
+
         mailService.sendCancelEmail(appointment);
 
         DoctorTimework dt = appointment.getDoctortimework();
@@ -155,11 +153,9 @@ public class AppointmentServiceImpl implements AppointmentService{
             note +="vì lí do: " + request.getAppointmentNote();
         }
         appointment.setAppointmentNote(note);
-        // theem vao history và xóa record hiện tại
         appointmentHistoryService.addAppointment(appointment);
         appointmentRepository.delete(appointment);
-        /// Thiếu nhá ^-^
-        // goọi mail thông báo hủy cho doc và patien
+
         mailService.sendCancelEmail(appointment);
 
         DoctorTimework dt = appointment.getDoctortimework();
