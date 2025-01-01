@@ -178,7 +178,7 @@ public class MailServiceImpl implements MailService {
 
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from("UNIME <hospital@unime.site>")
-                .to(emailDoctor, emailPatient, "anchinhktvn123@gmail.com")
+                .to(emailDoctor, emailPatient)
                 .subject("Bệnh viện Unime gửi thông báo về lịch khám")
                 .html(htmlTemplate)
                 .build();
