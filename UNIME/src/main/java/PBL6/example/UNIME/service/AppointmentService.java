@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AppointmentService {
 
-     String createAppointment(String username, AppointmentCreateRequest request);
+     AppointmentReponse createAppointment(String username, AppointmentCreateRequest request);
      String updateByDoctor( AppointmentUpdateRequest request);
      String updateByEmployee(String username, AppointmentUpdateRequest request);
      String updateByPatient(AppointmentUpdateRequest request);

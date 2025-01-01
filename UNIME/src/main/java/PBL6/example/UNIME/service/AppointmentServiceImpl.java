@@ -4,6 +4,7 @@ import PBL6.example.UNIME.dto.request.AppointmentCreateRequest;
 import PBL6.example.UNIME.dto.request.AppointmentUpdateRequest;
 import PBL6.example.UNIME.dto.response.AppointmentReponse;
 import PBL6.example.UNIME.entity.*;
+import PBL6.example.UNIME.entity.DoctorService;
 import PBL6.example.UNIME.enums.AppointmentStatus;
 import PBL6.example.UNIME.enums.DoctorTimeworkStatus;
 import PBL6.example.UNIME.exception.AppException;
@@ -16,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -41,28 +41,31 @@ public class AppointmentServiceImpl implements AppointmentService{
     DoctorTimeworkServiceImpl doctorTimeworkService;
     EmployeeRepository employeeRepository;
     AppointmentHistoryService appointmentHistoryService;
-    private final MailServiceImpl mailServiceImpl;
+    MailService mailService;
 
 
-    public String createAppointment(String username, AppointmentCreateRequest request) {
+    public AppointmentReponse createAppointment(String username, AppointmentCreateRequest request) {
+        Appointment appointment = new Appointment();
+
         Patient patient = patientRepository.findBypatientUserUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.PATIENT_NOT_FOUND));
+        appointment.setPatient(patient);
+
         DoctorTimework dtimework = doctorTimeworkRepository.findById(request.getDoctortimeworkId())
                 .orElseThrow(() -> new AppException(ErrorCode.DOCTORTIMEWORK_NOT_FOUND));
-
-        Appointment appointment = new Appointment();
-        appointment.setPatient(patientRepository.findById(patient.getPatientId())
-                .orElseThrow(() -> new AppException(ErrorCode.PATIENT_NOT_FOUND)));
         appointment.setDoctortimework(dtimework);
-        appointment.setDoctorservice(doctorServiceRepository.findById(request.getDoctorserviceId())
-                .orElseThrow(() -> new AppException(ErrorCode.DOCTORSERVICE_NOT_FOUND)));
+
+        DoctorService ds = doctorServiceRepository.findByDoctorAndService(request.getDoctorId(), request.getServiceId());
+        if(ds==null) throw new AppException(ErrorCode.DOCTORSERVICE_NOT_FOUND);
+        appointment.setDoctorservice(ds);
+
         appointmentRepository.save(appointment);
-        mailServiceImpl.sendSuccessMail(appointment);
+        mailService.sendSuccessEmail(appointment);
         dtimework.setStatus(DoctorTimeworkStatus.Busy.name());
         log.info("3: {}", dtimework.getStatus());
         doctorTimeworkService.updateDoctorTimework(dtimework.getId(), dtimework.getStatus());
 
-        return "Thanh cong";
+        return mapToAppointmentResponse(appointment);
     }
 
     public String updateByDoctor( AppointmentUpdateRequest request) {
@@ -100,7 +103,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.delete(appointment);
         /// Thiếu nhá ^-^
         // goọi mail thông báo hủy cho doc và patien
-        mailServiceImpl.sendCancelEmail(appointment);
+        mailService.sendCancelEmail(appointment);
 
         DoctorTimework dt = appointment.getDoctortimework();
         dt.setStatus(DoctorTimeworkStatus.Available.name());
@@ -157,7 +160,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.delete(appointment);
         /// Thiếu nhá ^-^
         // goọi mail thông báo hủy cho doc và patien
-        mailServiceImpl.sendCancelEmail(appointment);
+        mailService.sendCancelEmail(appointment);
 
         DoctorTimework dt = appointment.getDoctortimework();
         dt.setStatus(DoctorTimeworkStatus.Available.name());

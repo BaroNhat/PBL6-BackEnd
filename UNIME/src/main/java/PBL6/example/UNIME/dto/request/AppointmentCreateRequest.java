@@ -12,11 +12,11 @@ import lombok.experimental.FieldDefaults;
 public class AppointmentCreateRequest {
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    Integer patientId;
-
-    @NotNull(message = "MISSING_REQUIRED_FIELDS")
     Integer doctortimeworkId;
 
     @NotNull(message = "MISSING_REQUIRED_FIELDS")
-    Integer doctorserviceId;
+    Integer doctorId;
+
+    @NotNull(message = "MISSING_REQUIRED_FIELDS")
+    Integer serviceId;
 }
