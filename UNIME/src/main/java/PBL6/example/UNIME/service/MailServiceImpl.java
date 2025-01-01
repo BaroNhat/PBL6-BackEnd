@@ -51,7 +51,7 @@ public class MailServiceImpl implements MailService {
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from("UNIME <hospital@unime.site>")
                 .to(mail)
-                .subject("Receive OTP from Unime Hospital")
+                .subject("Thư gửi mã OTP xác thực từ bệnh viện Unime")
                 .html(htmlTemplate)
                 .build();
 
@@ -69,9 +69,9 @@ public class MailServiceImpl implements MailService {
         String newPasswork = generateNum(8);
         String htmlTemplate="";
         try {
-            Resource resource = resourceLoader.getResource("classpath:static/email.html");
+            Resource resource = resourceLoader.getResource("classpath:static/emailPass.html");
             htmlTemplate = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-            htmlTemplate = htmlTemplate.replace("{{OTP}}", newPasswork);
+            htmlTemplate = htmlTemplate.replace("{{PASS}}", newPasswork);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to read email template", e);
@@ -84,7 +84,7 @@ public class MailServiceImpl implements MailService {
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from("UNIME <hospital@unime.site>")
                 .to(mail)
-                .subject("Receive new passwork from Unime Hospital ")
+                .subject("Thư gửi mật khẩu mới từ bệnh vện Unime")
                 .html(htmlTemplate)
                 .build();
         User user = userService.getUserByEmail(mail);
@@ -118,6 +118,51 @@ public class MailServiceImpl implements MailService {
             htmlTemplate = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             htmlTemplate = htmlTemplate.replace("{{DATE}}", formattedDate);
             htmlTemplate = htmlTemplate.replace("{{NOTE}}", note);
+            htmlTemplate = htmlTemplate.replace("{{DOCTOR}}", doctorName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to read email template", e);
+        }
+        // Kiểm tra template không rỗng
+        if (htmlTemplate.isEmpty()) {
+            throw new RuntimeException("Email template is empty");
+        }
+
+        CreateEmailOptions params = CreateEmailOptions.builder()
+                .from("UNIME <hospital@unime.site>")
+                .to(emailDoctor, emailPatient, "anchinhktvn123@gmail.com")
+                .subject("Bệnh viện Unime gửi thông báo về lịch khám")
+                .html(htmlTemplate)
+                .build();
+        try {
+            CreateEmailResponse data = resend.emails().send(params);
+            return formattedDate;
+        } catch (ResendException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to send email: " + e.getMessage());
+        }
+    }
+    public String sendSuccessMail(Appointment appointments) {
+
+        String emailDoctor = appointments.getDoctorservice().getDoctor().getDoctorUserId().getEmail();
+        String doctorName = appointments.getDoctortimework().getDoctor().getDoctorName();
+        String emailPatient = appointments.getPatient().getPatientUser().getEmail();
+
+        Resend resend = new Resend("re_UwUSKQNg_EMC7CsQgrUDzsMzcZwXQfBmx");
+        Integer year = appointments.getDoctortimework().getYear();
+        Integer weekOfYear = appointments.getDoctortimework().getWeekOfYear();
+        DayOfWeek dayOfWeek = DayOfWeek.valueOf(appointments.getDoctortimework().getTimeWork().getDayOfWeek());
+
+        LocalDate date = getDateFromWeekAndDayOfWeek(weekOfYear, year, dayOfWeek);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = date.format(formatter);
+        String note = appointments.getAppointmentNote();
+
+        String htmlTemplate="";
+        try {
+            Resource resource = resourceLoader.getResource("classpath:static/makeAppointment.html");
+            htmlTemplate = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            htmlTemplate = htmlTemplate.replace("{{DATE}}", formattedDate);
             htmlTemplate = htmlTemplate.replace("{{DOCTOR}}", doctorName);
         } catch (IOException e) {
             e.printStackTrace();

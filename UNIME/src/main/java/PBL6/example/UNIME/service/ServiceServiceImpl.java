@@ -4,6 +4,7 @@ import PBL6.example.UNIME.dto.request.ServiceRequest;
 import PBL6.example.UNIME.dto.response.DoctorResponse;
 import PBL6.example.UNIME.dto.response.ServiceResponse;
 import PBL6.example.UNIME.entity.Department;
+import PBL6.example.UNIME.entity.Employee;
 import PBL6.example.UNIME.entity.Service;
 import PBL6.example.UNIME.exception.AppException;
 import PBL6.example.UNIME.exception.ErrorCode;
@@ -14,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,6 +27,7 @@ public class ServiceServiceImpl implements ServiceService {
     ServiceRepository serviceRepository;
     DepartmentService departmentService;
     DoctorServiceService doctorServiceService;
+    EmployeeService employeeService;
 
     public ServiceResponse createService(ServiceRequest request) {
         if(serviceRepository.existsByserviceName(request.getServiceName())) {
@@ -74,6 +77,15 @@ public class ServiceServiceImpl implements ServiceService {
     public List<ServiceResponse> getAllServices() {
         List<Service> services = serviceRepository.findAll();
         return services.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<ServiceResponse> getServicesByDepartment(String username) {
+        Employee employee = employeeService.getEmployeeByUsername(username);
+        List<Service> services = serviceRepository.findAll();
+        return services.stream()
+                .filter(service -> Objects.equals(service.getDepartment().getDepartmentId(), employee.getDepartment().getDepartmentId()))
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }

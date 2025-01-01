@@ -32,23 +32,23 @@ public class DoctorServiceCotroller {
                 .build();
     }
 
-    @DeleteMapping("/{doctor_service_id}")
-    ApiResponse<String> delDoctorForService(@PathVariable("doctor_service_id") Integer doctorServiceId ) {
+    @DeleteMapping()
+    ApiResponse<String> delDoctorForService(@RequestBody DoctorServiceRequest request ) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        service.delDoctorForSerVice(authentication.getName(), doctorServiceId);
+        service.delDoctorForSerVice(authentication.getName(), request);
         return ApiResponse.<String>builder()
                 .result("SUCCESS")
                 .build();
     }
 
-    @GetMapping("/get/doctorList/{service_id}") // 3s
+    @GetMapping("/get/doctorList/{service_id}")
     ApiResponse<List<DoctorResponse>> getDoctorForService(@PathVariable("service_id") Integer serviceId ) {
         return ApiResponse.<List<DoctorResponse>>builder()
                 .result(service.getDoctorByService(serviceId))
                 .build();
     }
 
-    @GetMapping("/get/serviceList/{doctor_id}")  // 2.5s
+    @GetMapping("/get/serviceList/{doctor_id}")
     ApiResponse<List<ServiceResponse>> getServiceByDoctor(@PathVariable("doctor_id") Integer serviceId ) {
         return ApiResponse.<List<ServiceResponse>>builder()
                 .result(service.getServicesByDoctorId(serviceId))

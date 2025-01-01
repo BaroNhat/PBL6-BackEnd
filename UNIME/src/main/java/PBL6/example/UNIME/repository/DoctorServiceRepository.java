@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DoctorServiceRepository extends JpaRepository <DoctorService, Integer> {
@@ -28,6 +29,6 @@ public interface DoctorServiceRepository extends JpaRepository <DoctorService, I
             "FROM DoctorService ds JOIN FETCH ds.service s JOIN FETCH ds.doctor d " +
             "WHERE s.serviceId = :service_id AND d.doctorId =:doctor_id")
     DoctorService findByDoctorAndService(@Param("doctor_id") Integer doctorId,
-                                         @Param("service_id") Integer serviceId);
+                                                  @Param("service_id") Integer serviceId);
 
 }
