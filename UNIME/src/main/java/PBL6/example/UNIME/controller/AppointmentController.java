@@ -28,9 +28,9 @@ public class AppointmentController {
     AppointmentService appointmentService;
 
     @PostMapping
-    ApiResponse<String> createAppointment(@RequestBody AppointmentCreateRequest request){
+    ApiResponse<AppointmentReponse> createAppointment(@RequestBody AppointmentCreateRequest request){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        return ApiResponse.<String>builder()
+        return ApiResponse.<AppointmentReponse>builder()
                 .result(appointmentService.createAppointment(authentication.getName(), request))
                 .build();
     }
