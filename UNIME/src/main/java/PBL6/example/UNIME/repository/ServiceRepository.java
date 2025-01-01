@@ -1,5 +1,6 @@
 package PBL6.example.UNIME.repository;
 
+import PBL6.example.UNIME.entity.Employee;
 import PBL6.example.UNIME.entity.Service;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,4 +28,10 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
             "FROM Service s JOIN FETCH s.department " +
             "WHERE s.serviceId =:serviceId")
     Optional<Service> findById(@NotNull @Param("serviceId") Integer serviceId);
+
+    @Query("SELECT s " +
+            "FROM Service s  "+
+            "WHERE s.department.departmentId = :departmentId")
+    List<Service> findBydepartmentId(@Param("departmentId") Integer departmentId);
+
 }

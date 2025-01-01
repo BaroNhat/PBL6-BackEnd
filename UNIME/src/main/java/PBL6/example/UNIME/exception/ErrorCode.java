@@ -24,7 +24,7 @@ public enum ErrorCode {
     PATIENT_NOT_FOUND(2001, "Patient not found", HttpStatus.NOT_FOUND),
     DEPARTMENT_NOT_FOUND(2002, "Department not found", HttpStatus.NOT_FOUND),
     DEPARTMENT_EXISTED(2003, "Department is already exist", HttpStatus.BAD_REQUEST),
-    DEPARTMENT_CAN_NOT_DELETE(2004, "Cannot delete department as it has associated employees/doctors.", HttpStatus.BAD_REQUEST),
+    DEPARTMENT_CAN_NOT_DELETE(2004, "Cannot delete department as it has associated employees/doctors/service.", HttpStatus.BAD_REQUEST),
     SERVICE_NOT_FOUND(2004, "Service not found", HttpStatus.NOT_FOUND),
     SERVICE_EXITED(2005, "Service exited", HttpStatus.BAD_REQUEST),
     SERVICE_CAN_NOT_DELETE(2002, "Cannot delete service as it has associated doctors.", HttpStatus.BAD_REQUEST),

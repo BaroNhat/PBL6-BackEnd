@@ -25,23 +25,31 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
+@EnableScheduling
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements AuthenticationService {
     UserRepository userRepository;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
+    ZonedDateTime vietnamTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -57,7 +65,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         log.info("authenticate");
-        // 1. Tìm kiếm tài khoản
         var user = userRepository.findByusername(request.getUsername())
                 .orElseThrow(()->  new AppException(ErrorCode.USER_NOT_EXITED)); // lỗi ko tìm ra username
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -65,14 +72,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if(user.getStatus().equals(Status.LOCKED.name()))
             throw new AppException(ErrorCode.FORBIDDEN);
 
-        // 2. kiểm tra password
         boolean authentication = passwordEncoder.matches(request.getPassword(),
                 user.getPassword());
         if (!authentication) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);// lỗi pw ko đúng
         }
 
-        // 3. tạo token
         var token = generateToken(user);
 
         return AuthenticationResponse.builder()
@@ -109,7 +114,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } catch (AppException exception){
             log.info("Token already expired");
         }
+    }
 
+    @Scheduled(fixedRate = 60000)
+    public void autoDelInvalidatedToken(){
+        List<InvalidatedToken> invalidatedTokenList = invalidatedTokenRepository.findAll();
+        int i = 0;
+        for(InvalidatedToken token : invalidatedTokenList){
+            if(isExpired(token.getExpiryTime())){
+                log.info("i: " + ++i);
+                invalidatedTokenRepository.delete(token);
+            }
+        }
+    }
+
+    public boolean isExpired(Date expiryTime) {
+        Date now = Date.from(vietnamTime.toInstant());
+        return expiryTime.before(now);
     }
 
     public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
@@ -126,8 +147,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         var username = signedJWT.getJWTClaimsSet().getSubject();
 
-        var user =
-                userRepository.findByusername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+        var user = userRepository.findByusername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
         var token = generateToken(user);
 
@@ -139,7 +159,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime =signedJWT.getJWTClaimsSet().getExpirationTime();
-        log.info(" expiryTime: {},  isRefresh:{}", expiryTime.after(new Date()), isRefresh);
+        log.info(" expiryTime: {},  isRefresh:{}", expiryTime.after(Date.from(vietnamTime.toInstant())), isRefresh);
 
         if(isRefresh){
             expiryTime = new Date(signedJWT.getJWTClaimsSet().getIssueTime()
@@ -147,7 +167,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         var verified = signedJWT.verify(verifier);
-
 
         if (!(verified && expiryTime.after(new Date())))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -160,15 +179,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private String generateToken(User user ) {
 
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512); // sử dụng thuật toán HMAC với độ dài 512 bit để ký JWS.
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().
                 subject(user.getUsername()).
                 issuer("UNIMEHospital.com").
-                issueTime(new Date()).
-                expirationTime(new Date(
-                        Instant.now().plus(VALID_DURATION, ChronoUnit.HOURS).toEpochMilli()
-                ))
+                issueTime(Date.from(vietnamTime.toInstant()))
+                .expirationTime(Date.from(
+                        Instant.now()
+                                .atZone(ZoneId.of("Asia/Ho_Chi_Minh")).plusHours(VALID_DURATION)
+                                .toInstant()
+                    )
+                )
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole())
                 .build();
