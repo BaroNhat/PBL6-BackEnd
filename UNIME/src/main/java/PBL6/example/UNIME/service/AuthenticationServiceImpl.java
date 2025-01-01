@@ -38,6 +38,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 @Slf4j
@@ -48,7 +49,6 @@ import java.util.UUID;
 public class AuthenticationServiceImpl implements AuthenticationService {
     UserRepository userRepository;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
-    ZonedDateTime vietnamTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
 
 
     @NonFinal
@@ -116,9 +116,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    @Scheduled(fixedRate = 60000)
     public void autoDelInvalidatedToken(){
         List<InvalidatedToken> invalidatedTokenList = invalidatedTokenRepository.findAll();
+        log.info("size tokentList"+ invalidatedTokenList.size());
         int i = 0;
         for(InvalidatedToken token : invalidatedTokenList){
             if(isExpired(token.getExpiryTime())){
@@ -129,7 +129,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public boolean isExpired(Date expiryTime) {
-        Date now = Date.from(vietnamTime.toInstant());
+        Date now = new Date();
         return expiryTime.before(now);
     }
 
@@ -159,7 +159,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime =signedJWT.getJWTClaimsSet().getExpirationTime();
-        log.info(" expiryTime: {},  isRefresh:{}", expiryTime.after(Date.from(vietnamTime.toInstant())), isRefresh);
+        log.info(" expiryTime: {},  isRefresh:{}", expiryTime.after(new Date()), isRefresh);
 
         if(isRefresh){
             expiryTime = new Date(signedJWT.getJWTClaimsSet().getIssueTime()
@@ -179,18 +179,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private String generateToken(User user ) {
 
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512); // sử dụng thuật toán HMAC với độ dài 512 bit để ký JWS.
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().
                 subject(user.getUsername()).
                 issuer("UNIMEHospital.com").
-                issueTime(Date.from(vietnamTime.toInstant()))
-                .expirationTime(Date.from(
-                        Instant.now()
-                                .atZone(ZoneId.of("Asia/Ho_Chi_Minh")).plusHours(VALID_DURATION)
-                                .toInstant()
-                    )
-                )
+                issueTime(new Date()).
+                expirationTime(new Date(
+                        Instant.now().plus(VALID_DURATION, ChronoUnit.HOURS).toEpochMilli()
+                ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", user.getRole())
                 .build();
@@ -198,7 +195,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
         JWSObject jwsObject = new JWSObject(header, payload);
-
+        log.info("Default TimeZone: " + TimeZone.getDefault().getID());
+        log.info("Init token: "+ jwtClaimsSet.getIssueTime());
+        log.info("Exp: "+ jwtClaimsSet.getExpirationTime());
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
