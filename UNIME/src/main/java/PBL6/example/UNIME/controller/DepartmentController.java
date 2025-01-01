@@ -25,7 +25,7 @@ public class DepartmentController {
     @Autowired
     DepartmentService departmentService;
 
-    //==== Admin
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     ApiResponse<DepartmentResponse> createDepartment(@RequestBody @Valid DepartmentRequest request) {
         ApiResponse<DepartmentResponse> apiResponse = new ApiResponse<>();
@@ -33,6 +33,7 @@ public class DepartmentController {
         return apiResponse;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{department_id}")
     ApiResponse<DepartmentResponse> updateDepartment(@PathVariable Integer department_id, @RequestBody DepartmentRequest request){
         return ApiResponse.<DepartmentResponse>builder()
@@ -40,6 +41,7 @@ public class DepartmentController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{department_id}")
     ApiResponse<String> deleteDeparment(@PathVariable Integer department_id){
         departmentService.deleteDeparment(department_id);

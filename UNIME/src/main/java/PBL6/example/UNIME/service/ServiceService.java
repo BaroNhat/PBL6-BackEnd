@@ -6,11 +6,11 @@ import PBL6.example.UNIME.dto.response.ServiceResponse;
 import java.util.List;
 
 public interface ServiceService {
-    public ServiceResponse createService(ServiceRequest request);
-    public ServiceResponse getServiceById(Integer serviceId);
-    public ServiceResponse updateService(Integer serviceId, ServiceRequest request);
-    public void deleteService(Integer serviceId);
-    public List<ServiceResponse> getAllServices();
-    public List<ServiceResponse> findServiceByName(String serviceName);
-
+    ServiceResponse createService(ServiceRequest request);
+    ServiceResponse getServiceById(Integer serviceId);
+    ServiceResponse updateService(Integer serviceId, ServiceRequest request);
+    void deleteService(Integer serviceId);
+    List<ServiceResponse> getAllServices();
+    List<ServiceResponse> findServiceByName(String serviceName);
+    List<ServiceResponse> getServicesByDepartment(String username);
 }

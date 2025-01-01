@@ -53,11 +53,11 @@ public class DoctorServiceServiceImpl implements DoctorServiceService {
         doctorServiceRepository.save(doctorService);
     }
 
-    public void delDoctorForSerVice(String username, Integer doctorServiceId) {
-        List<Appointment> list = appointmentRepository.findByDoctorService(doctorServiceId);
+    public void delDoctorForSerVice(String username, DoctorServiceRequest request) {
+        DoctorService doctorService = doctorServiceRepository.findByDoctorAndService(request.getDoctorID(), request.getServiceID());
+        if(doctorService==null) throw new AppException(ErrorCode.DOCTORSERVICE_NOT_FOUND);
+        List<Appointment> list = appointmentRepository.findByDoctorService(doctorService.getDoctorserviceId());
         if (list.isEmpty()) {
-            DoctorService doctorService = doctorServiceRepository.findById(doctorServiceId)
-                    .orElseThrow(() -> new AppException(ErrorCode.DOCTORSERVICE_NOT_FOUND));
             doctorServiceRepository.delete(doctorService);
         }else throw  new AppException(ErrorCode.DOCTORSERVICE_CAN_NOT_DELETE);
     }

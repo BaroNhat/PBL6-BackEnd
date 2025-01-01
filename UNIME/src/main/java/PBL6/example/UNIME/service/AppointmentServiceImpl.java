@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
@@ -57,6 +56,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setDoctorservice(doctorServiceRepository.findById(request.getDoctorserviceId())
                 .orElseThrow(() -> new AppException(ErrorCode.DOCTORSERVICE_NOT_FOUND)));
         appointmentRepository.save(appointment);
+        mailServiceImpl.sendSuccessMail(appointment);
         dtimework.setStatus(DoctorTimeworkStatus.Busy.name());
         log.info("3: {}", dtimework.getStatus());
         doctorTimeworkService.updateDoctorTimework(dtimework.getId(), dtimework.getStatus());

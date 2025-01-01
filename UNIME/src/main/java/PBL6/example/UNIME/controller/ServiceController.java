@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,6 +64,15 @@ public class ServiceController {
                 .result(serviceService.findServiceByName(serviceName))
                 .build();
     }
+
+    @GetMapping("/get/byDepartment")
+    ApiResponse<List<ServiceResponse>> getServiceByName() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ApiResponse.<List<ServiceResponse>>builder()
+                .result(serviceService.getServicesByDepartment(authentication.getName()))
+                .build();
+    }
+
     @GetMapping("/get/byId/{service_id}")
     ApiResponse<ServiceResponse> getServiceById(@PathVariable("service_id") Integer serviceId) {
         return ApiResponse.<ServiceResponse>builder()

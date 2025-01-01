@@ -10,6 +10,7 @@ import PBL6.example.UNIME.exception.ErrorCode;
 import PBL6.example.UNIME.repository.DepartmentRepository;
 import PBL6.example.UNIME.repository.DoctorRepository;
 import PBL6.example.UNIME.repository.EmployeeRepository;
+import PBL6.example.UNIME.repository.ServiceRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,8 +29,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     DepartmentRepository departmentRepository;
     private final DoctorRepository doctorRepository;
     private final EmployeeRepository employeeRepository;
+    private final ServiceRepository serviceRepository;
 
-    @PreAuthorize("hasRole('ADMIN')")
     public DepartmentResponse createDepartment(DepartmentRequest request) {
         if (departmentRepository.findBydepartmentName(request.getDepartmentName()) != null ){
             throw new AppException(ErrorCode.DEPARTMENT_EXISTED);
@@ -41,7 +42,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return mapToResponse(departmentRepository.save(department));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public DepartmentResponse updateDepartment(Integer departmentId, DepartmentRequest request) {
         // Tìm phòng ban cần cập nhật theo ID
         Department department = departmentRepository.findById(departmentId)
@@ -58,14 +58,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
     public void deleteDeparment(Integer departmentId) {
         Department department = getDepartmentById(departmentId);
 
         List<Doctor> doctorList = doctorRepository.findBydepartment(departmentId);
         List<Employee> employeesList = employeeRepository.findBydepartmentId(departmentId);
+        List<PBL6.example.UNIME.entity.Service> serviceList = serviceRepository.findBydepartmentId(departmentId);
 
-        if(doctorList.size() != 0 || employeesList.size() != 0){
+        if(!doctorList.isEmpty() || !employeesList.isEmpty() || !serviceList.isEmpty()){
             throw new AppException(ErrorCode.DEPARTMENT_CAN_NOT_DELETE);
         }
         departmentRepository.delete(department);
