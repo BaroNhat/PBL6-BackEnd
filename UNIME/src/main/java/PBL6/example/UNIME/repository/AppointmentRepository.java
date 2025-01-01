@@ -61,14 +61,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     List<Appointment> findByPatient(@Param("username") String username );
 
     @Query("""
-        SELECT a
+            SELECT a
             FROM Appointment a
             JOIN FETCH a.doctortimework tw
-            JOIN FETCH tw.timeWork
-            JOIN FETCH a.patient
+            jOIN FETCH tw.timeWork
+            JOIN FETCH a.patient pa
             JOIN FETCH a.doctorservice ds
             JOIN FETCH ds.service
             JOIN FETCH ds.doctor d
+            JOIN FETCH pa.patientUser
             JOIN FETCH d.doctorUserId
     """)
     List<Appointment> findAll();
@@ -77,6 +78,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             SELECT a
             FROM Appointment a
             JOIN FETCH a.doctortimework tw
+            jOIN FETCH tw.timeWork
             JOIN FETCH a.patient
             JOIN FETCH a.doctorservice ds
             JOIN FETCH ds.service

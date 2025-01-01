@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.List;
@@ -109,10 +110,10 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
 
-//    @Scheduled(fixedRate = 600000)
-    @Scheduled(cron = "0 0 18 * * ?")
+    @Scheduled(fixedRate = 1800000)
     public void autoCancelAppointment() {
         List<Appointment> allAppointments = appointmentRepository.findAll();
+        log.info("allAppointments: {}", allAppointments.size());
         int i = 0;
         for (Appointment appointment : allAppointments) {
             if(isBeforeToday(appointment)){
@@ -131,12 +132,12 @@ public class AppointmentServiceImpl implements AppointmentService{
 
         String dayOfWeekStr = appointment.getDoctortimework().getTimeWork().getDayOfWeek();
         DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekStr);
+        LocalTime endTime = appointment.getDoctortimework().getTimeWork().getEndTime();
 
         LocalDate date = getDateFromWeekAndDayOfWeek(week, year, dayOfWeek);
-
-        LocalDate today = LocalDate.now();
-
-        return (date.isBefore(today))?true:false;
+        if(date.isBefore(LocalDate.now())) return true;
+        else if(date.equals(LocalDate.now()) && endTime.isBefore(LocalTime.now())) return true;
+        else return false;
     }
 
 
