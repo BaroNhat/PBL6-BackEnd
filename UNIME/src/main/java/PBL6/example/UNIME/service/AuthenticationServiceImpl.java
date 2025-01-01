@@ -116,6 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+    @Scheduled(cron = "0 1 * * * *")
     public void autoDelInvalidatedToken(){
         List<InvalidatedToken> invalidatedTokenList = invalidatedTokenRepository.findAll();
         log.info("size tokentList"+ invalidatedTokenList.size());
